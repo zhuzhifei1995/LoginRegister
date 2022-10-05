@@ -528,6 +528,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     Log.e("TAG", "文件夹创建成功");
                 }
             }
+
             file = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(ChatFriendActivity.this,
