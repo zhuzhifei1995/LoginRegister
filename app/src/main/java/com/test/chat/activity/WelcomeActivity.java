@@ -32,6 +32,7 @@ public class WelcomeActivity extends Activity {
     }
 
     private void initPermission() {
+        Log.e(TAG, "开始请求应用权限");
         PermissionManager.requestPermission(WelcomeActivity.this, new PermissionManager.Callback() {
             @Override
             public void permissionSuccess() {
@@ -59,7 +60,7 @@ public class WelcomeActivity extends Activity {
 
                             @Override
                             public void permissionFailed() {
-                                Log.e(TAG, "permissionFailed:STORAGE ");
+                                Log.e(TAG, "请求应用文件权限失败！");
                                 PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
                             }
                         }, Permission.Group.STORAGE);
@@ -67,7 +68,7 @@ public class WelcomeActivity extends Activity {
 
                     @Override
                     public void permissionFailed() {
-                        Log.e(TAG, "permissionFailed:MICROPHONE ");
+                        Log.e(TAG, "请求应用录音权限失败！");
                         PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
                     }
                 }, Permission.Group.MICROPHONE);
@@ -75,7 +76,7 @@ public class WelcomeActivity extends Activity {
 
             @Override
             public void permissionFailed() {
-                Log.e(TAG, "permissionFailed:CAMERA ");
+                Log.e(TAG, "请求应用相机权限失败！");
                 PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
             }
         }, Permission.Group.CAMERA);

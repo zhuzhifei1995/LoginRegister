@@ -110,7 +110,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                     photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME));
                     Toast.makeText(MainActivity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
                     TmpFileUtil.copyFile(new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME), new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
-                    Log.e(TAG, "handleMessage: " + jsonObject.getString("message"));
                 } else {
                     Toast.makeText(MainActivity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
                     SharedPreferencesUtils.removeKey(MainActivity.this, "status", "user");
@@ -131,15 +130,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
-            Log.e(TAG, "handleMessage: " + json);
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
-                Log.e(TAG, "handleMessage: " + jsonObject.getString("message"));
                 for (int i = 0; i < messagesJSONArray.length(); i++) {
-                    Log.e(TAG, "handleMessage messagesJSONArray: " + messagesJSONArray.getJSONObject(i));
                     if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
-                        Log.e(TAG, "handleMessage: 保存图片");
                         final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
                         final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
                         new Thread(new Runnable() {
@@ -147,14 +142,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(MainActivity.this, photoBitmap,
-                                            Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                 }
                             }
                         }).start();
                     }
                     if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
-                        Log.e(TAG, "handleMessage: 保存声音");
                         final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
                         final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
                         new Thread(new Runnable() {
@@ -196,16 +189,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                         final String photo = user.getString("photo");
                         String[] photos = photo.split("/");
                         final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        Log.e(TAG, "handleMessage: " + tmpBitmapFileName);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(MainActivity.this, bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
                             }
                         }).start();
                     }
-                    Log.e(TAG, "handleMessage: " + userJSONObjectList.toString());
                 }
             } catch (JSONException e) {
                 try {
@@ -275,7 +266,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             } else {
                 try {
                     String friendJSON = (String) message.obj;
-                    Log.e(TAG, "handleMessage: " + friendJSON);
                     JSONObject jsonObject = new JSONObject(friendJSON);
                     if (jsonObject.getString("code").equals("1")) {
                         Intent intent = new Intent(MainActivity.this, FriendShowActivity.class);
@@ -294,37 +284,32 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
     };
 
     private void initFriendRecyclerView() {
-        Log.e(TAG, "initFriendRecyclerView: " + userJSONObjectList);
         try {
             clickUserList = new ArrayList<>();
             String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
-            Log.e(TAG, "initFriendRecyclerView: clickUserJSON" + clickUserJSON);
             JSONArray jsonArray = new JSONArray(clickUserJSON);
             for (int i = 0; i < jsonArray.length(); i++) {
                 clickUserList.add(jsonArray.getJSONObject(i));
             }
-            Log.e(TAG, "initFriendRecyclerView: clickUserList" + clickUserList);
         } catch (JSONException e) {
-            Log.e(TAG, "文件读取失败，未点击过好友！");
+            Log.e(TAG, "文件读取失败，未点击过好友："+"/tmp/message/chat.json");
         }
         friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(userJSONObjectList);
         friend_RecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         friendRecyclerViewAdapter.setOnItemClickListener(new FriendRecyclerViewAdapter.FriendRecyclerViewAdapterOnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
-                Log.e(TAG, "第" + position + "个被点击：onItemClick: " + userJSONObjectList.get(position));
+                Log.e(TAG, "第" + position + "个被短时的点击：" + userJSONObjectList.get(position));
                 Intent intent = new Intent(MainActivity.this, FriendShowActivity.class);
                 intent.putExtra("friendJSON", userJSONObjectList.get(position).toString());
                 if (clickUserList.size() == 0) {
                     clickUserList.add(userJSONObjectList.get(position));
                 } else {
                     String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
-                    Log.e(TAG, "onItemClick: " + clickUserJSON);
                     if (!clickUserJSON.contains(userJSONObjectList.get(position).toString())) {
                         clickUserList.add(userJSONObjectList.get(position));
                     }
                 }
-                Log.e(TAG, "onItemClick: clickUserList" + clickUserList);
                 TmpFileUtil.writeJSONToFile(clickUserList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
                 startActivity(intent);
                 new Thread(new Runnable() {
@@ -348,7 +333,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         friendRecyclerViewAdapter.setOnItemLongClickListener(new FriendRecyclerViewAdapter.FriendRecyclerViewAdapterOnItemLongClickListener() {
             @Override
             public void onItemLongClick(int position) {
-                Log.e(TAG, "onItemLongClick: " + userJSONObjectList.get(position));
+                Log.e(TAG, "第" + position + "个被长按：" + userJSONObjectList.get(position));
             }
         });
         friend_RecyclerView.setAdapter(friendRecyclerViewAdapter);
@@ -445,8 +430,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             public void run() {
                 Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(MainActivity.this, photoBitmap,
-                            Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -505,15 +489,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
 
         Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
         if (bitmap != null) {
-            Log.e(TAG, "initMyView: 正常");
+            Log.e(TAG, "图片加载正常");
             photo_my_ImageView.setImageBitmap(bitmap);
         } else {
-            Log.e(TAG, "initMyView: 图片为空");
+            Log.e(TAG, "图片为空,加载失败");
             photo_my_ImageView.setImageResource(R.drawable.user_default_photo);
         }
         TextView nike_name_TextView = findViewById(R.id.nike_name_TextView);
         String nick_name = SharedPreferencesUtils.getString(MainActivity.this, "nick_name", "", "user");
-        Log.e(TAG, "initMyView: " + nick_name);
         if (!nick_name.equals("")) {
             nike_name_TextView.setText(nick_name);
         } else {
@@ -554,7 +537,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         final List<JSONObject> chatJSONObjectList = new ArrayList<>();
         String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath()
                 + "/tmp/message", "chat.json");
-        Log.e(TAG, "initMessageView: " + json);
         try {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -574,7 +556,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             chatRecyclerViewAdapter.setOnItemClickListener(new FriendRecyclerViewAdapter.FriendRecyclerViewAdapterOnItemClickListener() {
                 @Override
                 public void onItemClick(final int position) {
-                    Log.e(TAG, "onItemClick: " + chatJSONObjectList.get(position).toString());
+                    Log.e(TAG, "第" + position + "个被短时的点击：" + chatJSONObjectList.get(position).toString());
                     Intent intent = new Intent(MainActivity.this, FriendShowActivity.class);
                     intent.putExtra("friendJSON", chatJSONObjectList.get(position).toString());
                     startActivity(intent);
@@ -598,7 +580,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             chat_RecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             chat_RecyclerView.setAdapter(chatRecyclerViewAdapter);
         }
-        Log.e(TAG, "initMessageView: " + IS_UPDATE_MY_VIEW);
     }
 
     private void getNetFriendRecyclerView() {
@@ -635,10 +616,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath()
                 + "/tmp/user", "photo.png.cache");
         if (bitmap != null) {
-            Log.e(TAG, "initFriendView: 正常");
+            Log.e(TAG, "图片加载正常");
             title_left_ImageView.setImageBitmap(bitmap);
         } else {
-            Log.e(TAG, "initFriendView: 图片为空");
+            Log.e(TAG, "图片加载失败,图片为空");
             title_left_ImageView.setImageResource(R.drawable.user_default_photo);
         }
         if (IS_UPDATE_MY_VIEW) {
@@ -676,7 +657,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             try {
                 String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/friend", "friend.json");
-                Log.e(TAG, "initFriendView: " + json);
                 JSONArray jsonArray = new JSONArray(json);
                 userJSONObjectList = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -695,7 +675,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > 0)) {
-                    Log.e(TAG, "onLayoutChange: 键盘收起");
+                    Log.e(TAG, "键盘被收起");
                     View title_search_bar_include = findViewById(R.id.title_search_bar_include);
                     title_search_bar_include.setVisibility(View.VISIBLE);
                     LinearLayout title_search_LinearLayout = findViewById(R.id.title_search_LinearLayout);
@@ -704,14 +684,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                     foot_select_View.setVisibility(View.VISIBLE);
                     friend_RecyclerView.setVisibility(View.VISIBLE);
                 } else if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > 0)) {
-                    Log.e(TAG, "onLayoutChange: 键盘弹起");
+                    Log.e(TAG, "键盘被弹起");
                     View foot_select_View = findViewById(R.id.foot_select_View);
                     foot_select_View.setVisibility(View.GONE);
                     friend_RecyclerView.setVisibility(View.GONE);
                     root_LinearLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e(TAG, "onLayoutChange: 键盘失去焦点");
+                            Log.e(TAG, "键盘已经失去焦点");
                             search_EditText.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -761,9 +741,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/user", "photo.png.cache");
                 if (userPhotoFile.delete()) {
-                    Log.e(TAG, "deletePhotoCacheFile: 临时头像图片删除成功");
+                    Log.e(TAG, "临时头像图片删除成功："+userPhotoFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "deletePhotoCacheFile: 无临时头像文件图片");
+                    Log.e(TAG, "无临时头像文件图片："+userPhotoFile.getAbsolutePath());
                 }
                 TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend"));
                 TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message"));
@@ -879,9 +859,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e("TAG", "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                 } else {
-                    Log.e("TAG", "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                 }
             }
         }
@@ -895,8 +875,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             pictureUri = Uri.fromFile(pictureFile);
         }
-        Log.e(TAG, "photoFromCapture: " + pictureFile.getAbsolutePath());
-        Log.e(TAG, "photoFromCapture: " + pictureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
@@ -922,9 +900,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 File dirFile = new File(TMP_PHOTO_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e(TAG, "文件夹创建失败");
+                        Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                     } else {
-                        Log.e(TAG, "文件夹创建成功");
+                        Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -936,7 +914,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                         outputStream.flush();
                         outputStream.close();
                     } else {
-                        Log.e(TAG, "图片不存在");
+                        Log.e(TAG, "图片文件不存在！");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -986,9 +964,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                 }
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
@@ -1166,7 +1144,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
 
     @Override
     public void onClick(View view) {
-        Log.e(TAG, "onClick: " + view.getId());
+        Log.e(TAG, "主界面的内容被点击：" + view.getId());
         switch (view.getId()) {
             case R.id.dynamic_LinearLayout:
             case R.id.dynamic_ImageView:
@@ -1211,7 +1189,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.e("TAG", "onKeyDown: ");
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - CURRENT_BACK_PRESSED_TIME > BACK_PRESSED_INTERVAL) {
                 CURRENT_BACK_PRESSED_TIME = System.currentTimeMillis();
@@ -1228,9 +1205,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
     private void deletePhotoCacheFile() {
         File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
         if (photoCacheFile.delete()) {
-            Log.e(TAG, "deletePhotoCacheFile: 临时图片删除成功");
+            Log.e(TAG, "临时图片删除成功："+photoCacheFile.getAbsolutePath());
         } else {
-            Log.e(TAG, "deletePhotoCacheFile: 无生成的图片");
+            Log.e(TAG, "无生成的图片"+photoCacheFile.getAbsolutePath());
         }
     }
 
@@ -1238,7 +1215,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
     protected void onDestroy() {
         TmpFileUtil.writeJSONToFile("{}", Environment.getExternalStorageDirectory().getPath()
                 + "/tmp/friend", "friend.json");
-        Log.e(TAG, "onDestroy: 关闭");
         super.onDestroy();
     }
 

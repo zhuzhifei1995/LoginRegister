@@ -61,7 +61,6 @@ public class CustomListView extends ListView implements OnScrollListener {
 
     @SuppressLint("InflateParams")
     private void init(Context context) {
-        Log.e(TAG, "init: ");
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         refreshHeadLinearLayout = (LinearLayout) layoutInflater.inflate(R.layout.refresh_head_list_view, null);
         mArrowImageView = (ImageView) refreshHeadLinearLayout.findViewById(R.id.head_arrowImageView);
@@ -70,9 +69,7 @@ public class CustomListView extends ListView implements OnScrollListener {
         mLastUpdatedTextView = (TextView) refreshHeadLinearLayout.findViewById(R.id.head_lastUpdatedTextView);
         measureView(refreshHeadLinearLayout);
         mHeadContentHeight = refreshHeadLinearLayout.getMeasuredHeight();
-        System.out.println("mHeadContentHeight = " + mHeadContentHeight);
         int mHeadContentWidth = refreshHeadLinearLayout.getMeasuredWidth();
-        System.out.println("mHeadContentWidth = " + mHeadContentWidth);
         refreshHeadLinearLayout.setPadding(0, -1 * mHeadContentHeight, 0, 0);
         refreshHeadLinearLayout.invalidate();
         addHeaderView(refreshHeadLinearLayout, null, false);
@@ -93,22 +90,17 @@ public class CustomListView extends ListView implements OnScrollListener {
 
     private void measureView(View child) {
         android.view.ViewGroup.LayoutParams params = child.getLayoutParams();
-        System.out.println("params = " + params);
         if (params == null) {
             params = new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }
-        System.out.println("lpWidth = " + params.width);
         int childWidthSpec = ViewGroup.getChildMeasureSpec(0, 0, params.width);
-        System.out.println("childWidthSpec = " + childWidthSpec);
         int lpHeight = params.height;
-        System.out.println("lpHeight = " + lpHeight);
         int childHeightSpec;
         if (lpHeight > 0) {
             childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.EXACTLY);
         } else {
             childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.UNSPECIFIED);
         }
-        System.out.println("childHeightSpec = " + childHeightSpec);
         child.measure(childWidthSpec, childHeightSpec);
     }
 

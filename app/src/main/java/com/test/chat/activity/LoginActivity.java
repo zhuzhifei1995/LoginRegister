@@ -64,7 +64,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
                     JSONObject user = jsonObject.getJSONObject("message");
-                    Log.e(TAG, "handleMessage: " + user);
 
                     SharedPreferencesUtils.putString(LoginActivity.this, "create_time", user.getString("create_time"), "user");
                     SharedPreferencesUtils.putString(LoginActivity.this, "password", user.getString("password"), "user");
@@ -76,7 +75,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SharedPreferencesUtils.putBoolean(LoginActivity.this, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
                     SharedPreferencesUtils.putString(LoginActivity.this, "photo", user.getString("photo"), "user");
 
-                    Log.e(TAG, "handleMessage: " + user.getString("photo"));
                     saveUserPhoto(user.getString("photo"));
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -98,7 +96,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ANDROID_ID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
-        Log.e(TAG, "onCreate: " + ANDROID_ID);
+        Log.e(TAG, "获取设备的 ANDROID_ID：" + ANDROID_ID);
         if (SharedPreferencesUtils.getBoolean(LoginActivity.this, "status", false, "user")) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -157,8 +155,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        Log.e(TAG, "登录界面的内容被点击：" + view.getId());
+        switch (view.getId()) {
             case R.id.view_more_RelativeLayout:
                 showMoreMenu(MORE_UP_IS_SHOW);
                 break;
@@ -234,8 +233,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void run() {
                 Bitmap photoBitmap = new HttpUtil(LoginActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(LoginActivity.this, photoBitmap,
-                            Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                 }
             }
         }).start();

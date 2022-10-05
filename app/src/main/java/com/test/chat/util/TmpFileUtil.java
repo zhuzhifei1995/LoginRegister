@@ -22,7 +22,7 @@ public class TmpFileUtil {
     private static final String TAG = ActivityUtil.TAG;
 
     public static void writeToTmpFile(String soundFile, InputStream inputStream) {
-        Log.e(TAG, "writeToTmpFile: 保存声音" + soundFile);
+        Log.e(TAG, "保存声音文件：" + soundFile);
         try {
             int index;
             byte[] bytes = new byte[1024];
@@ -33,35 +33,37 @@ public class TmpFileUtil {
             }
             inputStream.close();
             fileOutputStream.close();
+            Log.e(TAG, "保存声音文件成功：" + soundFile);
         } catch (IOException e) {
+            Log.e(TAG, "保存声音文件失败：" + soundFile);
             e.printStackTrace();
         }
     }
 
     public static void writeJSONToFile(String json, String fileDir, String fileName) {
-        Log.e(TAG, "writeJSONToFile: ");
+        Log.e(TAG, "writeJSONToFile: 文件开始写入数据："+fileName);
         try {
             File file = new File(fileDir);
             if (!file.exists()) {
                 if (file.mkdir()) {
-                    Log.e(TAG, "文件夹创建成功：" + fileName);
+                    Log.e(TAG, "文件夹创建成功：" + fileDir);
                 } else {
-                    Log.e(TAG, "文件夹创建失败: " + fileName);
+                    Log.e(TAG, "文件夹创建失败: " + fileDir);
                 }
             }
             FileWriter fw = new FileWriter(fileDir + "/" + fileName);
             fw.flush();
             fw.write(json);
             fw.close();
-            Log.e(TAG, "文件写入成功" + fileName);
+            Log.e(TAG, "文件写入成功" + fileDir + "/" + fileName);
         } catch (Exception e) {
-            Log.e(TAG, "文件写入失败" + fileName);
+            Log.e(TAG, "文件写入失败" + fileDir + "/" + fileName);
             e.printStackTrace();
         }
     }
 
     public static String getJSONFileString(String fileDir, String fileName) {
-        Log.e(TAG, "getJSONFileString: ");
+        Log.e(TAG, "获取文件的文本数据：" + fileDir + "/" + fileName);
         StringBuilder json = new StringBuilder();
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(fileDir, fileName));
@@ -72,14 +74,16 @@ public class TmpFileUtil {
                 json.append(line).append("\n");
             }
             fileInputStream.close();
+            Log.e(TAG, "获取文件的文本数据成功：" + fileDir + "/" + fileName);
         } catch (Exception e) {
-            Log.e(TAG, "文件读取失败，未点击过好友！");
+            Log.e(TAG, "获取文件的文本数据失败, 文件读取失败, 未点击过好友！"+ fileDir + "/" + fileName );
+            e.printStackTrace();
         }
         return json.toString();
     }
 
     public static void copyFile(File fromFile, File toFile) {
-        Log.e(TAG, "copyFile: ");
+        Log.e(TAG, "copyFile: 开始从" + fromFile + "拷贝文件到：" + toFile);
         if (!fromFile.exists()) {
             return;
         }
@@ -91,16 +95,16 @@ public class TmpFileUtil {
         }
         if (!Objects.requireNonNull(toFile.getParentFile()).exists()) {
             if (!toFile.getParentFile().mkdirs()) {
-                Log.e("TAG", "文件夹创建失败");
+                Log.e(TAG, "文件夹创建失败："+toFile.getName());
             } else {
-                Log.e("TAG", "文件夹创建成功");
+                Log.e(TAG, "文件夹创建成功："+toFile.getAbsolutePath());
             }
         }
         if (toFile.exists()) {
             if (!toFile.delete()) {
-                Log.e("TAG", "文件夹删除失败");
+                Log.e(TAG, "文件夹删除失败："+toFile.getName());
             } else {
-                Log.e("TAG", "文件夹删除成功");
+                Log.e(TAG, "文件夹删除成功："+toFile.getName());
             }
         }
         try {
@@ -113,24 +117,27 @@ public class TmpFileUtil {
             }
             fileInputStream.close();
             fileOutputStream.close();
+            Log.e(TAG, "copyFile: 开始从" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝成功！");
         } catch (IOException e) {
+            Log.e(TAG, "copyFile: 开始从" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝失败！");
             e.printStackTrace();
-
         }
     }
 
     public static void deleteFileCache(File dirFile) {
-        Log.e(TAG, "deleteFileCache: ");
-        if (dirFile == null || !dirFile.exists() || !dirFile.isDirectory())
+        if (dirFile == null || !dirFile.exists() || !dirFile.isDirectory()){
+            Log.e(TAG, "要删除的文件夹不存在！");
             return;
+        }
         for (File file : Objects.requireNonNull(dirFile.listFiles())) {
             if (file.isFile()) {
                 if (file.delete()) {
-                    Log.e(TAG, "deleteFriendListViewCache: friendCacheFile临时图片删除成功");
+                    Log.e(TAG, "删除文件成功：" +file.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "deleteFriendListViewCache: friendCacheFile无生成的图片");
+                    Log.e(TAG, "要删除的文件不存在！");
                 }
             } else if (file.isDirectory())
+                Log.e(TAG, "要删除的文件是文件夹！" + file.getAbsolutePath());
                 deleteFileCache(file);
         }
     }

@@ -36,7 +36,7 @@ public class WebNetActivity extends Activity {
         setContentView(R.layout.activity_q_q_server);
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
-        Log.e(TAG, "onCreate: " + url);
+        Log.e(TAG, "请求显示的网页链接为：" + url);
         progressDialog = new ProgressDialog(WebNetActivity.this);
         Window window = progressDialog.getWindow();
         if (window != null) {

@@ -23,15 +23,15 @@ public class ImageUtil {
         return BitmapFactory.decodeFile(new File(dirFile, name).getPath(), options);
     }
 
-    public static void saveBitmapToTmpFile(Activity activity, Bitmap bitmap, String dirFile, String name) {
+    public static void saveBitmapToTmpFile(Bitmap bitmap, String dirFile, String name) {
         Log.e(TAG, "保存图片:" + name);
         File file;
         file = new File(dirFile);
         if (!file.exists()) {
             if (!file.mkdirs()) {
-                Log.e("TAG", "文件夹创建失败");
+                Log.e(TAG, "文件夹创建失败："+dirFile);
             } else {
-                Log.e("TAG", "文件夹创建成功");
+                Log.e(TAG, "文件夹创建成功"+dirFile);
             }
         }
         try {
@@ -41,13 +41,13 @@ public class ImageUtil {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                Log.e(TAG, "已经保存");
+                Log.e(TAG, "已经保存："+name);
             } else {
-                Log.e(TAG, "保存失败，图片不存在");
+                Log.e(TAG, "保存失败，图片不存在：" + name);
             }
 
         } catch (IOException e) {
-            Log.e(TAG, "保存失败");
+            Log.e(TAG, "保存失败：" +dirFile+"/"+ name);
             e.printStackTrace();
         }
     }

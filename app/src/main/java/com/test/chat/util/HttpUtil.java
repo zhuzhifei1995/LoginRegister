@@ -41,6 +41,7 @@ public class HttpUtil {
     private Context context;
 
     public HttpUtil(Context context) {
+        Log.e(TAG, "新建HttpUtil工具类成功：");
         client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                 .build();
@@ -48,6 +49,7 @@ public class HttpUtil {
     }
 
     public String getRequest(String url) {
+        Log.e(TAG, "请求的地址链接：" + url);
         Log.e(TAG, url);
         Request request = new Request.Builder().url(url).build();
         try {
@@ -63,7 +65,8 @@ public class HttpUtil {
     }
 
     public String postRequest(String url, Map<String, String> parameter) {
-        Log.e(TAG, url);
+        Log.e(TAG, "请求的地址链接：" + url);
+        Log.e(TAG, "请求的地址参数：" + parameter);
         FormBody formBody = null;
         if (parameter != null && parameter.size() != 0) {
             Builder builder = new Builder();
@@ -93,6 +96,7 @@ public class HttpUtil {
     }
 
     public Bitmap getImageBitmap(String imageUrl) {
+        Log.e(TAG, "请求的图片链接：" + imageUrl);
         Request request = new Request.Builder().url(imageUrl).build();
         Bitmap bitmap;
         try {
@@ -110,6 +114,8 @@ public class HttpUtil {
     }
 
     public void getSoundFile(String fileUrl, String voiceName) {
+        Log.e(TAG, "请求下载的文件链接：" + fileUrl);
+        Log.e(TAG, "请求下载的文件名称：" + voiceName);
         Request request = new Request.Builder().url(fileUrl).build();
         try {
             ResponseBody responseBody = client.newCall(request).execute().body();
@@ -125,6 +131,9 @@ public class HttpUtil {
     }
 
     public String upLoadImageFile(final File file, final String url, final Map<String, String> parameter) {
+        Log.e(TAG, "请求上传的文件链接：" + url);
+        Log.e(TAG, "请求上传的文件位置：" + file.getAbsolutePath());
+        Log.e(TAG, "请求上传的文件参数：" + parameter);
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (parameter != null && parameter.size() != 0) {
             for (Map.Entry<String, String> entry : parameter.entrySet()) {

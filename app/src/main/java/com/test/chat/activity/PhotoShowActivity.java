@@ -49,7 +49,6 @@ public class PhotoShowActivity extends Activity {
     }
 
     private void initView() {
-        Log.e(TAG, "initView: " + IS_SEEK_BAR_CHANGE);
         ImageView photo_show_ImageView = findViewById(R.id.photo_show_ImageView);
         LinearLayout voice_LinearLayout = findViewById(R.id.voice_LinearLayout);
         LinearLayout photo_show_LinearLayout = findViewById(R.id.photo_show_LinearLayout);
@@ -109,7 +108,6 @@ public class PhotoShowActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if (IS_PLAYING) {
-                    Log.e(TAG, "initView: " + mediaPlayer.getDuration());
                     play_ImageView.setImageResource(R.drawable.voice_play);
                     if (!mediaPlayer.isPlaying()) {
                         mediaPlayer.start();

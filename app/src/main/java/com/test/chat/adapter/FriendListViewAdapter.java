@@ -34,6 +34,7 @@ public class FriendListViewAdapter extends ArrayAdapter<JSONObject> {
     public FriendListViewAdapter(Context context, int resource, List<JSONObject> jsonObjects) {
         super(context, resource, jsonObjects);
         this.resource = resource;
+        Log.e(TAG, "初始化FriendListViewAdapter成功：" + jsonObjects.toString());
     }
 
     @Override

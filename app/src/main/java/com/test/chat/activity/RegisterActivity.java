@@ -164,7 +164,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void initViewRegister() {
-        Log.e(TAG, "initViewRegister: " + getPackageName());
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("手机验证");
         LinearLayout password_setting_LinearLayout = findViewById(R.id.password_setting_LinearLayout);
@@ -665,10 +664,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e(TAG, "submitRegister: " + password);
-                    Log.e(TAG, "submitRegister: " + phone);
                     File file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
-                    Log.e(TAG, "run: " + file);
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("password", password);
                     parameter.put("phone", phone);
@@ -749,9 +745,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e("TAG", "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
                 } else {
-                    Log.e("TAG", "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
                 }
             }
         }
@@ -765,9 +761,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             pictureUri = Uri.fromFile(pictureFile);
         }
-        Log.e(TAG, "photoFromCapture: " + pictureFile.getAbsolutePath());
-
-        Log.e(TAG, "photoFromCapture: " + pictureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
@@ -793,9 +786,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 File dirFile = new File(TMP_PHOTO_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e("TAG", "文件夹创建失败");
+                        Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
                     } else {
-                        Log.e("TAG", "文件夹创建成功");
+                        Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -821,9 +814,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e("TAG", "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
                 } else {
-                    Log.e("TAG", "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
                 }
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
@@ -922,8 +915,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        Log.e(TAG, "注册界面的内容被点击：" + view.getId());
+        switch (view.getId()) {
             case R.id.local_setting_TextView:
                 showSelectLocal();
                 break;
@@ -966,9 +960,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
         IS_SET_PHOTO_FLAG = false;
         if (photoCacheFile.delete()) {
-            Log.e(TAG, "deletePhotoCacheFile: 临时图片删除成功");
+            Log.e(TAG, "头像临时图片删除成功："+photoCacheFile.getAbsolutePath());
         } else {
-            Log.e(TAG, "deletePhotoCacheFile: 无生成的图片");
+            Log.e(TAG, "无头像生成的图片");
         }
     }
 

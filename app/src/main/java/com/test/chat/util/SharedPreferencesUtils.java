@@ -14,7 +14,7 @@ public class SharedPreferencesUtils {
     private static SharedPreferences sharedPreferences;
 
     public static void putBoolean(Context context, String key, boolean value, String filename) {
-        Log.e(TAG, "putBoolean: ");
+        Log.e(TAG, "保存临时数据到"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -22,7 +22,7 @@ public class SharedPreferencesUtils {
     }
 
     public static boolean getBoolean(Context context, String key, boolean defValue, String filename) {
-        Log.e(TAG, "getBoolean: ");
+        Log.e(TAG, "获取临时数据"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -30,7 +30,7 @@ public class SharedPreferencesUtils {
     }
 
     public static void putString(Context context, String key, String value, String filename) {
-        Log.e(TAG, "putString: ");
+        Log.e(TAG, "保存临时数据到"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -38,7 +38,7 @@ public class SharedPreferencesUtils {
     }
 
     public static String getString(Context context, String key, String defValue, String filename) {
-        Log.e(TAG, "getString: ");
+        Log.e(TAG, "获取临时数据"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -46,7 +46,7 @@ public class SharedPreferencesUtils {
     }
 
     public static void putInt(Context context, String key, int value, String filename) {
-        Log.e(TAG, "putInt: ");
+        Log.e(TAG, "保存临时数据到"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -54,7 +54,7 @@ public class SharedPreferencesUtils {
     }
 
     public static int getInt(Context context, String key, int defValue, String filename) {
-        Log.e(TAG, "getInt: ");
+        Log.e(TAG, "获取临时数据"+filename+"文件成功："+key);
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
@@ -62,9 +62,8 @@ public class SharedPreferencesUtils {
     }
 
     public static void removeKey(Context context, String key, String filename) {
-        Log.e(TAG, "removeKey: ");
+        Log.e(TAG, "删除临时文件数据成功"+filename);
         if (sharedPreferences == null) {
-            Log.e("TAG", "removeKey: " + key);
             sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         }
         sharedPreferences.edit().remove(key).apply();

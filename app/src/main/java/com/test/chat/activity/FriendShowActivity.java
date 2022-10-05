@@ -170,6 +170,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Log.e(TAG, "好友显示界面的内容被点击：" + view.getId());
         switch (view.getId()) {
             case R.id.title_left_ImageView:
                 finish();

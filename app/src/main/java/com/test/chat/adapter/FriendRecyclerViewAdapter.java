@@ -33,7 +33,7 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     private FriendRecyclerViewAdapterOnItemLongClickListener friendRecyclerViewAdapterOnItemLongClickListener;
 
     public FriendRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
-        Log.e(TAG, "MessageRecyclerViewAdapter: " + jsonObjectList);
+        Log.e(TAG, "初始化FriendRecyclerViewAdapter成功：" + jsonObjectList.toString());
         this.jsonObjectList = jsonObjectList;
     }
 

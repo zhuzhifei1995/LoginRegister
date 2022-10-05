@@ -86,7 +86,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
-            Log.e(TAG, "handleMessage: " + json);
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
@@ -101,8 +100,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(ChatFriendActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(ChatFriendActivity.this, photoBitmap,
-                                            Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
@@ -123,7 +121,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         }).start();
                     }
                 }
-                Log.e(TAG, "handleMessage: " + jsonObject.getString("message"));
                 TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -147,7 +144,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         if (friendName.equals("")) {
             friendName = friendLoginNumber;
         }
-        Log.e(TAG, "friendName: " + friendName);
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText(friendName);
         send_message_Button = findViewById(R.id.send_message_Button);
@@ -177,12 +173,12 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         send_message_EditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e(TAG, "beforeTextChanged: ");
+                Log.e(TAG, "输入框内容有变化！");
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e(TAG, "onTextChanged: ");
+                Log.e(TAG, "输入框内容正在变化！");
             }
 
             @Override
@@ -195,17 +191,15 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     send_message_Button.setVisibility(View.VISIBLE);
                     send_image_message_Button.setVisibility(View.GONE);
                 }
-                Log.e(TAG, "afterTextChanged: " + text);
+                Log.e(TAG, "输入框内容变化完成！ " + text);
             }
         });
         message_RecyclerView = findViewById(R.id.message_RecyclerView);
         messageJSONObjectList = new ArrayList<>();
 
         String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
-        Log.e(TAG, "initView: " + json);
-        JSONArray jsonArray;
         try {
-            jsonArray = new JSONArray(json);
+            JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 Log.e(TAG, jsonArray.getJSONObject(i).toString());
                 messageJSONObjectList.add(jsonArray.getJSONObject(i));
@@ -224,7 +218,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             @Override
             public void onItemClick(int position) {
                 JSONObject jsonObject = messageJSONObjectList.get(position);
-                Log.e(TAG, "onItemClick: " + jsonObject);
                 try {
                     if (jsonObject.getString("message_type").equals("2")) {
                         if (messageJSONObjectList.get(position).getString("message_type").equals("2")) {
@@ -261,6 +254,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Log.e(TAG, "聊天界面的内容被点击：" + view.getId());
         switch (view.getId()) {
             case R.id.title_left_ImageView:
                 backFriendShow();
@@ -324,7 +318,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             Toast.makeText(ChatFriendActivity.this, "录音结束！", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(ChatFriendActivity.this, "录音异常！", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "endRecord: 未初始化 mediaRecorder");
+            Log.e(TAG, "未初始化录音的工具类！");
         }
     }
 
@@ -413,7 +407,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         messageRecyclerViewAdapter.notifyDataSetChanged();
         final String message = send_message_EditText.getText().toString();
         if (!message.trim().equals("")) {
-            Log.e(TAG, "sendMessage: " + messageJSONObjectList);
             send_message_EditText.setText("");
             new Thread(new Runnable() {
                 @Override
@@ -451,9 +444,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             File dirFile = new File(MESSAGE_IMAGE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e("TAG", "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                 } else {
-                    Log.e("TAG", "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                 }
             }
         }
@@ -462,14 +455,11 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pictureUri = FileProvider.getUriForFile(ChatFriendActivity.this,
-                    "com.exam.loginregistsystem.fileProvider", pictureFile);
+                    getPackageName() +".fileProvider", pictureFile);
         } else {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             pictureUri = Uri.fromFile(pictureFile);
         }
-        Log.e(TAG, "photoFromCapture: " + pictureFile.getAbsolutePath());
-
-        Log.e(TAG, "photoFromCapture: " + pictureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
@@ -495,9 +485,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 File dirFile = new File(MESSAGE_IMAGE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e("TAG", "文件夹创建失败");
+                        Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                     } else {
-                        Log.e("TAG", "文件夹创建成功");
+                        Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -523,16 +513,16 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             File dirFile = new File(MESSAGE_IMAGE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e("TAG", "文件夹创建失败");
+                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
                 } else {
-                    Log.e("TAG", "文件夹创建成功");
+                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
                 }
             }
 
             file = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(ChatFriendActivity.this,
-                    "com.exam.loginregistsystem.fileProvider", file), "image/*");
+                    getPackageName() +".fileProvider", file), "image/*");
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("crop", "true");
             intent.putExtra("aspectX", 1);
@@ -659,18 +649,18 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         if (mediaRecorder == null) {
             if (!voiceDirPath.exists()) {
                 if (voiceDirPath.mkdir()) {
-                    Log.e(TAG, "startRecord: 录音文件夹创建成功");
+                    Log.e(TAG, "录音文件夹创建成功："+voiceDirPath);
                 } else {
-                    Log.e(TAG, "startRecord: 录音文件夹创建失败");
+                    Log.e(TAG, "录音文件夹创建失败："+voiceDirPath);
                 }
             }
             File file = new File(voiceDirPath, "tmp.amr.cache");
             if (!file.exists()) {
                 try {
                     if (file.createNewFile()) {
-                        Log.e(TAG, "startRecord: 录音文件创建成功");
+                        Log.e(TAG, " 录音文件创建成功："+file.getAbsolutePath());
                     } else {
-                        Log.e(TAG, "startRecord: 录音文件创建失败");
+                        Log.e(TAG, "录音文件创建失败："+file.getAbsolutePath());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

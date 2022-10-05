@@ -10,6 +10,7 @@ import com.test.chat.util.ActivityUtil;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -18,7 +19,7 @@ public class PermissionManager {
     private static final String TAG = ActivityUtil.TAG;
 
     public static void requestPermission(final Context context, final Callback callback, String... permissions) {
-        Log.e(TAG, "requestPermission: ");
+        Log.e(TAG, "获取应用权限的列表是：" + Arrays.toString(permissions));
         AndPermission.with(context)
                 .permission(permissions)
                 .onGranted(new Action() {

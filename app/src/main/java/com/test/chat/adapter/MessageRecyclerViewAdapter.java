@@ -34,7 +34,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
     private Context context;
 
     public MessageRecyclerViewAdapter(Context context, List<JSONObject> jsonObjectList) {
-        Log.e(TAG, "MessageRecyclerViewAdapter: " + jsonObjectList);
+        Log.e(TAG, "初始化MessageRecyclerViewAdapter成功：" + jsonObjectList.toString());
         this.jsonObjectList = jsonObjectList;
         this.context = context;
     }

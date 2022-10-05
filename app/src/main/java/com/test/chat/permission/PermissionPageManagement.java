@@ -30,7 +30,7 @@ public class PermissionPageManagement {
     private static final String MANUFACTURER_LEN_OVO = "LEN_OVO";
 
     public static void goToPermissionSetting(Activity activity) {
-        Log.e(TAG, "goToPermissionSetting: " + Build.MANUFACTURER);
+        Log.e(TAG, "获取权限的机型名称为: " + Build.MANUFACTURER);
         switch (Build.MANUFACTURER) {
             case MANUFACTURER_HUA_WEI:
                 huaWei(activity);
@@ -55,7 +55,7 @@ public class PermissionPageManagement {
                 break;
             default:
                 applicationInfo(activity);
-                Log.e(TAG, "目前暂不支持此系统");
+                Log.e(TAG, "目前暂不支持此系统" + Build.MANUFACTURER);
                 break;
         }
     }
@@ -179,7 +179,6 @@ public class PermissionPageManagement {
     }
 
     private static void goIntentSetting(Activity pActivity) {
-        Log.e(TAG, "goIntentSetting: ");
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", pActivity.getPackageName(), null);
         intent.setData(uri);
