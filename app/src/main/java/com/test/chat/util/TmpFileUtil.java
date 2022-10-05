@@ -41,7 +41,7 @@ public class TmpFileUtil {
     }
 
     public static void writeJSONToFile(String json, String fileDir, String fileName) {
-        Log.e(TAG, "writeJSONToFile: 文件开始写入数据："+fileName);
+        Log.e(TAG, "文件开始写入数据："+ fileDir + "/" + fileName);
         try {
             File file = new File(fileDir);
             if (!file.exists()) {
@@ -55,9 +55,9 @@ public class TmpFileUtil {
             fw.flush();
             fw.write(json);
             fw.close();
-            Log.e(TAG, "文件写入成功" + fileDir + "/" + fileName);
+            Log.e(TAG, "文件写入成功：" + fileDir + "/" + fileName);
         } catch (Exception e) {
-            Log.e(TAG, "文件写入失败" + fileDir + "/" + fileName);
+            Log.e(TAG, "文件写入失败：" + fileDir + "/" + fileName);
             e.printStackTrace();
         }
     }
@@ -83,7 +83,7 @@ public class TmpFileUtil {
     }
 
     public static void copyFile(File fromFile, File toFile) {
-        Log.e(TAG, "copyFile: 开始从" + fromFile + "拷贝文件到：" + toFile);
+        Log.e(TAG, "copyFile: 开始从：" + fromFile + "拷贝文件到：" + toFile);
         if (!fromFile.exists()) {
             return;
         }
@@ -117,9 +117,9 @@ public class TmpFileUtil {
             }
             fileInputStream.close();
             fileOutputStream.close();
-            Log.e(TAG, "copyFile: 开始从" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝成功！");
+            Log.e(TAG, "开始从：" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝成功！");
         } catch (IOException e) {
-            Log.e(TAG, "copyFile: 开始从" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝失败！");
+            Log.e(TAG, "开始从：" + fromFile.getAbsolutePath() + "拷贝文件到：" + toFile.getAbsolutePath()+", 拷贝失败！");
             e.printStackTrace();
         }
     }
@@ -137,7 +137,7 @@ public class TmpFileUtil {
                     Log.e(TAG, "要删除的文件不存在！");
                 }
             } else if (file.isDirectory())
-                Log.e(TAG, "要删除的文件是文件夹！" + file.getAbsolutePath());
+                Log.e(TAG, "要删除的文件是文件夹：" + file.getAbsolutePath());
                 deleteFileCache(file);
         }
     }
