@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:background="@drawable/progress_dialog_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/_86_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_top_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/_86" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@drawable/line_view_bg" />
+
+    <TextView
+        android:id="@+id/_853_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_center_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/_853" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@drawable/line_view_bg" />
+
+    <TextView
+        android:id="@+id/_852_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_center_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/_852" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@drawable/line_view_bg" />
+
+    <TextView
+        android:id="@+id/_886_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_center_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/_886" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@drawable/line_view_bg" />
+
+    <TextView
+        android:id="@+id/cancel_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bottom_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/cancel" />
+
+
+</LinearLayout>
