@@ -1,4 +1,4 @@
-package com.test.chat.util;
+package com.test.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
+import com.test.chat.util.ImageUtil;
+import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -26,7 +28,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FriendListViewAdapter extends ArrayAdapter<JSONObject> {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private int resource;
 
     public FriendListViewAdapter(Context context, int resource, List<JSONObject> jsonObjects) {

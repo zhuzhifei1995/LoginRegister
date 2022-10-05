@@ -25,7 +25,7 @@ import androidx.annotation.RequiresApi;
 import com.test.chat.R;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +33,7 @@ import org.json.JSONObject;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FriendShowActivity extends Activity implements View.OnClickListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static boolean IS_SHOW_MY_MESSAGE = false;
     private ProgressDialog progressDialog;
 

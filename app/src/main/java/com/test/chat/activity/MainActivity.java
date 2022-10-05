@@ -44,12 +44,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
-import com.test.chat.util.FriendRecyclerViewAdapter;
-import com.test.chat.util.HttpUtils;
+import com.test.chat.adapter.FriendRecyclerViewAdapter;
+import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.util.TmpFileUtil;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -69,7 +69,7 @@ import java.util.Objects;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends Activity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final int BACK_PRESSED_INTERVAL = 2000;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -145,7 +145,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap photoBitmap = new HttpUtils(MainActivity.this).getImageBitmap(messageImageUrl);
+                                Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
                                     ImageUtil.saveBitmapToTmpFile(MainActivity.this, photoBitmap,
                                             Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
@@ -161,7 +161,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                             @Override
                             public void run() {
                                 try {
-                                    new HttpUtils(MainActivity.this).getSoundFile(messageVoiceUrl, voiceName);
+                                    new HttpUtil(MainActivity.this).getSoundFile(messageVoiceUrl, voiceName);
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap bitmap = new HttpUtils(MainActivity.this).getImageBitmap(photo);
+                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
                                 ImageUtil.saveBitmapToTmpFile(MainActivity.this, bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
                             }
                         }).start();
@@ -338,7 +338,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                             e.printStackTrace();
                         }
                         Message message = new Message();
-                        message.obj = new HttpUtils(MainActivity.this).postRequest(Utils.NET_URL + "/get_messages", parameter);
+                        message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                         getMessageHandler.sendMessage(message);
                     }
                 }).start();
@@ -443,7 +443,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap photoBitmap = new HttpUtils(MainActivity.this).getImageBitmap(photo);
+                Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
                     ImageUtil.saveBitmapToTmpFile(MainActivity.this, photoBitmap,
                             Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
@@ -496,7 +496,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                         Map<String, String> parameter = new HashMap<>();
                         parameter.put("id", id);
                         Message message = new Message();
-                        message.obj = new HttpUtils(MainActivity.this).postRequest(Utils.NET_URL + "/query_user_by_id", parameter);
+                        message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
                         mySwipeRefreshHandler.sendMessage(message);
                     }
                 }).start();
@@ -589,7 +589,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                                 e.printStackTrace();
                             }
                             Message message = new Message();
-                            message.obj = new HttpUtils(MainActivity.this).postRequest(Utils.NET_URL + "/get_messages", parameter);
+                            message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                             getMessageHandler.sendMessage(message);
                         }
                     }).start();
@@ -605,7 +605,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
         Map<String, String> parameter = new HashMap<>();
         parameter.put("id", SharedPreferencesUtils.getString(MainActivity.this, "id", "0", "user"));
         Message message = new Message();
-        message.obj = new HttpUtils(MainActivity.this).postRequest(Utils.NET_URL + "/query_all_user", parameter);
+        message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
         friendShowHandler.sendMessage(message);
     }
 
@@ -970,8 +970,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                             "id", "0", "user"));
                     File updatePhotoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
                     Message message = new Message();
-                    message.obj = new HttpUtils(MainActivity.this).upLoadImageFile(updatePhotoFile,
-                            Utils.NET_URL + "/update_user_photo", parameter);
+                    message.obj = new HttpUtil(MainActivity.this).upLoadImageFile(updatePhotoFile,
+                            ActivityUtil.NET_URL + "/update_user_photo", parameter);
                     uploadUpdatePhotoHandler.sendMessage(message);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -1075,7 +1075,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 hideSoftInputFromWindow(Objects.requireNonNull(MainActivity.this.getCurrentFocus()).getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
         final String phone = search_EditText.getText().toString();
-        if (Utils.isMobileNO(phone)) {
+        if (ActivityUtil.isMobileNO(phone)) {
             progressDialog.show();
             Window window = progressDialog.getWindow();
             if (window != null) {
@@ -1099,8 +1099,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                     } else {
                         message.what = 0;
                     }
-                    message.obj = new HttpUtils(MainActivity.this).postRequest
-                            (Utils.NET_URL + "/query_user_by_phone", parameter);
+                    message.obj = new HttpUtil(MainActivity.this).postRequest
+                            (ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
                     searchFriendHandler.sendMessage(message);
                 }
             }).start();

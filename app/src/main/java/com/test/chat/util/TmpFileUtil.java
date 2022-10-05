@@ -19,7 +19,7 @@ import java.util.Objects;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class TmpFileUtil {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
 
     public static void writeToTmpFile(String soundFile, InputStream inputStream) {
         Log.e(TAG, "writeToTmpFile: 保存声音" + soundFile);

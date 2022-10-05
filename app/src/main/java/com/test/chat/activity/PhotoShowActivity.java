@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import com.test.chat.R;
 import com.test.chat.util.ImageUtil;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 import java.io.File;
 import java.util.Timer;
@@ -32,7 +32,7 @@ import java.util.TimerTask;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class PhotoShowActivity extends Activity {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static boolean IS_PLAYING = true;
     private static boolean IS_SEEK_BAR_CHANGE = false;
     private MediaPlayer mediaPlayer;

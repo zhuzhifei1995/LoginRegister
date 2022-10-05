@@ -15,7 +15,7 @@ import java.io.IOException;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class ImageUtil {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
 
     public static Bitmap getBitmapFromFile(String dirFile, String name) {
         System.gc();

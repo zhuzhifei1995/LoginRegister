@@ -1,4 +1,4 @@
-package com.test.chat.util;
+package com.test.chat.permission;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,10 +11,12 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.test.chat.util.ActivityUtil;
+
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class PermissionPageManagement {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final String MANUFACTURER_HUA_WEI = "HUA_WEI";
     private static final String MANUFACTURER_MEI_ZU = "MEI_ZU";
     private static final String MANUFACTURER_XiAO_MI = "XiAO_MI";

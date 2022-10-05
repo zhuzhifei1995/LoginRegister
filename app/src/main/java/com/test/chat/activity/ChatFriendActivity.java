@@ -41,12 +41,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
-import com.test.chat.util.HttpUtils;
+import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
-import com.test.chat.util.MessageRecyclerViewAdapter;
+import com.test.chat.adapter.MessageRecyclerViewAdapter;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.util.TmpFileUtil;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +64,7 @@ import java.util.UUID;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class ChatFriendActivity extends Activity implements View.OnClickListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
@@ -99,7 +99,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap photoBitmap = new HttpUtils(ChatFriendActivity.this).getImageBitmap(messageImageUrl);
+                                Bitmap photoBitmap = new HttpUtil(ChatFriendActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
                                     ImageUtil.saveBitmapToTmpFile(ChatFriendActivity.this, photoBitmap,
                                             Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
@@ -118,7 +118,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                new HttpUtils(ChatFriendActivity.this).getSoundFile(messageVoiceUrl, voiceName);
+                                new HttpUtil(ChatFriendActivity.this).getSoundFile(messageVoiceUrl, voiceName);
                             }
                         }).start();
                     }
@@ -318,7 +318,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
                     parameter.put("message", voiceUploadFileName);
                     parameter.put("message_type", 3 + "");
-                    new HttpUtils(ChatFriendActivity.this).upLoadImageFile(voiceUploadFile, Utils.NET_URL + "/send_message", parameter);
+                    new HttpUtil(ChatFriendActivity.this).upLoadImageFile(voiceUploadFile, ActivityUtil.NET_URL + "/send_message", parameter);
                 }
             }).start();
             Toast.makeText(ChatFriendActivity.this, "录音结束！", Toast.LENGTH_SHORT).show();
@@ -402,7 +402,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 parameter.put("user_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id", "", "user"));
                 parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtils(ChatFriendActivity.this).postRequest(Utils.NET_URL + "/get_messages", parameter);
+                message.obj = new HttpUtil(ChatFriendActivity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                 getMessageHandler.sendMessage(message);
             }
         }).start();
@@ -434,7 +434,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
                     parameter.put("message", message);
                     parameter.put("message_type", 1 + "");
-                    new HttpUtils(ChatFriendActivity.this).postRequest(Utils.NET_URL + "/send_message", parameter);
+                    new HttpUtil(ChatFriendActivity.this).postRequest(ActivityUtil.NET_URL + "/send_message", parameter);
                 }
             }).start();
         } else {
@@ -573,7 +573,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
                 parameter.put("message", messageImage);
                 parameter.put("message_type", 2 + "");
-                new HttpUtils(ChatFriendActivity.this).upLoadImageFile(messageImageFile, Utils.NET_URL + "/send_message", parameter);
+                new HttpUtil(ChatFriendActivity.this).upLoadImageFile(messageImageFile, ActivityUtil.NET_URL + "/send_message", parameter);
             }
         }).start();
     }

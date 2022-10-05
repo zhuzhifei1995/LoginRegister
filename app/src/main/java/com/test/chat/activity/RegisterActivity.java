@@ -43,8 +43,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.test.chat.R;
-import com.test.chat.util.HttpUtils;
-import com.test.chat.util.Utils;
+import com.test.chat.util.HttpUtil;
+import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +58,7 @@ import java.util.Map;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class RegisterActivity extends Activity implements View.OnClickListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
@@ -491,11 +491,11 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (!check_agree_CheckBox.isChecked()) {
             Toast.makeText(this, "请确认是否已经阅读《腾讯QQ服务条款》", Toast.LENGTH_SHORT).show();
         }
-        if (!Utils.isMobileNO(phone)) {
+        if (!ActivityUtil.isMobileNO(phone)) {
             Toast.makeText(this, "请正确填写手机号，我们将向您发送一条验证码短信", Toast.LENGTH_SHORT).show();
             phone_number_EditText.requestFocus();
         }
-        if (Utils.isMobileNO(phone) && check_agree_CheckBox.isChecked()) {
+        if (ActivityUtil.isMobileNO(phone) && check_agree_CheckBox.isChecked()) {
             InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(phone_number_EditText.getWindowToken(), 0);
             getMobileNoCode();
@@ -521,8 +521,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("phone", phone);
                 Message message = new Message();
-                message.obj = new HttpUtils(RegisterActivity.this)
-                        .postRequest(Utils.NET_URL + "/phone_is_register_user", parameter);
+                message.obj = new HttpUtil(RegisterActivity.this)
+                        .postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
                 codeHandler.sendMessage(message);
             }
         }).start();
@@ -637,7 +637,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 //        password = "123456789";
 //        re_password = "123456789";
 
-        if (Utils.isPassword(password)) {
+        if (ActivityUtil.isPassword(password)) {
             if (password.equals(re_password)) {
                 initViewPhotoSet();
             } else {
@@ -673,7 +673,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     parameter.put("password", password);
                     parameter.put("phone", phone);
                     Message message = new Message();
-                    message.obj = new HttpUtils(RegisterActivity.this).upLoadImageFile(file, Utils.NET_URL + "/register_user", parameter);
+                    message.obj = new HttpUtil(RegisterActivity.this).upLoadImageFile(file, ActivityUtil.NET_URL + "/register_user", parameter);
                     registerHandler.sendMessage(message);
                 }
             }).start();

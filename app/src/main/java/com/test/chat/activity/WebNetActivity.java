@@ -22,12 +22,12 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class WebNetActivity extends Activity {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private ProgressDialog progressDialog;
 
     @Override

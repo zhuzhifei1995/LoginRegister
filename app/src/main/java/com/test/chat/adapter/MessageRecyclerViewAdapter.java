@@ -1,4 +1,4 @@
-package com.test.chat.util;
+package com.test.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,9 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
+import com.test.chat.util.ImageUtil;
+import com.test.chat.util.SharedPreferencesUtils;
+import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -25,7 +28,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecyclerViewAdapter.MessageRecyclerViewHolder> {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private List<JSONObject> jsonObjectList;
     private MessageRecyclerViewAdapter.MessageRecyclerViewAdapterOnItemClickListener messageRecyclerViewAdapterOnItemClickListener;
     private Context context;

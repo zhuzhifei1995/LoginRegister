@@ -9,15 +9,15 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
-import com.test.chat.util.PermissionManager;
-import com.test.chat.util.PermissionPageManagement;
-import com.test.chat.util.Utils;
+import com.test.chat.permission.PermissionManager;
+import com.test.chat.permission.PermissionPageManagement;
+import com.test.chat.util.ActivityUtil;
 import com.yanzhenjie.permission.Permission;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class WelcomeActivity extends Activity {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

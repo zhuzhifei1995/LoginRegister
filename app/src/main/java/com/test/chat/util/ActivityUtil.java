@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class Utils {
+public class ActivityUtil {
 
     //    连接电脑正常网络时
     public static String NET_URL = "http://192.168.1.4:8080";

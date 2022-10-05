@@ -1,4 +1,4 @@
-package com.test.chat.util;
+package com.test.chat.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
+import com.test.chat.util.ActivityUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +31,7 @@ import java.util.Date;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class CustomListView extends ListView implements OnScrollListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private final static int RELEASE_TO_REFRESH = 0;
     private final static int PULL_TO_REFRESH = 1;
     private final static int REFRESHING = 2;

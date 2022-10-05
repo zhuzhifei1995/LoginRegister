@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class SharedPreferencesUtils {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static SharedPreferences sharedPreferences;
 
     public static void putBoolean(Context context, String key, boolean value, String filename) {

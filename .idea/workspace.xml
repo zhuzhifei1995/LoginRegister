@@ -12,9 +12,28 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
+    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="修改chat文件">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/holder/MessageRecyclerViewHolder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/PhotoShowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/PhotoShowActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/WebNetActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/WebNetActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/WelcomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/WelcomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/CustomListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/CustomListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/FriendListViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FriendListViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/FriendRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FriendRecyclerViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/HttpUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/HttpUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ImageUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ImageUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/MessageRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/MessageRecyclerViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/PermissionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/permission/PermissionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/PermissionPageManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/permission/PermissionPageManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/SharedPreferencesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/SharedPreferencesUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/TmpFileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/TmpFileUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664987898165</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="修改chat文件">
+      <created>1664987984284</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1664987984284</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,7 +250,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="提交" />
+    <MESSAGE value="修改chat文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改chat文件" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="174" key="#Inspections" timestamp="1664033048971">
@@ -275,14 +302,14 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="815" y="280" key="AndroidProcessChooserDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1664899825678" />
-    <state x="497" y="32" width="870" height="813" key="CommitChangelistDialog2" timestamp="1664987892178">
+    <state x="497" y="32" width="870" height="813" key="CommitChangelistDialog2" timestamp="1664989152959">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="497" y="32" width="870" height="813" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1664987892178" />
-    <state x="267" y="237" key="FileChooserDialogImpl" timestamp="1664629091396">
+    <state x="497" y="32" width="870" height="813" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1664989152959" />
+    <state x="267" y="237" key="FileChooserDialogImpl" timestamp="1664988127918">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="267" y="237" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1664629091396" />
+    <state x="267" y="237" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1664988127918" />
     <state x="785" y="404" width="549" height="223" key="Github.ShareDialog" timestamp="1664987763231">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
@@ -335,10 +362,10 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state width="623" height="498" key="SwitcherDM/0.0.1920.1032@0.0.1920.1032" timestamp="1664982244149" />
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2" timestamp="1664987370801">
+    <state x="552" y="248" key="Vcs.Push.Dialog.v2" timestamp="1664990188649">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1664987370801" />
+    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1664990188649" />
     <state x="119" y="66" width="1736" height="848" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1664802303357">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>

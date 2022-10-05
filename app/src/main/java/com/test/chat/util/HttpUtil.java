@@ -29,9 +29,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class HttpUtils {
+public class HttpUtil {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final long READ_TIMEOUT = 60000;
     private static final long WRITE_TIMEOUT = 60000;
     private static final long CONNECT_TIMEOUT = 60000;
@@ -40,7 +40,7 @@ public class HttpUtils {
     private OkHttpClient client;
     private Context context;
 
-    public HttpUtils(Context context) {
+    public HttpUtil(Context context) {
         client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                 .build();

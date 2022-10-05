@@ -30,10 +30,10 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
-import com.test.chat.util.HttpUtils;
+import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.util.Utils;
+import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +44,7 @@ import java.util.Map;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class LoginActivity extends Activity implements OnClickListener {
 
-    private static final String TAG = Utils.TAG;
+    private static final String TAG = ActivityUtil.TAG;
     private static final int BACK_PRESSED_INTERVAL = 2000;
     private static long CURRENT_BACK_PRESSED_TIME = 0;
     private static boolean MORE_UP_IS_SHOW = false;
@@ -221,8 +221,8 @@ public class LoginActivity extends Activity implements OnClickListener {
                 parameter.put("password", login_password);
                 parameter.put("android_id", ANDROID_ID);
                 Message message = new Message();
-                message.obj = new HttpUtils(LoginActivity.this)
-                        .postRequest(Utils.NET_URL + "/login_user", parameter);
+                message.obj = new HttpUtil(LoginActivity.this)
+                        .postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
                 loginHandler.sendMessage(message);
             }
         }).start();
@@ -232,7 +232,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap photoBitmap = new HttpUtils(LoginActivity.this).getImageBitmap(photo);
+                Bitmap photoBitmap = new HttpUtil(LoginActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
                     ImageUtil.saveBitmapToTmpFile(LoginActivity.this, photoBitmap,
                             Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
