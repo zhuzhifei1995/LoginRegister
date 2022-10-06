@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +21,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.test.chat.R;
-import com.test.chat.util.ImageUtil;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.ImageUtil;
 
 import java.io.File;
 import java.util.Timer;

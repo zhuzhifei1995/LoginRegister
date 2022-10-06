@@ -23,9 +23,9 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
+import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

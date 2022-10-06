@@ -41,12 +41,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
+import com.test.chat.adapter.MessageRecyclerViewAdapter;
+import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
-import com.test.chat.adapter.MessageRecyclerViewAdapter;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.util.TmpFileUtil;
-import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,7 +100,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(ChatFriendActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
@@ -444,9 +444,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             File dirFile = new File(MESSAGE_IMAGE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                 }
             }
         }
@@ -455,7 +455,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pictureUri = FileProvider.getUriForFile(ChatFriendActivity.this,
-                    getPackageName() +".fileProvider", pictureFile);
+                    getPackageName() + ".fileProvider", pictureFile);
         } else {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             pictureUri = Uri.fromFile(pictureFile);
@@ -485,9 +485,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 File dirFile = new File(MESSAGE_IMAGE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                        Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                     } else {
-                        Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                        Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -513,16 +513,16 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             File dirFile = new File(MESSAGE_IMAGE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                 }
             }
 
             file = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(ChatFriendActivity.this,
-                    getPackageName() +".fileProvider", file), "image/*");
+                    getPackageName() + ".fileProvider", file), "image/*");
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("crop", "true");
             intent.putExtra("aspectX", 1);
@@ -649,18 +649,18 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         if (mediaRecorder == null) {
             if (!voiceDirPath.exists()) {
                 if (voiceDirPath.mkdir()) {
-                    Log.e(TAG, "录音文件夹创建成功："+voiceDirPath);
+                    Log.e(TAG, "录音文件夹创建成功：" + voiceDirPath);
                 } else {
-                    Log.e(TAG, "录音文件夹创建失败："+voiceDirPath);
+                    Log.e(TAG, "录音文件夹创建失败：" + voiceDirPath);
                 }
             }
             File file = new File(voiceDirPath, "tmp.amr.cache");
             if (!file.exists()) {
                 try {
                     if (file.createNewFile()) {
-                        Log.e(TAG, " 录音文件创建成功："+file.getAbsolutePath());
+                        Log.e(TAG, " 录音文件创建成功：" + file.getAbsolutePath());
                     } else {
-                        Log.e(TAG, "录音文件创建失败："+file.getAbsolutePath());
+                        Log.e(TAG, "录音文件创建失败：" + file.getAbsolutePath());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

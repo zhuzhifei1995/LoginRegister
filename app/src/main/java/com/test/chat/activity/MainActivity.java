@@ -45,11 +45,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
 import com.test.chat.adapter.FriendRecyclerViewAdapter;
+import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.util.TmpFileUtil;
-import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                 }
                             }
                         }).start();
@@ -292,7 +292,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 clickUserList.add(jsonArray.getJSONObject(i));
             }
         } catch (JSONException e) {
-            Log.e(TAG, "文件读取失败，未点击过好友："+"/tmp/message/chat.json");
+            Log.e(TAG, "文件读取失败，未点击过好友：" + "/tmp/message/chat.json");
         }
         friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(userJSONObjectList);
         friend_RecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -430,7 +430,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             public void run() {
                 Bitmap photoBitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -741,9 +741,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/user", "photo.png.cache");
                 if (userPhotoFile.delete()) {
-                    Log.e(TAG, "临时头像图片删除成功："+userPhotoFile.getAbsolutePath());
+                    Log.e(TAG, "临时头像图片删除成功：" + userPhotoFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "无临时头像文件图片："+userPhotoFile.getAbsolutePath());
+                    Log.e(TAG, "无临时头像文件图片：" + userPhotoFile.getAbsolutePath());
                 }
                 TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend"));
                 TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message"));
@@ -859,9 +859,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                 }
             }
         }
@@ -900,9 +900,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
                 File dirFile = new File(TMP_PHOTO_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                        Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                     } else {
-                        Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                        Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -964,9 +964,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+dirFile.getAbsolutePath());
+                    Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                 }
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
@@ -1205,9 +1205,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Swip
     private void deletePhotoCacheFile() {
         File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
         if (photoCacheFile.delete()) {
-            Log.e(TAG, "临时图片删除成功："+photoCacheFile.getAbsolutePath());
+            Log.e(TAG, "临时图片删除成功：" + photoCacheFile.getAbsolutePath());
         } else {
-            Log.e(TAG, "无生成的图片"+photoCacheFile.getAbsolutePath());
+            Log.e(TAG, "无生成的图片" + photoCacheFile.getAbsolutePath());
         }
     }
 

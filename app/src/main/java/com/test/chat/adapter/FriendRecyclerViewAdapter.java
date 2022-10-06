@@ -15,8 +15,8 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
-import com.test.chat.util.ImageUtil;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.ImageUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;

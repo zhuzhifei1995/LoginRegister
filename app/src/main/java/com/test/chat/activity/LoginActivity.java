@@ -30,10 +30,10 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
+import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.util.ActivityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -233,7 +233,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void run() {
                 Bitmap photoBitmap = new HttpUtil(LoginActivity.this).getImageBitmap(photo);
                 if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(photoBitmap,Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                 }
             }
         }).start();

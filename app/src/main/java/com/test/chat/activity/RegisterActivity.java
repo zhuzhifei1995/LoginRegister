@@ -43,8 +43,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.test.chat.R;
-import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.HttpUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -745,9 +745,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
                 }
             }
         }
@@ -786,9 +786,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 File dirFile = new File(TMP_PHOTO_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
+                        Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
                     } else {
-                        Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
+                        Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
                     }
                 }
                 File file = new File(dirFile, IMAGE_FILE_NAME);
@@ -814,9 +814,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             File dirFile = new File(TMP_PHOTO_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败："+TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
                 } else {
-                    Log.e(TAG, "文件夹创建成功："+TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
                 }
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
@@ -960,7 +960,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
         IS_SET_PHOTO_FLAG = false;
         if (photoCacheFile.delete()) {
-            Log.e(TAG, "头像临时图片删除成功："+photoCacheFile.getAbsolutePath());
+            Log.e(TAG, "头像临时图片删除成功：" + photoCacheFile.getAbsolutePath());
         } else {
             Log.e(TAG, "无头像生成的图片");
         }
