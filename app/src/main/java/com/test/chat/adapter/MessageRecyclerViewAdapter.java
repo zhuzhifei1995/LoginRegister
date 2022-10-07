@@ -47,7 +47,6 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
     @Override
     public void onBindViewHolder(@NotNull final MessageRecyclerViewHolder messageRecyclerViewHolder, final int position) {
         JSONObject jsonObject = jsonObjectList.get(position);
-        Log.e(TAG, "onBindViewHolder: " + jsonObject.toString());
         try {
             String sendCode = jsonObject.getString("send_code");
             String messageType = jsonObject.getString("message_type");

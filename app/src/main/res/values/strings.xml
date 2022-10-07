@@ -73,5 +73,7 @@
     <string name="select_image_style">请选择一种上传头像的方式</string>
     <string name="exit_register">是否确认退出注册？</string>
     <string name="tip">提 示</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

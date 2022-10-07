@@ -25,6 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         tools:targetApi="q">
+        <activity android:name=".activity.Main2Activity" />
         <activity android:name=".activity.ChatFriendActivity" />
         <activity android:name=".activity.FriendShowActivity" />
         <activity android:name=".activity.PhotoShowActivity" />
@@ -40,7 +41,7 @@
         <activity android:name=".activity.WebNetActivity" />
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

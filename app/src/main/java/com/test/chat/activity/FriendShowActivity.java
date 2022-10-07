@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -74,14 +75,14 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
             @Override
             public void run() {
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(3000);
                     progressDialog.dismiss();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-        Log.e(TAG, "onCreate: " + friendJSON);
+        Toast.makeText(FriendShowActivity.this, "获取好友信息成功！", Toast.LENGTH_SHORT).show();
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("好友信息");
         LinearLayout friend_show_LinearLayout = findViewById(R.id.friend_show_LinearLayout);

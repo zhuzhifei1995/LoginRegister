@@ -6,4 +6,5 @@
     <color name="main_select">#0096DF</color>
     <color name="main_normal">#7D8F98</color>
     <color name="black">#000000</color>
+    <color name="text_bottom">#009CE8</color>
 </resources>

@@ -45,7 +45,6 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     @Override
     public void onBindViewHolder(@NotNull FriendRecyclerViewHolder messageRecyclerViewHolder, final int position) {
         JSONObject jsonObject = jsonObjectList.get(position);
-        Log.e(TAG, "onBindViewHolder: " + jsonObject);
         try {
             if (jsonObject != null) {
                 String nick_name = jsonObject.getString("nick_name");
