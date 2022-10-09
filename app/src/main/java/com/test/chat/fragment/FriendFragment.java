@@ -1,5 +1,6 @@
 package com.test.chat.fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -60,17 +61,16 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private static final String TAG = ActivityUtil.TAG;
     private View friendFragmentView;
+    private Activity activity;
     private Context context;
     private EditText search_EditText;
     private ProgressDialog progressDialog;
     private View title_search_bar_include;
     private LinearLayout title_search_LinearLayout;
     private SwipeRefreshLayout friend_SwipeRefreshLayout;
-    private ImageView title_right_ImageView;
     private ImageView title_left_ImageView;
     private TextView top_title_TextView;
     private List<JSONObject> userJSONObjectList;
-    private Button search_Button;
     private RecyclerView friend_RecyclerView;
     private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
     private List<JSONObject> clickUserList;
@@ -138,15 +138,54 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 }
                 TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
             } catch (Exception e) {
-                Toast.makeText(context, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
+            super.handleMessage(message);
+        }
+    };
+    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
+                    userJSONObjectList = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        final JSONObject user = jsonArray.getJSONObject(i);
+                        userJSONObjectList.add(user);
+                        final String photo = user.getString("photo");
+                        String[] photos = photo.split("/");
+                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                            }
+                        }).start();
+                    }
+                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                    friend_SwipeRefreshLayout.setRefreshing(false);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "刷新失败，网络异常！", Toast.LENGTH_LONG).show();
+                friend_SwipeRefreshLayout.setRefreshing(false);
+                Log.e(TAG, "获取数据失败！");
+                e.printStackTrace();
+            }
+            initFriendRecyclerView();
+            friend_SwipeRefreshLayout.setRefreshing(false);
             super.handleMessage(message);
         }
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        activity = getActivity();
         context = getActivity();
         super.onCreate(savedInstanceState);
     }
@@ -162,22 +201,24 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         progressDialog = new ProgressDialog(context);
         title_left_ImageView = friendFragmentView.findViewById(R.id.title_left_ImageView);
         top_title_TextView = friendFragmentView.findViewById(R.id.top_title_TextView);
-        title_right_ImageView = friendFragmentView.findViewById(R.id.title_right_ImageView);
+        ImageView title_right_ImageView = friendFragmentView.findViewById(R.id.title_right_ImageView);
         title_right_ImageView.setImageResource(R.drawable.search_button);
         title_right_ImageView.setOnClickListener(this);
-        search_Button = friendFragmentView.findViewById(R.id.search_Button);
+        Button search_Button = friendFragmentView.findViewById(R.id.search_Button);
         search_Button.setOnClickListener(this);
         title_search_bar_include = friendFragmentView.findViewById(R.id.title_search_bar_include);
         title_search_LinearLayout = friendFragmentView.findViewById(R.id.title_search_LinearLayout);
         friend_SwipeRefreshLayout = friendFragmentView.findViewById(R.id.friend_SwipeRefreshLayout);
         friend_SwipeRefreshLayout.setOnRefreshListener(this);
         friend_RecyclerView = friendFragmentView.findViewById(R.id.friend_RecyclerView);
-        initTitle();
+        LinearLayout fragment_friend_LinearLayout = friendFragmentView.findViewById(R.id.fragment_friend_LinearLayout);
+        fragment_friend_LinearLayout.setOnClickListener(this);
+        initTitleView();
         initKeyboardStateObserver();
         initFriendRecyclerView();
     }
 
-    private void initTitle() {
+    private void initTitleView() {
         friend_SwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         top_title_TextView.setText("好友");
@@ -193,7 +234,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void initKeyboardStateObserver() {
-        KeyboardStateObserver.getKeyboardStateObserver(getActivity()).
+        KeyboardStateObserver.getKeyboardStateObserver(activity).
                 setKeyboardVisibilityListener(new KeyboardStateObserver.OnKeyboardVisibilityListener() {
                     @Override
                     public void onKeyboardShow() {
@@ -222,6 +263,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void initNetFriendRecyclerView() {
+        friend_SwipeRefreshLayout.setRefreshing(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -234,42 +276,6 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }).start();
     }
 
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
-                    userJSONObjectList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        final JSONObject user = jsonArray.getJSONObject(i);
-                        userJSONObjectList.add(user);
-                        final String photo = user.getString("photo");
-                        String[] photos = photo.split("/");
-                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
-                            }
-                        }).start();
-                    }
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "获取数据失败！");
-                e.printStackTrace();
-            }
-            initFriendRecyclerView();
-            friend_SwipeRefreshLayout.setRefreshing(false);
-            super.handleMessage(message);
-        }
-    };
-
     private void showSearchFriend() {
         title_search_bar_include.setVisibility(View.GONE);
         title_search_LinearLayout.setVisibility(View.VISIBLE);
@@ -280,7 +286,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 search_EditText.setSelection(search_EditText.getText().length());
                 search_EditText.requestFocus();
                 InputMethodManager inputMethodManager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
-                inputMethodManager.showSoftInput(Objects.requireNonNull(getActivity()).getCurrentFocus(), 0);
+                inputMethodManager.showSoftInput(activity.getCurrentFocus(), 0);
             }
         }, 100);
 
@@ -298,8 +304,8 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private void searchFriend() {
         ((InputMethodManager) search_EditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).
-                hideSoftInputFromWindow(Objects.requireNonNull(Objects.requireNonNull(getActivity())
-                        .getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                hideSoftInputFromWindow(Objects.requireNonNull
+                        (activity.getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         final String phone = search_EditText.getText().toString();
         if (ActivityUtil.isMobileNO(phone)) {
             Window window = progressDialog.getWindow();
@@ -344,6 +350,12 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 break;
             case R.id.search_Button:
                 searchFriend();
+                break;
+            case R.id.fragment_friend_LinearLayout:
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (search_EditText != null) {
+                    inputMethodManager.hideSoftInputFromWindow(search_EditText.getWindowToken(), 0);
+                }
                 break;
             default:
                 break;

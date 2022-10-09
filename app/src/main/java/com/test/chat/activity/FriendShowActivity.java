@@ -10,6 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,6 +31,7 @@ import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +41,14 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     private static final String TAG = ActivityUtil.TAG;
     private static boolean IS_SHOW_MY_MESSAGE = false;
     private ProgressDialog progressDialog;
+    private Handler waitHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NotNull Message message) {
+            super.handleMessage(message);
+            progressDialog.dismiss();
+            Toast.makeText(FriendShowActivity.this, "获取好友信息成功！", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +87,13 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
-                    progressDialog.dismiss();
+                    Thread.sleep(4000);
+                    waitHandler.sendMessage(new Message());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-        Toast.makeText(FriendShowActivity.this, "获取好友信息成功！", Toast.LENGTH_SHORT).show();
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("好友信息");
         LinearLayout friend_show_LinearLayout = findViewById(R.id.friend_show_LinearLayout);

@@ -1,15 +1,9 @@
 package com.test.chat.activity;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,19 +21,6 @@ import com.test.chat.fragment.FriendFragment;
 import com.test.chat.fragment.MessageFragment;
 import com.test.chat.fragment.MyFragment;
 import com.test.chat.util.ActivityUtil;
-import com.test.chat.util.HttpUtil;
-import com.test.chat.util.ImageUtil;
-import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.util.TmpFileUtil;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
@@ -86,57 +67,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         friend_bottom_ImageButton = findViewById(R.id.friend_bottom_ImageButton);
         dynamic_bottom_ImageButton = findViewById(R.id.dynamic_bottom_ImageButton);
         my_bottom_ImageButton = findViewById(R.id.my_bottom_ImageButton);
-
         setSelect(0);
-        initNetFriendRecyclerViewDate();
     }
-
-    private void initNetFriendRecyclerViewDate() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, String> parameter = new HashMap<>();
-                parameter.put("id", SharedPreferencesUtils.getString(MainActivity.this, "id", "0", "user"));
-                Message message = new Message();
-                message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
-                friendShowHandler.sendMessage(message);
-            }
-        }).start();
-    }
-
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            List<JSONObject> userJSONObjectList = new ArrayList<>();
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(MainActivity.this, "刷新成功！", Toast.LENGTH_SHORT).show();
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject user = jsonArray.getJSONObject(i);
-                        userJSONObjectList.add(user);
-                        final String photo = user.getString("photo");
-                        String[] photos = photo.split("/");
-                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
-                            }
-                        }).start();
-                    }
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "获取数据失败！");
-                e.printStackTrace();
-            }
-            super.handleMessage(message);
-        }
-    };
 
     @SuppressLint("ResourceAsColor")
     private void setSelect(int i) {
@@ -207,9 +139,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View view) {
         setBottomSelectImageButton();
-        switch (v.getId()) {
+        switch (view.getId()) {
             case R.id.message_bottom_LinearLayout:
                 setSelect(0);
                 break;
