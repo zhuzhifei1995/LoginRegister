@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:background="@drawable/login_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -16,12 +16,12 @@
         android:layout_gravity="center"
         android:background="@drawable/button_center_bg"
         android:visibility="visible"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="30dp">
 
         <ImageView
             android:id="@+id/title_left_ImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/user_default_photo"

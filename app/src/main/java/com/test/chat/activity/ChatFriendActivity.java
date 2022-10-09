@@ -681,4 +681,10 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.e(TAG, "当前的聊天数据为："+messageJSONObjectList.toString());
+        TmpFileUtil.writeJSONToFile(messageJSONObjectList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+        super.onDestroy();
+    }
 }

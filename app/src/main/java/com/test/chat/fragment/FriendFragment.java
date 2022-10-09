@@ -377,7 +377,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (userJSONObjectList != null) {
             try {
                 clickUserList = new ArrayList<>();
-                String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
+                String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
                 JSONArray jsonArray = new JSONArray(clickUserJSON);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     clickUserList.add(jsonArray.getJSONObject(i));
@@ -396,12 +396,12 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     if (clickUserList.size() == 0) {
                         clickUserList.add(userJSONObjectList.get(position));
                     } else {
-                        String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
+                        String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
                         if (!clickUserJSON.contains(userJSONObjectList.get(position).toString())) {
                             clickUserList.add(userJSONObjectList.get(position));
                         }
                     }
-                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "chat.json");
+                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
                     startActivity(intent);
                     new Thread(new Runnable() {
                         @Override
@@ -432,5 +432,11 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
             Log.e(TAG, "列表为空");
             Toast.makeText(context, "没有查询到好友数据！", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        initFragmentView();
+        super.onHiddenChanged(hidden);
     }
 }

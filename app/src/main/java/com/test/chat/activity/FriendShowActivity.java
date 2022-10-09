@@ -30,10 +30,13 @@ import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
+import com.test.chat.util.TmpFileUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FriendShowActivity extends Activity implements View.OnClickListener {
@@ -46,7 +49,6 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
         public void handleMessage(@NotNull Message message) {
             super.handleMessage(message);
             progressDialog.dismiss();
-            Toast.makeText(FriendShowActivity.this, "获取好友信息成功！", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -201,4 +203,9 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message"));
+        super.onDestroy();
+    }
 }

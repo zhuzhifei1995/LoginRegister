@@ -81,18 +81,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         public void handleMessage(@NotNull Message message) {
             Intent intent = new Intent(context, LoginActivity.class);
             SharedPreferencesUtils.removeKey(context, "status", "user");
-            File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath()
-                    + "/tmp/user", "photo.png.cache");
+            File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
             if (userPhotoFile.delete()) {
                 Log.e(TAG, "临时头像图片删除成功：" + userPhotoFile.getAbsolutePath());
             } else {
                 Log.e(TAG, "无临时头像文件图片：" + userPhotoFile.getAbsolutePath());
             }
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend"));
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message"));
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend"));
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image"));
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/voice"));
+            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp"));
             startActivity(intent);
             activity.finish();
             progressDialog.dismiss();

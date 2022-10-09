@@ -222,6 +222,11 @@ public class LoginActivity extends Activity implements OnClickListener {
                 Message message = new Message();
                 message.obj = new HttpUtil(LoginActivity.this)
                         .postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 loginHandler.sendMessage(message);
             }
         }).start();
