@@ -30,7 +30,7 @@
         android:paddingRight="20dp"
         android:singleLine="true"
         android:text="@string/my_friend"
-        android:textColor="#ffffffff"
+        android:textColor="#ffffff"
         android:textSize="20sp" />
 
     <ImageView
