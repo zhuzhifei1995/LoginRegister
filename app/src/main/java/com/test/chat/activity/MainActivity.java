@@ -1,6 +1,5 @@
 package com.test.chat.activity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +64,41 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private MyFragment myFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
+    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
+                    userJSONObjectList = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        final JSONObject user = jsonArray.getJSONObject(i);
+                        userJSONObjectList.add(user);
+                        final String photo = user.getString("photo");
+                        String[] photos = photo.split("/");
+                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                            }
+                        }).start();
+                    }
+                }
+                Toast.makeText(MainActivity.this, "初始化数据成功！", Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                Toast.makeText(MainActivity.this, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,42 +160,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         }).start();
     }
-
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
-                    userJSONObjectList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        final JSONObject user = jsonArray.getJSONObject(i);
-                        userJSONObjectList.add(user);
-                        final String photo = user.getString("photo");
-                        String[] photos = photo.split("/");
-                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
-                            }
-                        }).start();
-                    }
-                }
-                Toast.makeText(MainActivity.this, "初始化数据成功！", Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                Toast.makeText(MainActivity.this, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-                e.printStackTrace();
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
 
     private void setSelect(int i) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
