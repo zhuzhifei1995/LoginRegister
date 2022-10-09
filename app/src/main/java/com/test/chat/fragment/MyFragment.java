@@ -74,10 +74,11 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private ProgressDialog progressDialog;
     private boolean IS_SHOW_MY_MESSAGE;
     private ImageView photo_my_ImageView;
-    private Handler waitHandler = new Handler(Looper.getMainLooper()) {
+    private SwipeRefreshLayout my_SwipeRefreshLayout;
+
+    private Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
-            super.handleMessage(message);
             Intent intent = new Intent(context, LoginActivity.class);
             SharedPreferencesUtils.removeKey(context, "status", "user");
             File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath()
@@ -95,6 +96,22 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             startActivity(intent);
             activity.finish();
             progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
+
+    private Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            Bitmap bitmap = (Bitmap) message.obj;
+            if (bitmap != null) {
+                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                photo_my_ImageView.setImageBitmap(bitmap);
+                initMyFragmentView();
+                my_SwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+            }
+            super.handleMessage(message);
         }
     };
     private Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
@@ -149,11 +166,15 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         my_message_LinearLayout.setOnClickListener(this);
         TextView login_out_TextView = myFragmentView.findViewById(R.id.login_out_TextView);
         login_out_TextView.setOnClickListener(this);
+        my_SwipeRefreshLayout = myFragmentView.findViewById(R.id.my_SwipeRefreshLayout);
+        my_SwipeRefreshLayout.setOnRefreshListener(this);
         initTitleView();
         initMyMessageView();
     }
 
     private void initTitleView() {
+        my_SwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light);
         TextView top_title_TextView = myFragmentView.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("我的");
         Button title_right_Button = myFragmentView.findViewById(R.id.title_right_Button);
@@ -241,7 +262,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            waitHandler.sendMessage(new Message());
+                            loginOutHandler.sendMessage(new Message());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -412,7 +433,64 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public void onRefresh() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                my_SwipeRefreshLayout.setRefreshing(true);
+                String id = SharedPreferencesUtils.getString(context, "id", "", "user");
+                Map<String, String> parameter = new HashMap<>();
+                parameter.put("id", id);
+                Message message = new Message();
+                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                mySwipeRefreshHandler.sendMessage(message);
+            }
+        }).start();
+    }
 
+    private Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
+                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
+                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                } else {
+                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
+                    my_SwipeRefreshLayout.setRefreshing(false);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
+                my_SwipeRefreshLayout.setRefreshing(false);
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+        }
+    };
+
+    private void saveUserPhoto(final String photo) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                try {
+                    message.obj = new HttpUtil(context).getImageBitmap(photo);
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    my_SwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                saveUserPhotoHandler.sendMessage(message);
+            }
+        }).start();
     }
 
     private void setSmallImageToImageView(Intent data) {

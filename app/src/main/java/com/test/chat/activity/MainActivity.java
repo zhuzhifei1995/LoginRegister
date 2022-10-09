@@ -1,13 +1,25 @@
 package com.test.chat.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +33,19 @@ import com.test.chat.fragment.FriendFragment;
 import com.test.chat.fragment.MessageFragment;
 import com.test.chat.fragment.MyFragment;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.HttpUtil;
+import com.test.chat.util.ImageUtil;
+import com.test.chat.util.SharedPreferencesUtils;
+import com.test.chat.util.TmpFileUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
@@ -40,6 +65,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private FriendFragment friendFragment;
     private DynamicFragment dynamicFragment;
     private MyFragment myFragment;
+    private List<JSONObject> userJSONObjectList;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +95,76 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dynamic_bottom_ImageButton = findViewById(R.id.dynamic_bottom_ImageButton);
         my_bottom_ImageButton = findViewById(R.id.my_bottom_ImageButton);
         setSelect(0);
+
+        initFriendFragmentData();
     }
 
-    @SuppressLint("ResourceAsColor")
+    private void initFriendFragmentData() {
+        progressDialog = new ProgressDialog(MainActivity.this);
+        Window window = progressDialog.getWindow();
+        if (window != null) {
+            progressDialog.show();
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.CENTER;
+            progressDialog.setCancelable(false);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            progressDialog.setContentView(R.layout.loading_progress_bar);
+            TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+            prompt_TextView.setText("初始化数据中.......");
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> parameter = new HashMap<>();
+                parameter.put("id", SharedPreferencesUtils.getString(MainActivity.this, "id", "0", "user"));
+                Message message = new Message();
+                message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                friendShowHandler.sendMessage(message);
+            }
+        }).start();
+    }
+
+    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
+                    userJSONObjectList = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        final JSONObject user = jsonArray.getJSONObject(i);
+                        userJSONObjectList.add(user);
+                        final String photo = user.getString("photo");
+                        String[] photos = photo.split("/");
+                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                            }
+                        }).start();
+                    }
+                }
+                Toast.makeText(MainActivity.this, "初始化数据成功！", Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                Toast.makeText(MainActivity.this, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
+
     private void setSelect(int i) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         hideFragment(transaction);
@@ -168,6 +262,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dynamic_bottom_TextView.setTextColor(Color.BLACK);
         my_bottom_ImageButton.setBackgroundResource(R.drawable.my_normal);
         my_bottom_TextView.setTextColor(Color.BLACK);
+    }
+
+    @Override
+    protected void onDestroy() {
+        userJSONObjectList = null;
+        super.onDestroy();
     }
 
     @Override

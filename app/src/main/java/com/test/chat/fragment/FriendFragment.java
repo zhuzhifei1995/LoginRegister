@@ -258,6 +258,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onRefresh() {
         if (friendRecyclerViewAdapter != null) {
             friendRecyclerViewAdapter.setOnItemClickListener(null);
+            Toast.makeText(context, "刷新中，请稍后......", Toast.LENGTH_LONG).show();
         }
         initNetFriendRecyclerView();
     }
@@ -313,7 +314,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 progressDialog.show();
                 WindowManager.LayoutParams params = window.getAttributes();
                 params.gravity = Gravity.CENTER;
-                progressDialog.setCancelable(true);
+                progressDialog.setCancelable(false);
                 window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 progressDialog.setContentView(R.layout.loading_progress_bar);
                 TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
