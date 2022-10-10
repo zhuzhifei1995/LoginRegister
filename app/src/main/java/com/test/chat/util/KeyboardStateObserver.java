@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi;
 public class KeyboardStateObserver {
 
     private static final String TAG = ActivityUtil.TAG;
-    private View mChildOfContent;
+    private final View mChildOfContent;
     private int usableHeightPrevious;
     private OnKeyboardVisibilityListener onKeyboardVisibilityListener;
 

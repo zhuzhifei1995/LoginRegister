@@ -1,5 +1,6 @@
 package com.test.chat.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -43,7 +44,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     private static final String TAG = ActivityUtil.TAG;
     private static boolean IS_SHOW_MY_MESSAGE = false;
     private ProgressDialog progressDialog;
-    private Handler waitHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler waitHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
             super.handleMessage(message);
@@ -181,6 +182,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
         startActivity(intent);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         Log.e(TAG, "好友显示界面的内容被点击：" + view.getId());

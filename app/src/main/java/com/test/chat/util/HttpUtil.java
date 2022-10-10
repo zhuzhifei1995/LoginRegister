@@ -35,10 +35,10 @@ public class HttpUtil {
     private static final long READ_TIMEOUT = 60000;
     private static final long WRITE_TIMEOUT = 60000;
     private static final long CONNECT_TIMEOUT = 60000;
-    private static MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String JSON_RESULT = "";
-    private OkHttpClient client;
-    private Context context;
+    private final OkHttpClient client;
+    private final Context context;
 
     public HttpUtil(Context context) {
         Log.e(TAG, "新建HttpUtil工具类成功：");

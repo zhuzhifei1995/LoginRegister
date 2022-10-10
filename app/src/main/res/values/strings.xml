@@ -39,10 +39,10 @@
     <string name="my_message">我的信息</string>
     <string name="nike_name_1">昵  称：</string>
     <string name="login_number_1">登录账号：</string>
-    <string name="phone_number_1">手机号：</string>
+    <string name="phone_number_1">注册手机号：</string>
     <string name="create_time_1">注册时间：</string>
     <string name="password_1">密码：</string>
-    <string name="update_user_message">修改信息</string>
+    <string name="account_and_security">账号与安全</string>
     <string name="my_friend">我的好友</string>
     <string name="search_text">查找好友</string>
     <string name="send_message">发消息</string>

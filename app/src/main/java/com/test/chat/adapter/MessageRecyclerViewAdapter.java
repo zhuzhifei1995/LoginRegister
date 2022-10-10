@@ -29,9 +29,9 @@ import java.util.List;
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecyclerViewAdapter.MessageRecyclerViewHolder> {
 
     private static final String TAG = ActivityUtil.TAG;
-    private List<JSONObject> jsonObjectList;
+    private final List<JSONObject> jsonObjectList;
     private MessageRecyclerViewAdapter.MessageRecyclerViewAdapterOnItemClickListener messageRecyclerViewAdapterOnItemClickListener;
-    private Context context;
+    private final Context context;
 
     public MessageRecyclerViewAdapter(Context context, List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化MessageRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -165,16 +165,16 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
     public static class MessageRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private LinearLayout right_message_LinearLayout;
-        private LinearLayout left_message_LinearLayout;
-        private ImageView right_message_ImageView;
-        private ImageView left_message_ImageView;
-        private TextView right_message_TextView;
-        private TextView left_message_TextView;
-        private ImageView right_ImageView;
-        private ImageView left_ImageView;
-        private ImageView right_voice_ImageView;
-        private ImageView left_voice_ImageView;
+        private final LinearLayout right_message_LinearLayout;
+        private final LinearLayout left_message_LinearLayout;
+        private final ImageView right_message_ImageView;
+        private final ImageView left_message_ImageView;
+        private final TextView right_message_TextView;
+        private final TextView left_message_TextView;
+        private final ImageView right_ImageView;
+        private final ImageView left_ImageView;
+        private final ImageView right_voice_ImageView;
+        private final ImageView left_voice_ImageView;
 
         public MessageRecyclerViewHolder(View view) {
             super(view);

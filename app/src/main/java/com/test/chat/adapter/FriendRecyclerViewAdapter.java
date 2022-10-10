@@ -1,5 +1,6 @@
 package com.test.chat.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
@@ -28,7 +29,7 @@ import java.util.List;
 public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecyclerViewAdapter.FriendRecyclerViewHolder> {
 
     private static final String TAG = ActivityUtil.TAG;
-    private List<JSONObject> jsonObjectList;
+    private final List<JSONObject> jsonObjectList;
     private FriendRecyclerViewAdapterOnItemClickListener friendRecyclerViewAdapterOnItemClickListener;
     private FriendRecyclerViewAdapterOnItemLongClickListener friendRecyclerViewAdapterOnItemLongClickListener;
 
@@ -43,7 +44,8 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NotNull FriendRecyclerViewHolder messageRecyclerViewHolder, final int position) {
+    @SuppressLint("RecyclerView")
+    public void onBindViewHolder(@NotNull FriendRecyclerViewHolder messageRecyclerViewHolder, int position) {
         JSONObject jsonObject = jsonObjectList.get(position);
         try {
             if (jsonObject != null) {
@@ -117,9 +119,9 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     }
 
     public static class FriendRecyclerViewHolder extends RecyclerView.ViewHolder {
-        private ImageView photo_ImageView;
-        private TextView nike_name_ListView_TextView;
-        private LinearLayout root_friend_LinearLayout;
+        private final ImageView photo_ImageView;
+        private final TextView nike_name_ListView_TextView;
+        private final LinearLayout root_friend_LinearLayout;
 
         public FriendRecyclerViewHolder(View view) {
             super(view);

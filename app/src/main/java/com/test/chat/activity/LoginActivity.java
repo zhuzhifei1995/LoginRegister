@@ -1,5 +1,6 @@
 package com.test.chat.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -56,7 +57,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private CheckBox remember_password_CheckBox;
     private EditText login_account_EditText;
     private EditText login_password_EditText;
-    private Handler loginHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler loginHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
@@ -154,6 +155,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         Log.e(TAG, "登录界面的内容被点击：" + view.getId());

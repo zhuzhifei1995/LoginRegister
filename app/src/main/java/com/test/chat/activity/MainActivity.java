@@ -1,5 +1,6 @@
 package com.test.chat.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -64,7 +65,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private MyFragment myFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -228,6 +229,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         setBottomSelectImageButton();

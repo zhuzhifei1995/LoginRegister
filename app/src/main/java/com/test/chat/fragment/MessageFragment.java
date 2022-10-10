@@ -48,12 +48,10 @@ public class MessageFragment extends Fragment {
 
     private static final String TAG = ActivityUtil.TAG;
     private View messageFragmentView;
-    private Activity activity;
     private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        activity = getActivity();
         context = getActivity();
         super.onCreate(savedInstanceState);
     }
@@ -119,7 +117,7 @@ public class MessageFragment extends Fragment {
         }
     }
 
-    private Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;

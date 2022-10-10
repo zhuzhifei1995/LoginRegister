@@ -1,6 +1,7 @@
 package com.test.chat.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -63,8 +64,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
-    private static String IMAGE_FILE_NAME = "photo.png.cache";
-    private static String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
+    private static final String IMAGE_FILE_NAME = "photo.png.cache";
+    private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
     private static boolean IS_SET_PHOTO_FLAG = false;
     private ProgressDialog progressDialog;
     private TextView local_TextView;
@@ -80,7 +81,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private String password;
     private String verificationCode;
 
-    private Handler codeHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -122,7 +123,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             }
         }
     };
-    private Handler registerHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler registerHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -704,6 +705,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         send_image_photo_message_TextView.setOnClickListener(this);
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void selectFromPhoto() {
         progressDialog.dismiss();
         if (ContextCompat.checkSelfPermission(RegisterActivity.this,
@@ -914,6 +916,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         startActivity(intent);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         Log.e(TAG, "注册界面的内容被点击：" + view.getId());

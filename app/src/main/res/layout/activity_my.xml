@@ -98,37 +98,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            tools:ignore="UselessParent">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:padding="15dp"
-                                android:text="@string/nike_name_1" />
-
-                            <TextView
-                                android:id="@+id/nike_name_TextView"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:lines="1"
-                                android:padding="15dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@drawable/line_view_bg" />
+                        android:visibility="visible">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -161,6 +131,38 @@
                             android:background="@drawable/line_view_bg" />
 
                         <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="15dp"
+                                android:text="@string/nike_name_1" />
+
+                            <TextView
+                                android:id="@+id/nike_name_TextView"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:lines="1"
+                                android:padding="15dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="@drawable/line_view_bg" />
+
+                        <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
@@ -261,7 +263,7 @@
                         android:focusable="true"
                         android:gravity="center"
                         android:padding="15dp"
-                        android:text="@string/update_user_message" />
+                        android:text="@string/account_and_security" />
 
                     <View
                         android:layout_width="match_parent"

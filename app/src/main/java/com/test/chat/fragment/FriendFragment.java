@@ -1,5 +1,6 @@
 package com.test.chat.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -75,7 +76,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
     private List<JSONObject> clickUserList;
 
-    private Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             if (message.what == 1) {
@@ -99,7 +100,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
             super.handleMessage(message);
         }
     };
-    private Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
@@ -144,7 +145,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
             super.handleMessage(message);
         }
     };
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -343,6 +344,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         title_search_LinearLayout.setVisibility(View.GONE);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

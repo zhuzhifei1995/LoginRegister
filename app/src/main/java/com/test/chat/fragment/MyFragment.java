@@ -1,6 +1,7 @@
 package com.test.chat.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,7 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,6 +62,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -75,8 +80,10 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private boolean IS_SHOW_MY_MESSAGE;
     private ImageView photo_my_ImageView;
     private SwipeRefreshLayout my_SwipeRefreshLayout;
+    private EditText dialog_nike_name_EditText;
 
-    private Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
+
+    private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
             Intent intent = new Intent(context, LoginActivity.class);
@@ -95,7 +102,15 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     };
 
-    private Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler updateNikeNameHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NotNull Message message) {
+            Log.e(TAG, "handleMessage: "+message.obj);
+            super.handleMessage(message);
+        }
+    };
+
+    private final Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             Bitmap bitmap = (Bitmap) message.obj;
@@ -109,7 +124,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
-    private Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -139,7 +154,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             progressDialog.dismiss();
         }
     };
-    private Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             try {
@@ -190,6 +205,14 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         login_out_TextView.setOnClickListener(this);
         my_SwipeRefreshLayout = myFragmentView.findViewById(R.id.my_SwipeRefreshLayout);
         my_SwipeRefreshLayout.setOnRefreshListener(this);
+        TextView account_and_security_TextView = myFragmentView.findViewById(R.id.account_and_security_TextView);
+        account_and_security_TextView.setOnClickListener(this);
+        LinearLayout login_number_LinearLayout = myFragmentView.findViewById(R.id.login_number_LinearLayout);
+        login_number_LinearLayout.setOnClickListener(this);
+        LinearLayout nike_name_LinearLayout = myFragmentView.findViewById(R.id.nike_name_LinearLayout);
+        nike_name_LinearLayout.setOnClickListener(this);
+        LinearLayout create_time_LinearLayout = myFragmentView.findViewById(R.id.create_time_LinearLayout);
+        create_time_LinearLayout.setOnClickListener(this);
         initTitleView();
         initMyMessageView();
     }
@@ -235,6 +258,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         password_TextView.setText(password);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -247,9 +271,75 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             case R.id.login_out_TextView:
                 loginOut();
                 break;
+            case R.id.account_and_security_TextView:
+                showAccountAndSecurity();
+                break;
+            case R.id.login_number_LinearLayout:
+                Toast.makeText(context, "登录账号不能修改！", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nike_name_LinearLayout:
+                updateNikeName();
+                break;
+            case R.id.create_time_LinearLayout:
+                Toast.makeText(context, "注册时间不能修改！", Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }
+
+    }
+
+    private void updateNikeName() {
+        progressDialog = new ProgressDialog(context);
+        Window window = progressDialog.getWindow();
+        final String oldNikeName = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.CENTER;
+            progressDialog.setCancelable(false);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.update_nike_name_progress_bar);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            dialog_nike_name_EditText = progressDialog.findViewById(R.id.dialog_nike_name_EditText);
+            dialog_nike_name_EditText.requestFocus();
+            dialog_nike_name_EditText.setText(oldNikeName);
+            dialog_nike_name_EditText.setSelection(oldNikeName.length());
+        }
+        TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
+        cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.dismiss();
+            }
+        });
+        TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
+        confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "onClick: " + dialog_nike_name_EditText.getText().toString() );
+                String newNikeName = dialog_nike_name_EditText.getText().toString().trim();
+                if (oldNikeName.equals(newNikeName)){
+                    Toast.makeText(context, "与旧的昵称一致，请重新填写！", Toast.LENGTH_SHORT).show();
+                }else {
+                    progressDialog.setContentView(R.layout.loading_progress_bar);
+                    TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                    prompt_TextView.setText("修改昵称信息中.......");
+                    Map<String, String> parameter = new HashMap<>();
+                    parameter.put("user_id",  SharedPreferencesUtils.getString(context, "id", "", "user"));
+                    parameter.put("nike_name",  newNikeName);
+                    Message message = new Message();
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL+"/update_user_nike_name_by_id",parameter);
+                    updateNikeNameHandler.sendMessage(message);
+
+                }
+            }
+        });
+
+    }
+
+    private void showAccountAndSecurity() {
 
     }
 
@@ -382,6 +472,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -403,6 +494,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void selectFromPhoto() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

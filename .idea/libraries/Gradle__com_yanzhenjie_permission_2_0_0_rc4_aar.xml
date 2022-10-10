@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.yanzhenjie:permission:2.0.0-rc4@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2412f29a90b942701397c4552db34086/jetified-permission-2.0.0-rc4/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2412f29a90b942701397c4552db34086/jetified-permission-2.0.0-rc4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2412f29a90b942701397c4552db34086/jetified-permission-2.0.0-rc4/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/358c56e1b434c5c7b8493e9c104936fa/transformed/jetified-permission-2.0.0-rc4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/358c56e1b434c5c7b8493e9c104936fa/transformed/jetified-permission-2.0.0-rc4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/358c56e1b434c5c7b8493e9c104936fa/transformed/jetified-permission-2.0.0-rc4/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yanzhenjie/permission/2.0.0-rc4/5287190365d6915db85cccd541fb3e73dd48396d/permission-2.0.0-rc4-javadoc.jar!/" />

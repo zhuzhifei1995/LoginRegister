@@ -1,6 +1,7 @@
 package com.test.chat.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -69,8 +70,8 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
-    private static String IMAGE_FILE_NAME = "message_tmp.png.cache";
-    private static String MESSAGE_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image";
+    private static final String IMAGE_FILE_NAME = "message_tmp.png.cache";
+    private static final String MESSAGE_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image";
     private static boolean IS_VOICE = false;
     private EditText send_message_EditText;
     private List<JSONObject> messageJSONObjectList;
@@ -82,7 +83,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private MediaRecorder mediaRecorder;
     private ProgressDialog progressDialog;
 
-    private Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
@@ -252,6 +253,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         Log.e(TAG, "聊天界面的内容被点击：" + view.getId());
@@ -282,6 +284,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void cancelVoice() {
         progressDialog.dismiss();
         messageRecyclerViewAdapter.notifyDataSetChanged();
@@ -349,6 +352,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         send_image_photo_message_TextView.setOnClickListener(this);
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void selectFromAlbum() {
         progressDialog.dismiss();
         if (ContextCompat.checkSelfPermission(ChatFriendActivity.this,
@@ -403,6 +407,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         finish();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sendMessage() {
         messageRecyclerViewAdapter.notifyDataSetChanged();
         final String message = send_message_EditText.getText().toString();
@@ -539,6 +544,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sendImageMessage() {
         messageRecyclerViewAdapter.notifyDataSetChanged();
         new Thread(new Runnable() {
@@ -601,6 +607,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {

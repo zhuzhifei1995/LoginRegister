@@ -1,6 +1,7 @@
 package com.test.chat.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -78,8 +79,8 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     private static long CURRENT_BACK_PRESSED_TIME = 0;
     private static boolean IS_UPDATE_MY_VIEW;
     private static boolean IS_SHOW_MY_MESSAGE = false;
-    private static String IMAGE_FILE_NAME = "photo.png.cache";
-    private static String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
+    private static final String IMAGE_FILE_NAME = "photo.png.cache";
+    private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
     private ImageView dynamic_ImageView;
     private TextView dynamic_TextView;
     private ImageView my_ImageView;
@@ -100,7 +101,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     private Button search_Button;
     private List<JSONObject> clickUserList;
 
-    private Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -126,7 +127,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             progressDialog.dismiss();
         }
     };
-    private Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             String json = (String) message.obj;
@@ -171,7 +172,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-    private Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
             String json = (String) message.obj;
@@ -222,14 +223,14 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-    private Handler friendSwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler friendSwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
             friend_SwipeRefreshLayout.setRefreshing(false);
             super.handleMessage(message);
         }
     };
-    private Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             try {
@@ -257,7 +258,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-    private Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             if (message.what == 1) {
@@ -1143,6 +1144,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         Log.e(TAG, "主界面的内容被点击：" + view.getId());

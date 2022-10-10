@@ -29,7 +29,7 @@ import java.util.List;
 public class FriendListViewAdapter extends ArrayAdapter<JSONObject> {
 
     private static final String TAG = ActivityUtil.TAG;
-    private int resource;
+    private final int resource;
 
     public FriendListViewAdapter(Context context, int resource, List<JSONObject> jsonObjects) {
         super(context, resource, jsonObjects);
