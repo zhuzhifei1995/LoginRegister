@@ -13,8 +13,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_friend_show.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_friend_show.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_my.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_my.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/friend_list_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/friend_list_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/title_back_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/title_back_bar.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -280,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665332386556</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="更新">
+      <created>1665343931757</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1665343931757</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -321,6 +337,10 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="358" y="184" key="#PSD/0.0.1920.1032@0.0.1920.1032" timestamp="1664987456151" />
+    <state x="232" y="0" key="#Updates" timestamp="1665376068297">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state x="232" y="0" key="#Updates/0.0.1280.672@0.0.1280.672" timestamp="1665376068297" />
     <state x="414" y="170" width="1111" height="691" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1664982704506">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
@@ -357,10 +377,10 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="815" y="280" key="AndroidProcessChooserDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1665330497568" />
-    <state x="167" y="0" width="1601" height="1007" key="CommitChangelistDialog2" timestamp="1665332379210">
+    <state x="167" y="0" width="1601" height="1007" key="CommitChangelistDialog2" timestamp="1665343925714">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="167" y="0" width="1601" height="1007" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1665332379210" />
+    <state x="167" y="0" width="1601" height="1007" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1665343925714" />
     <state x="191" y="72" key="DiffContextDialog" timestamp="1665052001978">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
@@ -421,10 +441,11 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state width="623" height="498" key="SwitcherDM/0.0.1920.1032@0.0.1920.1032" timestamp="1664982244149" />
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2" timestamp="1665343917459">
-      <screen x="0" y="0" width="1920" height="1032" />
+    <state x="368" y="137" key="Vcs.Push.Dialog.v2" timestamp="1665375826267">
+      <screen x="0" y="0" width="1280" height="672" />
     </state>
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1665343917459" />
+    <state x="368" y="137" key="Vcs.Push.Dialog.v2/0.0.1280.672@0.0.1280.672" timestamp="1665375826267" />
+    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1665343959625" />
     <state x="119" y="66" width="1736" height="848" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1664802303357">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
@@ -449,9 +470,9 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="616" y="238" width="840" height="1034" key="run.anything.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1664036468500" />
-    <state x="623" y="223" width="874" height="678" key="search.everywhere.popup" timestamp="1665332019431">
+    <state x="623" y="223" width="874" height="678" key="search.everywhere.popup" timestamp="1665404513575">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="623" y="223" width="874" height="678" key="search.everywhere.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1665332019431" />
+    <state x="623" y="223" width="874" height="678" key="search.everywhere.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1665404513575" />
   </component>
 </project>
