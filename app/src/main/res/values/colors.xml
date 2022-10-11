@@ -7,4 +7,6 @@
     <color name="main_normal">#7D8F98</color>
     <color name="black">#000000</color>
     <color name="text_bottom">#009CE8</color>
+    <color name="gray">#cccccc</color>
+
 </resources>

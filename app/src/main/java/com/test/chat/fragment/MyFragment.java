@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,6 +93,52 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
+    private final Handler updatePasswordHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NotNull Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    SharedPreferencesUtils.putString(context, "password", "", "user");
+                    SharedPreferencesUtils.putBoolean(context, "is_remember_password", false, "user");
+                    progressDialog.dismiss();
+                    Window window = progressDialog.getWindow();
+                    if (window != null) {
+                        WindowManager.LayoutParams params = window.getAttributes();
+                        params.gravity = Gravity.CENTER;
+                        progressDialog.setCancelable(false);
+                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        progressDialog.show();
+                        progressDialog.setContentView(R.layout.loading_progress_bar);
+                        TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                        prompt_TextView.setText("退出登陆中.......");
+                    }
+                    Toast.makeText(context, "修改密码成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(2000);
+                                loginOutHandler.sendMessage(new Message());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+        }
+    };
+    private EditText dialog_old_password_EditText;
     private boolean IS_SHOW_MY_MESSAGE;
     private ImageView photo_my_ImageView;
     private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
@@ -136,17 +183,16 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
                     initMyFragmentView();
                 } else {
-                    Toast.makeText(context, "更新昵称失败！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(context, "更新昵称失败！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             super.handleMessage(message);
             progressDialog.dismiss();
         }
     };
-
     private final Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -300,7 +346,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private void updateNikeName() {
         progressDialog = new ProgressDialog(context);
         Window window = progressDialog.getWindow();
-        final String oldNickName = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
+        String oldNickName = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
             params.gravity = Gravity.CENTER;
@@ -331,11 +377,21 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 if (oldNickName.equals(newNickName)) {
                     Toast.makeText(context, "与旧的昵称一致，请重新填写！", Toast.LENGTH_SHORT).show();
                 } else {
+                    InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     progressDialog.dismiss();
-                    progressDialog.show();
-                    progressDialog.setContentView(R.layout.loading_progress_bar);
-                    TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
-                    prompt_TextView.setText("修改昵称信息中.......");
+                    progressDialog = new ProgressDialog(context);
+                    Window window = progressDialog.getWindow();
+                    if (window != null) {
+                        WindowManager.LayoutParams params = window.getAttributes();
+                        params.gravity = Gravity.CENTER;
+                        progressDialog.setCancelable(false);
+                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        progressDialog.show();
+                        progressDialog.setContentView(R.layout.loading_progress_bar);
+                        TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                        prompt_TextView.setText("修改昵称信息中.......");
+                    }
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -347,7 +403,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                             updateNikeNameHandler.sendMessage(message);
                         }
                     }).start();
-
                 }
             }
         });
@@ -355,7 +410,113 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
     private void showAccountAndSecurity() {
-
+        progressDialog = new ProgressDialog(context);
+        Window window = progressDialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.BOTTOM;
+            progressDialog.setCancelable(true);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.account_and_security_progress_bar);
+        }
+        TextView update_password_TextView = progressDialog.findViewById(R.id.update_password_TextView);
+        update_password_TextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.dismiss();
+                String oldPassword = SharedPreferencesUtils.getString(context, "password", "", "user");
+                if (window != null) {
+                    WindowManager.LayoutParams params = window.getAttributes();
+                    params.gravity = Gravity.CENTER;
+                    progressDialog.setCancelable(false);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.show();
+                    progressDialog.setContentView(R.layout.update_password_progress_bar);
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    dialog_old_password_EditText = progressDialog.findViewById(R.id.dialog_old_password_EditText);
+                    dialog_old_password_EditText.requestFocus();
+                }
+                TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
+                cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        progressDialog.dismiss();
+                    }
+                });
+                TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
+                confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText dialog_new_password_EditText = progressDialog.findViewById(R.id.dialog_new_password_EditText);
+                        EditText dialog_re_new_password_EditText = progressDialog.findViewById(R.id.dialog_re_new_password_EditText);
+                        String inputOldPassword = dialog_old_password_EditText.getText().toString();
+                        if (inputOldPassword.equals(oldPassword)) {
+                            String newPassword = dialog_new_password_EditText.getText().toString();
+                            String reNewPassword = dialog_re_new_password_EditText.getText().toString();
+                            if (inputOldPassword.equals(newPassword)) {
+                                dialog_new_password_EditText.requestFocus();
+                                dialog_new_password_EditText.setSelection(newPassword.length());
+                                Toast.makeText(context, "新密码与原始密码一样，请重新输入！", Toast.LENGTH_LONG).show();
+                            } else {
+                                if (ActivityUtil.isPassword(newPassword)) {
+                                    if (newPassword.equals(reNewPassword)) {
+                                        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                                        progressDialog.dismiss();
+                                        progressDialog = new ProgressDialog(context);
+                                        Window window = progressDialog.getWindow();
+                                        if (window != null) {
+                                            WindowManager.LayoutParams params = window.getAttributes();
+                                            params.gravity = Gravity.CENTER;
+                                            progressDialog.setCancelable(false);
+                                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            progressDialog.show();
+                                            progressDialog.setContentView(R.layout.loading_progress_bar);
+                                            TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                                            prompt_TextView.setText("修改密码中.......");
+                                        }
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Map<String, String> parameter = new HashMap<>();
+                                                parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                                                parameter.put("password", newPassword);
+                                                Message message = new Message();
+                                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_password_by_id", parameter);
+                                                updatePasswordHandler.sendMessage(message);
+                                            }
+                                        }).start();
+                                    } else {
+                                        dialog_re_new_password_EditText.requestFocus();
+                                        Toast.makeText(context, "两次输入的修改密码不一致！", Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    dialog_new_password_EditText.requestFocus();
+                                    Toast.makeText(context, "密码格式错误，请输入8·12位字母和数字组合", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "原始密码输入错误！", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+        TextView update_phone_number_TextView = progressDialog.findViewById(R.id.update_phone_number_TextView);
+        update_phone_number_TextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+        TextView cancel_TextView = progressDialog.findViewById(R.id.cancel_TextView);
+        cancel_TextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void loginOut() {
@@ -377,7 +538,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 if (window != null) {
                     WindowManager.LayoutParams params = window.getAttributes();
                     params.gravity = Gravity.CENTER;
-                    progressDialog.setCancelable(true);
+                    progressDialog.setCancelable(false);
                     window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     progressDialog.show();
                     progressDialog.setContentView(R.layout.loading_progress_bar);

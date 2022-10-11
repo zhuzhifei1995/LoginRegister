@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/login_out_confirm_TextView"
+        android:id="@+id/update_password_TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_top_bg"
@@ -16,7 +16,7 @@
         android:focusable="true"
         android:gravity="center"
         android:padding="15dp"
-        android:text="@string/confirm" />
+        android:text="@string/update_password" />
 
     <View
         android:layout_width="wrap_content"
@@ -24,7 +24,23 @@
         android:background="@drawable/line_view_bg" />
 
     <TextView
-        android:id="@+id/login_out_cancel_TextView"
+        android:id="@+id/update_phone_number_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_center_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/update_phone_number" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@drawable/line_view_bg" />
+
+    <TextView
+        android:id="@+id/cancel_TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_bottom_bg"

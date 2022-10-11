@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
+    android:layout_height="60dp"
     android:background="@drawable/login_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/title_left_ImageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/back_button"
