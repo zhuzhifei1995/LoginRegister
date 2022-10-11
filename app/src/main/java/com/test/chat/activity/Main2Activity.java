@@ -76,57 +76,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
+    private static final String IMAGE_FILE_NAME = "photo.png.cache";
+    private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
     private static long CURRENT_BACK_PRESSED_TIME = 0;
     private static boolean IS_UPDATE_MY_VIEW;
     private static boolean IS_SHOW_MY_MESSAGE = false;
-    private static final String IMAGE_FILE_NAME = "photo.png.cache";
-    private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
-    private ImageView dynamic_ImageView;
-    private TextView dynamic_TextView;
-    private ImageView my_ImageView;
-    private TextView my_TextView;
-    private ImageView friend_ImageView;
-    private TextView friend_TextView;
-    private ImageView message_ImageView;
-    private TextView message_TextView;
-    private ImageView photo_my_ImageView;
-    private ProgressDialog progressDialog;
-    private List<JSONObject> userJSONObjectList;
-    private EditText search_EditText;
-    private RecyclerView friend_RecyclerView;
-    private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
-    private SwipeRefreshLayout friend_SwipeRefreshLayout;
-    private SwipeRefreshLayout my_SwipeRefreshLayout;
-    private ImageView title_right_ImageView;
-    private Button search_Button;
-    private List<JSONObject> clickUserList;
-
-    private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME));
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                    TmpFileUtil.copyFile(new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME), new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
-                } else {
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                    SharedPreferencesUtils.removeKey(Main2Activity.this, "status", "user");
-                    startActivity(new Intent(Main2Activity.this, LoginActivity.class));
-                    finish();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(Main2Activity.this, "网络异常！", Toast.LENGTH_LONG).show();
-                photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath()
-                        + "/tmp/user", "photo.png.cache"));
-                e.printStackTrace();
-            }
-            super.handleMessage(message);
-            progressDialog.dismiss();
-        }
-    };
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -172,6 +126,58 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
+    private ImageView dynamic_ImageView;
+    private TextView dynamic_TextView;
+    private ImageView my_ImageView;
+    private TextView my_TextView;
+    private ImageView friend_ImageView;
+    private TextView friend_TextView;
+    private ImageView message_ImageView;
+    private TextView message_TextView;
+    private ImageView photo_my_ImageView;
+    private ProgressDialog progressDialog;
+    private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME));
+                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                    TmpFileUtil.copyFile(new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME), new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
+                } else {
+                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                    SharedPreferencesUtils.removeKey(Main2Activity.this, "status", "user");
+                    startActivity(new Intent(Main2Activity.this, LoginActivity.class));
+                    finish();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(Main2Activity.this, "网络异常！", Toast.LENGTH_LONG).show();
+                photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath()
+                        + "/tmp/user", "photo.png.cache"));
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+            progressDialog.dismiss();
+        }
+    };
+    private List<JSONObject> userJSONObjectList;
+    private EditText search_EditText;
+    private RecyclerView friend_RecyclerView;
+    private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
+    private SwipeRefreshLayout friend_SwipeRefreshLayout;
+    private final Handler friendSwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NotNull Message message) {
+            friend_SwipeRefreshLayout.setRefreshing(false);
+            super.handleMessage(message);
+        }
+    };
+    private SwipeRefreshLayout my_SwipeRefreshLayout;
+    private ImageView title_right_ImageView;
+    private Button search_Button;
+    private List<JSONObject> clickUserList;
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -220,66 +226,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             friend_SwipeRefreshLayout.setRefreshing(false);
             title_right_ImageView.setOnClickListener(Main2Activity.this);
             friend_RecyclerView.setVisibility(View.VISIBLE);
-            super.handleMessage(message);
-        }
-    };
-    private final Handler friendSwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NotNull Message message) {
-            friend_SwipeRefreshLayout.setRefreshing(false);
-            super.handleMessage(message);
-        }
-    };
-    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(Main2Activity.this, "刷新成功！", Toast.LENGTH_LONG).show();
-                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "create_time", userJSONObject.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "password", userJSONObject.getString("password"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "login_number", userJSONObject.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "nick_name", userJSONObject.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "phone", userJSONObject.getString("phone"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "photo", userJSONObject.getString("photo_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"));
-                } else {
-                    Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            my_SwipeRefreshLayout.setRefreshing(false);
-            initMyView();
-            super.handleMessage(message);
-        }
-    };
-    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                initMyView();
-                Toast.makeText(Main2Activity.this, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(Main2Activity.this, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(Main2Activity.this, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
             super.handleMessage(message);
         }
     };
@@ -339,7 +285,34 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         });
         friend_RecyclerView.setAdapter(friendRecyclerViewAdapter);
         progressDialog.dismiss();
-    }
+    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    Toast.makeText(Main2Activity.this, "刷新成功！", Toast.LENGTH_LONG).show();
+                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "create_time", userJSONObject.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "password", userJSONObject.getString("password"), "user");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "login_number", userJSONObject.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "nick_name", userJSONObject.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "phone", userJSONObject.getString("phone"), "user");
+                    SharedPreferencesUtils.putString(Main2Activity.this, "photo", userJSONObject.getString("photo_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                } else {
+                    Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            my_SwipeRefreshLayout.setRefreshing(false);
+            initMyView();
+            super.handleMessage(message);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -375,7 +348,31 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         setContentView(R.layout.activity_main2);
         initView();
         initMessageView();
-    }
+    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                initMyView();
+                Toast.makeText(Main2Activity.this, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(Main2Activity.this, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(Main2Activity.this, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     private void initView() {
         LinearLayout dynamic_LinearLayout = findViewById(R.id.dynamic_LinearLayout);
@@ -1239,6 +1236,10 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             }
         }).start();
     }
+
+
+
+
 
 }
 

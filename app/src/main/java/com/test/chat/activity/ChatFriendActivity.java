@@ -73,16 +73,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private static final String IMAGE_FILE_NAME = "message_tmp.png.cache";
     private static final String MESSAGE_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image";
     private static boolean IS_VOICE = false;
-    private EditText send_message_EditText;
-    private List<JSONObject> messageJSONObjectList;
-    private RecyclerView message_RecyclerView;
-    private MessageRecyclerViewAdapter messageRecyclerViewAdapter;
-    private Button send_message_Button;
-    private Button send_image_message_Button;
-    private Button voice_Button;
-    private MediaRecorder mediaRecorder;
-    private ProgressDialog progressDialog;
-
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -129,6 +119,15 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             super.handleMessage(message);
         }
     };
+    private EditText send_message_EditText;
+    private List<JSONObject> messageJSONObjectList;
+    private RecyclerView message_RecyclerView;
+    private MessageRecyclerViewAdapter messageRecyclerViewAdapter;
+    private Button send_message_Button;
+    private Button send_image_message_Button;
+    private Button voice_Button;
+    private MediaRecorder mediaRecorder;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -690,7 +689,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     @Override
     protected void onDestroy() {
-        Log.e(TAG, "当前的聊天数据为："+messageJSONObjectList.toString());
+        Log.e(TAG, "当前的聊天数据为：" + messageJSONObjectList.toString());
         TmpFileUtil.writeJSONToFile(messageJSONObjectList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
         super.onDestroy();
     }

@@ -12,9 +12,9 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/my_SwipeRefreshLayout"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,17 +99,17 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <LinearLayout
+                            android:id="@+id/login_number_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
+                            android:background="@drawable/button_center_bg"
                             android:clickable="true"
                             android:focusable="true"
+                            android:orientation="horizontal"
                             android:padding="5dp"
-                            android:id="@+id/login_number_LinearLayout"
-                            android:background="@drawable/button_center_bg"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -137,14 +137,14 @@
                             android:background="@drawable/line_view_bg" />
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="5dp"
                             android:id="@+id/nike_name_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/button_center_bg"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:orientation="horizontal"
+                            android:padding="5dp"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -169,14 +169,14 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
-                            android:visibility="gone"
-                            android:background="@drawable/line_view_bg" />
+                            android:background="@drawable/line_view_bg"
+                            android:visibility="gone" />
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -204,14 +204,14 @@
                             android:background="@drawable/line_view_bg" />
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="5dp"
                             android:id="@+id/create_time_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
                             android:background="@drawable/button_center_bg"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -234,16 +234,16 @@
                         </LinearLayout>
 
                         <View
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
-                            android:background="@drawable/line_view_bg" />
+                            android:background="@drawable/line_view_bg"
+                            android:visibility="gone" />
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             tools:ignore="UselessParent">
 
                             <TextView

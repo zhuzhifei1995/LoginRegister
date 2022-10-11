@@ -55,8 +55,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     private ProgressDialog progressDialog;
     private String ANDROID_ID;
     private CheckBox remember_password_CheckBox;
-    private EditText login_account_EditText;
-    private EditText login_password_EditText;
     private final Handler loginHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -92,6 +90,8 @@ public class LoginActivity extends Activity implements OnClickListener {
             progressDialog.dismiss();
         }
     };
+    private EditText login_account_EditText;
+    private EditText login_password_EditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

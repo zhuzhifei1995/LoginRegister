@@ -64,42 +64,6 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private View friendFragmentView;
     private Activity activity;
     private Context context;
-    private EditText search_EditText;
-    private ProgressDialog progressDialog;
-    private View title_search_bar_include;
-    private LinearLayout title_search_LinearLayout;
-    private SwipeRefreshLayout friend_SwipeRefreshLayout;
-    private ImageView title_left_ImageView;
-    private TextView top_title_TextView;
-    private List<JSONObject> userJSONObjectList;
-    private RecyclerView friend_RecyclerView;
-    private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
-    private List<JSONObject> clickUserList;
-
-    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(context, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -145,6 +109,41 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
             super.handleMessage(message);
         }
     };
+    private EditText search_EditText;
+    private ProgressDialog progressDialog;
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
+    private View title_search_bar_include;
+    private LinearLayout title_search_LinearLayout;
+    private SwipeRefreshLayout friend_SwipeRefreshLayout;
+    private ImageView title_left_ImageView;
+    private TextView top_title_TextView;
+    private List<JSONObject> userJSONObjectList;
+    private RecyclerView friend_RecyclerView;
+    private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
+    private List<JSONObject> clickUserList;
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {

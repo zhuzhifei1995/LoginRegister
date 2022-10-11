@@ -30,8 +30,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
     private static final String TAG = ActivityUtil.TAG;
     private final List<JSONObject> jsonObjectList;
-    private MessageRecyclerViewAdapter.MessageRecyclerViewAdapterOnItemClickListener messageRecyclerViewAdapterOnItemClickListener;
     private final Context context;
+    private MessageRecyclerViewAdapter.MessageRecyclerViewAdapterOnItemClickListener messageRecyclerViewAdapterOnItemClickListener;
 
     public MessageRecyclerViewAdapter(Context context, List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化MessageRecyclerViewAdapter成功：" + jsonObjectList.toString());

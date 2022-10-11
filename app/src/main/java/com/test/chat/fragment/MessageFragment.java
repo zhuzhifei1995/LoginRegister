@@ -1,6 +1,5 @@
 package com.test.chat.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
 import com.test.chat.activity.FriendShowActivity;
-import com.test.chat.activity.Main2Activity;
 import com.test.chat.adapter.FriendRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -49,6 +47,51 @@ public class MessageFragment extends Fragment {
     private static final String TAG = ActivityUtil.TAG;
     private View messageFragmentView;
     private Context context;
+    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
+                for (int i = 0; i < messagesJSONArray.length(); i++) {
+                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
+                        final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
+                        final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
+                                if (photoBitmap != null) {
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                }
+                            }
+                        }).start();
+                    }
+                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
+                        final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
+                        final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+                    }
+                }
+                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+            } catch (Exception e) {
+                Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,52 +159,6 @@ public class MessageFragment extends Fragment {
             chat_RecyclerView.setAdapter(chatRecyclerViewAdapter);
         }
     }
-
-    private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
-                for (int i = 0; i < messagesJSONArray.length(); i++) {
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
-                        final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
-                        final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
-                                if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
-                                }
-                            }
-                        }).start();
-                    }
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
-                        final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
-                        final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).start();
-                    }
-                }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
-            } catch (Exception e) {
-                Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            super.handleMessage(message);
-        }
-    };
 
     private void initTitleView() {
         TextView top_title_TextView = messageFragmentView.findViewById(R.id.top_title_TextView);

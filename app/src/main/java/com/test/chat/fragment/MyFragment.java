@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -62,8 +61,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -77,12 +74,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private Activity activity;
     private Context context;
     private ProgressDialog progressDialog;
-    private boolean IS_SHOW_MY_MESSAGE;
-    private ImageView photo_my_ImageView;
-    private SwipeRefreshLayout my_SwipeRefreshLayout;
-    private EditText dialog_nike_name_EditText;
-
-
     private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
@@ -101,29 +92,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
-
-    private final Handler updateNikeNameHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NotNull Message message) {
-            Log.e(TAG, "handleMessage: "+message.obj);
-            super.handleMessage(message);
-        }
-    };
-
-    private final Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            Bitmap bitmap = (Bitmap) message.obj;
-            if (bitmap != null) {
-                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
-                photo_my_ImageView.setImageBitmap(bitmap);
-                initMyFragmentView();
-                my_SwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
-            }
-            super.handleMessage(message);
-        }
-    };
+    private boolean IS_SHOW_MY_MESSAGE;
+    private ImageView photo_my_ImageView;
     private final Handler uploadUpdatePhotoHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -154,6 +124,43 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             progressDialog.dismiss();
         }
     };
+    private SwipeRefreshLayout my_SwipeRefreshLayout;
+    private final Handler updateNikeNameHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NotNull Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    SharedPreferencesUtils.putString(context, "nick_name", jsonObject.getString("nick_name"), "user");
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    initMyFragmentView();
+                } else {
+                    Toast.makeText(context, "更新昵称失败！", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "更新昵称失败！", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+            progressDialog.dismiss();
+        }
+    };
+
+    private final Handler saveUserPhotoHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            Bitmap bitmap = (Bitmap) message.obj;
+            if (bitmap != null) {
+                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                photo_my_ImageView.setImageBitmap(bitmap);
+                initMyFragmentView();
+                my_SwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+            }
+            super.handleMessage(message);
+        }
+    };
     private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -181,6 +188,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
+    private EditText dialog_nike_name_EditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -292,7 +300,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private void updateNikeName() {
         progressDialog = new ProgressDialog(context);
         Window window = progressDialog.getWindow();
-        final String oldNikeName = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
+        final String oldNickName = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
             params.gravity = Gravity.CENTER;
@@ -304,8 +312,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             dialog_nike_name_EditText = progressDialog.findViewById(R.id.dialog_nike_name_EditText);
             dialog_nike_name_EditText.requestFocus();
-            dialog_nike_name_EditText.setText(oldNikeName);
-            dialog_nike_name_EditText.setSelection(oldNikeName.length());
+            dialog_nike_name_EditText.setText(oldNickName);
+            dialog_nike_name_EditText.setSelection(oldNickName.length());
         }
         TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
         cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
@@ -318,20 +326,27 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "onClick: " + dialog_nike_name_EditText.getText().toString() );
-                String newNikeName = dialog_nike_name_EditText.getText().toString().trim();
-                if (oldNikeName.equals(newNikeName)){
+                Log.e(TAG, "onClick: " + dialog_nike_name_EditText.getText().toString());
+                String newNickName = dialog_nike_name_EditText.getText().toString().trim();
+                if (oldNickName.equals(newNickName)) {
                     Toast.makeText(context, "与旧的昵称一致，请重新填写！", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
+                    progressDialog.dismiss();
+                    progressDialog.show();
                     progressDialog.setContentView(R.layout.loading_progress_bar);
                     TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
                     prompt_TextView.setText("修改昵称信息中.......");
-                    Map<String, String> parameter = new HashMap<>();
-                    parameter.put("user_id",  SharedPreferencesUtils.getString(context, "id", "", "user"));
-                    parameter.put("nike_name",  newNikeName);
-                    Message message = new Message();
-                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL+"/update_user_nike_name_by_id",parameter);
-                    updateNikeNameHandler.sendMessage(message);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Map<String, String> parameter = new HashMap<>();
+                            parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                            parameter.put("nick_name", newNickName);
+                            Message message = new Message();
+                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_user_nike_name_by_id", parameter);
+                            updateNikeNameHandler.sendMessage(message);
+                        }
+                    }).start();
 
                 }
             }

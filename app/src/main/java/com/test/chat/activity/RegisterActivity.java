@@ -68,6 +68,32 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
     private static boolean IS_SET_PHOTO_FLAG = false;
     private ProgressDialog progressDialog;
+    private final Handler registerHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            String json = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            progressDialog.dismiss();
+                            finish();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+                Toast.makeText(RegisterActivity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                Toast.makeText(RegisterActivity.this, "网络异常！", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                e.printStackTrace();
+            }
+        }
+    };
     private TextView local_TextView;
     private CheckBox check_agree_CheckBox;
     private EditText phone_number_EditText;
@@ -80,7 +106,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private String phone;
     private String password;
     private String verificationCode;
-
     private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -120,32 +145,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     }
                 }).start();
                 Toast.makeText(RegisterActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-    private final Handler registerHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1000);
-                            progressDialog.dismiss();
-                            finish();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-                Toast.makeText(RegisterActivity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                Toast.makeText(RegisterActivity.this, "网络异常！", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-                e.printStackTrace();
             }
         }
     };

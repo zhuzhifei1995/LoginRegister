@@ -156,16 +156,16 @@
                         </LinearLayout>
 
                         <View
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
-                            android:background="@drawable/line_view_bg" />
+                            android:background="@drawable/line_view_bg"
+                            android:visibility="gone" />
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             tools:ignore="UselessParent">
 
                             <TextView
