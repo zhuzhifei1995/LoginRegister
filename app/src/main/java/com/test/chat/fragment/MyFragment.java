@@ -138,6 +138,23 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
+    private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            super.handleMessage(message);
+            progressDialog.dismiss();
+            Log.e(TAG, "handleMessage: " + message.obj);
+            try {
+                JSONObject jsonObject = new JSONObject((String) message.obj);
+                if (jsonObject.getString("code").equals("1")) {
+
+                }
+                Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
     private EditText dialog_old_password_EditText;
     private boolean IS_SHOW_MY_MESSAGE;
     private ImageView photo_my_ImageView;
@@ -508,6 +525,124 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         update_phone_number_TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.dismiss();
+                Window window = progressDialog.getWindow();
+                if (window != null) {
+                    WindowManager.LayoutParams params = window.getAttributes();
+                    params.gravity = Gravity.CENTER;
+                    progressDialog.setCancelable(false);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.show();
+                    progressDialog.setContentView(R.layout.update_phone_number_progress_bar);
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    EditText update_phone_number_EditText = progressDialog.findViewById(R.id.update_phone_number_EditText);
+                    update_phone_number_EditText.requestFocus();
+                    TextView update_local_setting_TextView = progressDialog.findViewById(R.id.update_local_setting_TextView);
+                    update_local_setting_TextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                            final ProgressDialog localPhoneProgressDialog = new ProgressDialog(context);
+                            Window window = localPhoneProgressDialog.getWindow();
+                            if (window != null) {
+                                WindowManager.LayoutParams params = window.getAttributes();
+                                params.gravity = Gravity.CENTER;
+                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                progressDialog.setCancelable(true);
+                                localPhoneProgressDialog.show();
+                                localPhoneProgressDialog.setContentView(R.layout.local_phone_progress_bar);
+                            }
+                            TextView update_local_TextView = progressDialog.findViewById(R.id.update_local_TextView);
+                            TextView _86_TextView = localPhoneProgressDialog.findViewById(R.id._86_TextView);
+                            _86_TextView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    localPhoneProgressDialog.dismiss();
+                                    update_local_TextView.setText(new String("+86中国大陆"));
+                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
+                                }
+                            });
+
+                            TextView _853_TextView = localPhoneProgressDialog.findViewById(R.id._853_TextView);
+                            _853_TextView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    localPhoneProgressDialog.dismiss();
+                                    update_local_TextView.setText(new String("+853中国澳门"));
+                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
+                                }
+                            });
+
+                            TextView _852_TextView = localPhoneProgressDialog.findViewById(R.id._852_TextView);
+                            _852_TextView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    localPhoneProgressDialog.dismiss();
+                                    update_local_TextView.setText(new String("+852中国香港"));
+                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
+                                }
+                            });
+
+                            TextView _886_TextView = localPhoneProgressDialog.findViewById(R.id._886_TextView);
+                            _886_TextView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    localPhoneProgressDialog.dismiss();
+                                    update_local_TextView.setText(new String("+886中国台湾"));
+                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
+                                }
+                            });
+
+                            TextView cancel_TextView = localPhoneProgressDialog.findViewById(R.id.cancel_TextView);
+                            cancel_TextView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    localPhoneProgressDialog.dismiss();
+                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
+                                }
+                            });
+                        }
+                    });
+                    TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
+                    cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            progressDialog.dismiss();
+                        }
+                    });
+                    TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
+                    confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String newPhone = update_phone_number_EditText.getText().toString();
+                            Log.e(TAG, "onClick: " + newPhone);
+                            String oldPhone = SharedPreferencesUtils.getString(context, "phone", "", "user");
+                            Log.e(TAG, "onClick: " + oldPhone);
+                            if (!oldPhone.equals(newPhone)) {
+                                if (ActivityUtil.isMobileNO(newPhone)) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Map<String, String> parameter = new HashMap<>();
+                                            parameter.put("phone", newPhone);
+                                            Message message = new Message();
+                                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
+                                            codeHandler.sendMessage(message);
+                                        }
+                                    }).start();
+                                } else {
+                                    Toast.makeText(context, "手机号输入的不对！", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(context, "与上次绑定的手机号一样！", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+
+                        }
+                    });
+                }
             }
         });
         TextView cancel_TextView = progressDialog.findViewById(R.id.cancel_TextView);
