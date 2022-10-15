@@ -134,13 +134,13 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        activity = this;
         setContentView(R.layout.activity_chat_friend);
         initView();
     }
 
     private void initView() {
-        context = this;
-        activity = this;
         progressDialog = new ProgressDialog(context);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         String friendName = SharedPreferencesUtils.getString(context, "nick_name_friend", "", "user");

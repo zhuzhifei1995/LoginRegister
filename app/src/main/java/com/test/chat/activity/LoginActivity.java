@@ -97,6 +97,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         ANDROID_ID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
         Log.e(TAG, "获取设备的 ANDROID_ID：" + ANDROID_ID);
         if (SharedPreferencesUtils.getBoolean(context, "status", false, "user")) {
@@ -110,7 +111,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     private void initView() {
-        context = this;
         menu_more_LinearLayout = findViewById(R.id.menu_more_LinearLayout);
         Button login_register_Button = findViewById(R.id.login_register_Button);
         login_register_Button.setOnClickListener(this);

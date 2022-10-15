@@ -15,7 +15,8 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:padding="15dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:text="@string/confirm" />
 
     <View
@@ -31,7 +32,8 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:padding="15dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:text="@string/cancel" />
 
 

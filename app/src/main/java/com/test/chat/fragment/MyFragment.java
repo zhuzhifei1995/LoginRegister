@@ -142,19 +142,65 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         @Override
         public void handleMessage(Message message) {
             super.handleMessage(message);
-            progressDialog.dismiss();
             Log.e(TAG, "handleMessage: " + message.obj);
             try {
                 JSONObject jsonObject = new JSONObject((String) message.obj);
                 if (jsonObject.getString("code").equals("1")) {
+                    String phone = jsonObject.getString("phone");
+                    String verificationCode = jsonObject.getString("verification_code");
+                    progressDialog.dismiss();
+                    Window window = progressDialog.getWindow();
+                    if (window != null) {
+                        WindowManager.LayoutParams params = window.getAttributes();
+                        params.gravity = Gravity.CENTER;
+                        progressDialog.setCancelable(false);
+                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        progressDialog.show();
+                        progressDialog.setContentView(R.layout.verification_code_progress_bar);
+                    }
+                    TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
+                    cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            progressDialog.dismiss();
+                        }
+                    });
+                    TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
+                    confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            EditText update_verification_code_EditText = progressDialog.findViewById(R.id.update_verification_code_EditText);
+                            if (verificationCode.equals(update_verification_code_EditText.getText().toString())) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Map<String, String> parameter = new HashMap<>();
+                                        parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                                        parameter.put("phone", phone);
+                                        new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_phone_by_id", parameter);
+                                    }
+                                }).start();
+                                SharedPreferencesUtils.putString(context, "phone", phone, "user");
+                                progressDialog.dismiss();
+                                Toast.makeText(context, "修改绑定的手机号成功！", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "验证码输入错误！", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
+                } else {
+                    Toast.makeText(context, "修改失败，该号码已绑定账号！", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
-                Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         }
     };
+    private EditText update_phone_number_EditText;
     private EditText dialog_old_password_EditText;
     private boolean IS_SHOW_MY_MESSAGE;
     private ImageView photo_my_ImageView;
@@ -536,7 +582,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     progressDialog.setContentView(R.layout.update_phone_number_progress_bar);
                     window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                    EditText update_phone_number_EditText = progressDialog.findViewById(R.id.update_phone_number_EditText);
+                    update_phone_number_EditText = progressDialog.findViewById(R.id.update_phone_number_EditText);
                     update_phone_number_EditText.requestFocus();
                     TextView update_local_setting_TextView = progressDialog.findViewById(R.id.update_local_setting_TextView);
                     update_local_setting_TextView.setOnClickListener(new View.OnClickListener() {
@@ -561,7 +607,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
                                     update_local_TextView.setText(new String("+86中国大陆"));
-                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
                                 }
                             });
 
@@ -571,7 +616,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
                                     update_local_TextView.setText(new String("+853中国澳门"));
-                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
                                 }
                             });
 
@@ -581,7 +625,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
                                     update_local_TextView.setText(new String("+852中国香港"));
-                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
                                 }
                             });
 
@@ -591,7 +634,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
                                     update_local_TextView.setText(new String("+886中国台湾"));
-                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
                                 }
                             });
 
@@ -600,7 +642,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 @Override
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
-                                    inputMethodManager.showSoftInput(update_phone_number_EditText, InputMethodManager.SHOW_FORCED);
                                 }
                             });
                         }
@@ -622,20 +663,22 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                             Log.e(TAG, "onClick: " + oldPhone);
                             if (!oldPhone.equals(newPhone)) {
                                 if (ActivityUtil.isMobileNO(newPhone)) {
+                                    Window window = progressDialog.getWindow();
+                                    if (window != null) {
+                                        WindowManager.LayoutParams params = window.getAttributes();
+                                        params.gravity = Gravity.CENTER;
+                                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        progressDialog.setCancelable(false);
+                                        progressDialog.show();
+                                        progressDialog.setContentView(R.layout.loading_progress_bar);
+                                        TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                                        prompt_TextView.setText("获取验证码中.......");
+                                        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        inputMethodManager.hideSoftInputFromWindow(update_phone_number_EditText.getWindowToken(), 0);
+                                    }
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-
-//                                            Window window = progressDialog.getWindow();
-//                                            if (window != null) {
-//                                                WindowManager.LayoutParams params = window.getAttributes();
-//                                                params.gravity = Gravity.CENTER;
-//                                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                                                progressDialog.setCancelable(true);
-//                                                localPhoneProgressDialog.show();
-//                                                localPhoneProgressDialog.setContentView(R.layout.local_phone_progress_bar);
-//                                            }
-//                                            /
                                             Map<String, String> parameter = new HashMap<>();
                                             parameter.put("phone", newPhone);
                                             Message message = new Message();

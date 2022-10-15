@@ -154,6 +154,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        activity = this;
         setContentView(R.layout.activity_register);
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
@@ -166,8 +168,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void initViewRegister() {
-        context = this;
-        activity = this;
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("手机验证");
         LinearLayout password_setting_LinearLayout = findViewById(R.id.password_setting_LinearLayout);

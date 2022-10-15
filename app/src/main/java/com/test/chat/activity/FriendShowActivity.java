@@ -57,12 +57,12 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_friend_show);
         initView();
     }
 
     private void initView() {
-        context = this;
         Intent intent = getIntent();
         String friendJSON = intent.getStringExtra("friendJSON");
         progressDialog = new ProgressDialog(context);
