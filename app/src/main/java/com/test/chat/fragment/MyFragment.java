@@ -75,6 +75,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private Activity activity;
     private Context context;
     private ProgressDialog progressDialog;
+    private EditText update_verification_code_EditText;
+
     private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
@@ -157,6 +159,10 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         progressDialog.show();
                         progressDialog.setContentView(R.layout.verification_code_progress_bar);
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        update_verification_code_EditText = progressDialog.findViewById(R.id.update_verification_code_EditText);
+                        update_verification_code_EditText.requestFocus();
                     }
                     TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
                     cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +175,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            EditText update_verification_code_EditText = progressDialog.findViewById(R.id.update_verification_code_EditText);
                             if (verificationCode.equals(update_verification_code_EditText.getText().toString())) {
                                 new Thread(new Runnable() {
                                     @Override

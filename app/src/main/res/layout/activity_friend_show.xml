@@ -25,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/button_center_bg"
                 android:visibility="visible"
                 app:cardCornerRadius="60dp">
 
@@ -50,7 +49,7 @@
                 android:id="@+id/friend_show_LinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_center_bg"
+                android:background="@drawable/button_rounded_corners_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -96,6 +95,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/button_rounded_corners_bg"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -126,6 +128,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/button_rounded_corners_bg"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -156,6 +161,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/button_rounded_corners_bg"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -186,6 +194,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/button_rounded_corners_bg"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -217,6 +228,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:background="@drawable/button_rounded_corners_bg"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -224,6 +236,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="15dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:text="@string/password_1"
                         android:visibility="gone" />
 
@@ -251,7 +265,7 @@
                 android:id="@+id/send_message_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_center_bg"
+                android:background="@drawable/button_rounded_corners_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -266,7 +280,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_center_bg"
+                android:background="@drawable/button_rounded_corners_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -281,7 +295,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_center_bg"
+                android:background="@drawable/button_rounded_corners_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"

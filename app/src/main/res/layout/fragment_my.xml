@@ -60,7 +60,7 @@
                         android:id="@+id/my_message_LinearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/button_center_bg"
+                        android:background="@drawable/button_rounded_corners_bg"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
@@ -104,7 +104,7 @@
                             android:id="@+id/login_number_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/button_center_bg"
+                            android:background="@drawable/button_rounded_corners_bg"
                             android:clickable="true"
                             android:focusable="true"
                             android:orientation="horizontal"
@@ -139,7 +139,7 @@
                             android:id="@+id/nike_name_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/button_center_bg"
+                            android:background="@drawable/button_rounded_corners_bg"
                             android:clickable="true"
                             android:focusable="true"
                             android:orientation="horizontal"
@@ -176,6 +176,7 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:visibility="gone"
+                            android:background="@drawable/button_rounded_corners_bg"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -206,7 +207,7 @@
                             android:id="@+id/create_time_LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/button_center_bg"
+                            android:background="@drawable/button_rounded_corners_bg"
                             android:clickable="true"
                             android:focusable="true"
                             android:orientation="horizontal"
@@ -243,6 +244,7 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:visibility="gone"
+                            android:background="@drawable/button_rounded_corners_bg"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -275,7 +277,7 @@
                         android:id="@+id/account_and_security_TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_center_bg"
+                        android:background="@drawable/button_rounded_corners_bg"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
@@ -288,10 +290,26 @@
                         android:background="@drawable/line_view_bg" />
 
                     <TextView
+                        android:id="@+id/theme_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_rounded_corners_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:padding="20dp"
+                        android:text="主题设置" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/line_view_bg" />
+
+                    <TextView
                         android:id="@+id/login_out_TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_center_bg"
+                        android:background="@drawable/button_rounded_corners_bg"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"

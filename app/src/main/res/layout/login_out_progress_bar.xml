@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/progress_dialog_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical">
@@ -15,8 +15,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:padding="30dp"
         android:text="@string/confirm" />
 
     <View
@@ -32,8 +31,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:padding="30dp"
         android:text="@string/cancel" />
 
 

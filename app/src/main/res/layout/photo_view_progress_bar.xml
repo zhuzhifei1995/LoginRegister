@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/progress_dialog_bg"
     android:gravity="center_horizontal"
+    android:layout_marginBottom="5dp"
     android:orientation="vertical">
 
     <TextView

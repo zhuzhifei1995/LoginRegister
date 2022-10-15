@@ -47,6 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/button_send_rounded_corners_bg"
             android:text="@string/long_click_voice"
             android:visibility="gone" />
 
@@ -74,6 +75,7 @@
             android:id="@+id/send_image_message_Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@drawable/button_send_rounded_corners_bg"
             android:text="@string/add_image" />
 
     </LinearLayout>
