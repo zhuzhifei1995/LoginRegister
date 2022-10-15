@@ -73,6 +73,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private static final String IMAGE_FILE_NAME = "message_tmp.png.cache";
     private static final String MESSAGE_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image";
     private static boolean IS_VOICE = false;
+    private Context context;
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -89,7 +90,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap photoBitmap = new HttpUtil(ChatFriendActivity.this).getImageBitmap(messageImageUrl);
+                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
                                     ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                     try {
@@ -107,7 +108,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                new HttpUtil(ChatFriendActivity.this).getSoundFile(messageVoiceUrl, voiceName);
+                                new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
                             }
                         }).start();
                     }
@@ -119,6 +120,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             super.handleMessage(message);
         }
     };
+    private Activity activity;
     private EditText send_message_EditText;
     private List<JSONObject> messageJSONObjectList;
     private RecyclerView message_RecyclerView;
@@ -137,10 +139,12 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     }
 
     private void initView() {
-        progressDialog = new ProgressDialog(ChatFriendActivity.this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatFriendActivity.this);
-        String friendName = SharedPreferencesUtils.getString(ChatFriendActivity.this, "nick_name_friend", "", "user");
-        String friendLoginNumber = SharedPreferencesUtils.getString(ChatFriendActivity.this, "login_number_friend", "", "user");
+        context = this;
+        activity = this;
+        progressDialog = new ProgressDialog(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        String friendName = SharedPreferencesUtils.getString(context, "nick_name_friend", "", "user");
+        String friendLoginNumber = SharedPreferencesUtils.getString(context, "login_number_friend", "", "user");
         if (friendName.equals("")) {
             friendName = friendLoginNumber;
         }
@@ -158,9 +162,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         voice_Button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (ContextCompat.checkSelfPermission(ChatFriendActivity.this,
+                if (ContextCompat.checkSelfPermission(context,
                         Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ChatFriendActivity.this,
+                    ActivityCompat.requestPermissions(activity,
                             new String[]{Manifest.permission.RECORD_AUDIO}, 400);
                 } else {
                     startRecord();
@@ -208,7 +212,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             e.printStackTrace();
         }
 
-        messageRecyclerViewAdapter = new MessageRecyclerViewAdapter(ChatFriendActivity.this, messageJSONObjectList);
+        messageRecyclerViewAdapter = new MessageRecyclerViewAdapter(context, messageJSONObjectList);
         linearLayoutManager.setStackFromEnd(true);
         message_RecyclerView.setLayoutManager(linearLayoutManager);
         message_RecyclerView.setAdapter(messageRecyclerViewAdapter);
@@ -221,13 +225,13 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 try {
                     if (jsonObject.getString("message_type").equals("2")) {
                         if (messageJSONObjectList.get(position).getString("message_type").equals("2")) {
-                            Intent intent = new Intent(ChatFriendActivity.this, PhotoShowActivity.class);
+                            Intent intent = new Intent(context, PhotoShowActivity.class);
                             intent.putExtra("flag", 2);
                             intent.putExtra("photoName", messageJSONObjectList.get(position).getString("message") + ".cache");
                             startActivity(intent);
                         }
                     } else if (jsonObject.getString("message_type").equals("3")) {
-                        Intent intent = new Intent(ChatFriendActivity.this, PhotoShowActivity.class);
+                        Intent intent = new Intent(context, PhotoShowActivity.class);
                         intent.putExtra("flag", 3);
                         intent.putExtra("voiceName", messageJSONObjectList.get(position).getString("message") + ".cache");
                         startActivity(intent);
@@ -243,7 +247,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             public void run() {
                 send_message_EditText.setSelection(send_message_EditText.getText().length());
                 send_message_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) ChatFriendActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -310,16 +314,16 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     }
                     message_RecyclerView.scrollToPosition(messageRecyclerViewAdapter.getItemCount() - 1);
                     Map<String, String> parameter = new HashMap<>();
-                    parameter.put("user_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id", "", "user"));
-                    parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
+                    parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                    parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                     parameter.put("message", voiceUploadFileName);
                     parameter.put("message_type", 3 + "");
-                    new HttpUtil(ChatFriendActivity.this).upLoadImageFile(voiceUploadFile, ActivityUtil.NET_URL + "/send_message", parameter);
+                    new HttpUtil(context).upLoadImageFile(voiceUploadFile, ActivityUtil.NET_URL + "/send_message", parameter);
                 }
             }).start();
-            Toast.makeText(ChatFriendActivity.this, "录音结束！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "录音结束！", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(ChatFriendActivity.this, "录音异常！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "录音异常！", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "未初始化录音的工具类！");
         }
     }
@@ -354,30 +358,29 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     @SuppressLint("QueryPermissionsNeeded")
     private void selectFromAlbum() {
         progressDialog.dismiss();
-        if (ContextCompat.checkSelfPermission(ChatFriendActivity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ChatFriendActivity.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, REQUEST_IMAGE_GET);
             } else {
-                Toast.makeText(ChatFriendActivity.this, "未找到图片查看器！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "未找到图片查看器！", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private void selectFromPhoto() {
         progressDialog.dismiss();
-        if (ContextCompat.checkSelfPermission(ChatFriendActivity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(ChatFriendActivity.this,
+                || ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ChatFriendActivity.this,
+            ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
         } else {
@@ -396,10 +399,10 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             @Override
             public void run() {
                 Map<String, String> parameter = new HashMap<>();
-                parameter.put("user_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id", "", "user"));
-                parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
+                parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(ChatFriendActivity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                 getMessageHandler.sendMessage(message);
             }
         }).start();
@@ -427,15 +430,15 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     message_RecyclerView.scrollToPosition(messageRecyclerViewAdapter.getItemCount() - 1);
                     Log.e(TAG, "sendMessage: " + messageJSONObjectList);
                     Map<String, String> parameter = new HashMap<>();
-                    parameter.put("user_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id", "", "user"));
-                    parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
+                    parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                    parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                     parameter.put("message", message);
                     parameter.put("message_type", 1 + "");
-                    new HttpUtil(ChatFriendActivity.this).postRequest(ActivityUtil.NET_URL + "/send_message", parameter);
+                    new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/send_message", parameter);
                 }
             }).start();
         } else {
-            Toast.makeText(ChatFriendActivity.this, "发送消息不能为空！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "发送消息不能为空！", Toast.LENGTH_SHORT).show();
             send_message_EditText.setText("");
         }
     }
@@ -458,7 +461,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            pictureUri = FileProvider.getUriForFile(ChatFriendActivity.this,
+            pictureUri = FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", pictureFile);
         } else {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -525,7 +528,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
             file = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.setDataAndType(FileProvider.getUriForFile(ChatFriendActivity.this,
+            intent.setDataAndType(FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", file), "image/*");
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("crop", "true");
@@ -539,7 +542,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
             startActivityForResult(intent, REQUEST_BIG_IMAGE_CUTTING);
         } else {
-            Toast.makeText(ChatFriendActivity.this, "剪切图片失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "剪切图片失败", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -564,11 +567,11 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 File messageImageFile = new File(MESSAGE_IMAGE_PATH, messageImage + ".png.cache");
                 TmpFileUtil.copyFile(new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME), messageImageFile);
                 Map<String, String> parameter = new HashMap<>();
-                parameter.put("user_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id", "", "user"));
-                parameter.put("friend_id", SharedPreferencesUtils.getString(ChatFriendActivity.this, "id_friend", "", "user"));
+                parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                 parameter.put("message", messageImage);
                 parameter.put("message_type", 2 + "");
-                new HttpUtil(ChatFriendActivity.this).upLoadImageFile(messageImageFile, ActivityUtil.NET_URL + "/send_message", parameter);
+                new HttpUtil(context).upLoadImageFile(messageImageFile, ActivityUtil.NET_URL + "/send_message", parameter);
             }
         }).start();
     }
@@ -617,7 +620,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, REQUEST_IMAGE_GET);
                     } else {
-                        Toast.makeText(ChatFriendActivity.this, "未找到图片查看器！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "未找到图片查看器！", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -638,7 +641,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     private void startRecord() {
         File voiceDirPath = new File(Environment.getExternalStorageDirectory().getPath(), "/tmp/voice");
-        Toast.makeText(ChatFriendActivity.this, "开始录音......", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "开始录音......", Toast.LENGTH_SHORT).show();
         Window window = progressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
@@ -647,11 +650,11 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             progressDialog.setCancelable(false);
         }
         progressDialog.show();
-        InputMethodManager inputMethodManager = (InputMethodManager) ChatFriendActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(send_message_EditText.getWindowToken(), 0);
         progressDialog.setContentView(R.layout.voice_progress_bar);
         TextView cancel_voice_Button = progressDialog.findViewById(R.id.cancel_voice_Button);
-        cancel_voice_Button.setOnClickListener(ChatFriendActivity.this);
+        cancel_voice_Button.setOnClickListener(this);
         if (mediaRecorder == null) {
             if (!voiceDirPath.exists()) {
                 if (voiceDirPath.mkdir()) {

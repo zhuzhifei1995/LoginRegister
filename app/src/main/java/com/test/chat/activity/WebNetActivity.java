@@ -37,7 +37,7 @@ public class WebNetActivity extends Activity {
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
         Log.e(TAG, "请求显示的网页链接为：" + url);
-        progressDialog = new ProgressDialog(WebNetActivity.this);
+        progressDialog = new ProgressDialog(getApplicationContext());
         Window window = progressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();

@@ -2,6 +2,7 @@ package com.test.chat.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -65,6 +66,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private MyFragment myFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
+    private Context context;
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -84,15 +86,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap bitmap = new HttpUtil(MainActivity.this).getImageBitmap(photo);
+                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
                                 ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
                             }
                         }).start();
                     }
                 }
-                Toast.makeText(MainActivity.this, "初始化数据成功！", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "初始化数据成功！", Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
-                Toast.makeText(MainActivity.this, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 e.printStackTrace();
             }
@@ -109,6 +111,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initView() {
+        context = this;
         LinearLayout message_bottom_LinearLayout = findViewById(R.id.message_bottom_LinearLayout);
         LinearLayout friend_bottom_LinearLayout = findViewById(R.id.friend_bottom_LinearLayout);
         LinearLayout dynamic_bottom_LinearLayout = findViewById(R.id.dynamic_bottom_LinearLayout);
@@ -133,7 +136,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initFriendFragmentData() {
-        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog = new ProgressDialog(context);
         Window window = progressDialog.getWindow();
         if (window != null) {
             progressDialog.show();
@@ -149,9 +152,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void run() {
                 Map<String, String> parameter = new HashMap<>();
-                parameter.put("id", SharedPreferencesUtils.getString(MainActivity.this, "id", "0", "user"));
+                parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(MainActivity.this).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -273,7 +276,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - CURRENT_BACK_PRESSED_TIME > BACK_PRESSED_INTERVAL) {
                 CURRENT_BACK_PRESSED_TIME = System.currentTimeMillis();
-                Toast.makeText(MainActivity.this, "再按一次返回键退出", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "再按一次返回键退出", Toast.LENGTH_LONG).show();
                 return false;
             }
             moveTaskToBack(true);

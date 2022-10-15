@@ -2,6 +2,7 @@ package com.test.chat.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -48,6 +49,8 @@ public class PhotoShowActivity extends Activity {
     }
 
     private void initView() {
+        Context context = this;
+        Activity activity = this;
         ImageView photo_show_ImageView = findViewById(R.id.photo_show_ImageView);
         LinearLayout voice_LinearLayout = findViewById(R.id.voice_LinearLayout);
         LinearLayout photo_show_LinearLayout = findViewById(R.id.photo_show_LinearLayout);
@@ -81,9 +84,9 @@ public class PhotoShowActivity extends Activity {
             photo_show_ImageView.setVisibility(View.GONE);
             String voiceName = intent.getStringExtra("voiceName");
             voice_LinearLayout.setVisibility(View.VISIBLE);
-            if (ContextCompat.checkSelfPermission(PhotoShowActivity.this,
+            if (ContextCompat.checkSelfPermission(context,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(PhotoShowActivity.this, new String[]{
+                ActivityCompat.requestPermissions(activity, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }, 1);
             } else {
@@ -93,7 +96,7 @@ public class PhotoShowActivity extends Activity {
 
         } else {
             finish();
-            Toast.makeText(PhotoShowActivity.this, "传入的参数错误！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "传入的参数错误！", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -222,6 +225,4 @@ public class PhotoShowActivity extends Activity {
             mediaPlayer.release();
         }
     }
-
-
 }

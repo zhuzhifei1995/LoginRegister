@@ -1,6 +1,7 @@
 package com.test.chat.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.yanzhenjie.permission.Permission;
 public class WelcomeActivity extends Activity {
 
     private static final String TAG = ActivityUtil.TAG;
+    private Context context;
+    private Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,8 @@ public class WelcomeActivity extends Activity {
     }
 
     private void initView() {
+        context = this;
+        activity = this;
         int randomNumber = (int) (Math.random() * 3);
         LinearLayout main_LinearLayout = findViewById(R.id.main_LinearLayout);
         if (randomNumber == 1) {
@@ -47,20 +52,20 @@ public class WelcomeActivity extends Activity {
 
     private void initPermission() {
         Log.e(TAG, "开始请求应用权限");
-        PermissionManager.requestPermission(WelcomeActivity.this, new PermissionManager.Callback() {
+        PermissionManager.requestPermission(context, new PermissionManager.Callback() {
             @Override
             public void permissionSuccess() {
-                PermissionManager.requestPermission(WelcomeActivity.this, new PermissionManager.Callback() {
+                PermissionManager.requestPermission(context, new PermissionManager.Callback() {
                     @Override
                     public void permissionSuccess() {
-                        PermissionManager.requestPermission(WelcomeActivity.this, new PermissionManager.Callback() {
+                        PermissionManager.requestPermission(context, new PermissionManager.Callback() {
                             @Override
                             public void permissionSuccess() {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
-                                            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                                            Intent intent = new Intent(context, LoginActivity.class);
                                             Thread.sleep(2000);
                                             startActivity(intent);
                                             finish();
@@ -75,7 +80,7 @@ public class WelcomeActivity extends Activity {
                             @Override
                             public void permissionFailed() {
                                 Log.e(TAG, "请求应用文件权限失败！");
-                                PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
+                                PermissionPageManagement.goToPermissionSetting(activity);
                             }
                         }, Permission.Group.STORAGE);
                     }
@@ -83,7 +88,7 @@ public class WelcomeActivity extends Activity {
                     @Override
                     public void permissionFailed() {
                         Log.e(TAG, "请求应用录音权限失败！");
-                        PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
+                        PermissionPageManagement.goToPermissionSetting(activity);
                     }
                 }, Permission.Group.MICROPHONE);
             }
@@ -91,7 +96,7 @@ public class WelcomeActivity extends Activity {
             @Override
             public void permissionFailed() {
                 Log.e(TAG, "请求应用相机权限失败！");
-                PermissionPageManagement.goToPermissionSetting(WelcomeActivity.this);
+                PermissionPageManagement.goToPermissionSetting(activity);
             }
         }, Permission.Group.CAMERA);
     }

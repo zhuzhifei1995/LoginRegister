@@ -81,6 +81,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     private static long CURRENT_BACK_PRESSED_TIME = 0;
     private static boolean IS_UPDATE_MY_VIEW;
     private static boolean IS_SHOW_MY_MESSAGE = false;
+    private Context context;
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -95,7 +96,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap photoBitmap = new HttpUtil(Main2Activity.this).getImageBitmap(messageImageUrl);
+                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
                                     ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
                                 }
@@ -109,7 +110,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                             @Override
                             public void run() {
                                 try {
-                                    new HttpUtil(Main2Activity.this).getSoundFile(messageVoiceUrl, voiceName);
+                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
@@ -120,7 +121,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 }
                 TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
             } catch (Exception e) {
-                Toast.makeText(Main2Activity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络异常", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             super.handleMessage(message);
@@ -144,16 +145,16 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
                     photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME));
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
                     TmpFileUtil.copyFile(new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME), new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
                 } else {
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                    SharedPreferencesUtils.removeKey(Main2Activity.this, "status", "user");
-                    startActivity(new Intent(Main2Activity.this, LoginActivity.class));
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                    SharedPreferencesUtils.removeKey(context, "status", "user");
+                    startActivity(new Intent(context, LoginActivity.class));
                     finish();
                 }
             } catch (JSONException e) {
-                Toast.makeText(Main2Activity.this, "网络异常！", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                 photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/user", "photo.png.cache"));
                 e.printStackTrace();
@@ -186,7 +187,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             try {
                 jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(Main2Activity.this, "刷新成功！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
                     JSONArray jsonArray = jsonObject.getJSONArray("message");
                     TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
                     userJSONObjectList = new ArrayList<>();
@@ -199,7 +200,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Bitmap bitmap = new HttpUtil(Main2Activity.this).getImageBitmap(photo);
+                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
                                 ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
                             }
                         }).start();
@@ -216,7 +217,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 } catch (JSONException e1) {
                     e.printStackTrace();
                 }
-                Toast.makeText(Main2Activity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络异常", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 e.printStackTrace();
             }
@@ -242,12 +243,12 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             Log.e(TAG, "文件读取失败，未点击过好友：" + "/tmp/message/chat.json");
         }
         friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(userJSONObjectList);
-        friend_RecyclerView.setLayoutManager(new LinearLayoutManager(Main2Activity.this));
+        friend_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
         friendRecyclerViewAdapter.setOnItemClickListener(new FriendRecyclerViewAdapter.FriendRecyclerViewAdapterOnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
                 Log.e(TAG, "第" + position + "个被短时的点击：" + userJSONObjectList.get(position));
-                Intent intent = new Intent(Main2Activity.this, FriendShowActivity.class);
+                Intent intent = new Intent(context, FriendShowActivity.class);
                 intent.putExtra("friendJSON", userJSONObjectList.get(position).toString());
                 if (clickUserList.size() == 0) {
                     clickUserList.add(userJSONObjectList.get(position));
@@ -263,14 +264,14 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     @Override
                     public void run() {
                         Map<String, String> parameter = new HashMap<>();
-                        parameter.put("user_id", SharedPreferencesUtils.getString(Main2Activity.this, "id", "", "user"));
+                        parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                         try {
                             parameter.put("friend_id", userJSONObjectList.get(position).getString("id"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Message message = new Message();
-                        message.obj = new HttpUtil(Main2Activity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                         getMessageHandler.sendMessage(message);
                     }
                 }).start();
@@ -290,12 +291,12 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog = new ProgressDialog(Main2Activity.this);
+        progressDialog = new ProgressDialog(context);
         IS_UPDATE_MY_VIEW = true;
         Intent intent = getIntent();
         String status = intent.getStringExtra("status");
         if (status != null && !status.equals("")) {
-            Toast.makeText(Main2Activity.this, status, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, status, Toast.LENGTH_LONG).show();
             Window window = progressDialog.getWindow();
             if (window != null) {
                 window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -324,6 +325,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
     }
 
     private void initView() {
+        context = this;
         LinearLayout dynamic_LinearLayout = findViewById(R.id.dynamic_LinearLayout);
         dynamic_LinearLayout.setOnClickListener(this);
 
@@ -375,7 +377,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap photoBitmap = new HttpUtil(Main2Activity.this).getImageBitmap(photo);
+                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(photo);
                 if (photoBitmap != null) {
                     ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                     try {
@@ -386,34 +388,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 }
             }
         }).start();
-    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(Main2Activity.this, "刷新成功！", Toast.LENGTH_LONG).show();
-                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "create_time", userJSONObject.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "password", userJSONObject.getString("password"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "login_number", userJSONObject.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "nick_name", userJSONObject.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "phone", userJSONObject.getString("phone"), "user");
-                    SharedPreferencesUtils.putString(Main2Activity.this, "photo", userJSONObject.getString("photo_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"));
-                } else {
-                    Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(Main2Activity.this, "刷新失败！", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            my_SwipeRefreshLayout.setRefreshing(false);
-            initMyView();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void initMyView() {
         IS_SHOW_MY_MESSAGE = false;
@@ -450,11 +425,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     @Override
                     public void run() {
                         my_SwipeRefreshLayout.setRefreshing(true);
-                        String id = SharedPreferencesUtils.getString(Main2Activity.this, "id", "", "user");
+                        String id = SharedPreferencesUtils.getString(context, "id", "", "user");
                         Map<String, String> parameter = new HashMap<>();
                         parameter.put("id", id);
                         Message message = new Message();
-                        message.obj = new HttpUtil(Main2Activity.this).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
                         mySwipeRefreshHandler.sendMessage(message);
                     }
                 }).start();
@@ -470,25 +445,52 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             photo_my_ImageView.setImageResource(R.drawable.user_default_photo);
         }
         TextView nike_name_TextView = findViewById(R.id.nike_name_TextView);
-        String nick_name = SharedPreferencesUtils.getString(Main2Activity.this, "nick_name", "", "user");
+        String nick_name = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
         if (!nick_name.equals("")) {
             nike_name_TextView.setText(nick_name);
         } else {
             nike_name_TextView.setText("未设置昵称");
         }
         TextView login_number_TextView = findViewById(R.id.login_number_TextView);
-        String login_number = SharedPreferencesUtils.getString(Main2Activity.this, "login_number", "", "user");
+        String login_number = SharedPreferencesUtils.getString(context, "login_number", "", "user");
         login_number_TextView.setText(login_number);
         TextView phone_number_TextView = findViewById(R.id.phone_number_TextView);
-        String phone = SharedPreferencesUtils.getString(Main2Activity.this, "phone", "", "user");
+        String phone = SharedPreferencesUtils.getString(context, "phone", "", "user");
         phone_number_TextView.setText(phone);
         TextView create_time_TextView = findViewById(R.id.create_time_TextView);
-        String create_time = SharedPreferencesUtils.getString(Main2Activity.this, "create_time", "", "user");
+        String create_time = SharedPreferencesUtils.getString(context, "create_time", "", "user");
         create_time_TextView.setText(create_time);
         TextView password_TextView = findViewById(R.id.password_TextView);
-        String password = SharedPreferencesUtils.getString(Main2Activity.this, "password", "", "user");
+        String password = SharedPreferencesUtils.getString(context, "password", "", "user");
         password_TextView.setText(password);
-    }
+    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
+                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
+                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                } else {
+                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            my_SwipeRefreshLayout.setRefreshing(false);
+            initMyView();
+            super.handleMessage(message);
+        }
+    };
 
     private void initMessageView() {
         setContentView(R.layout.activity_main2);
@@ -531,36 +533,36 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 @Override
                 public void onItemClick(final int position) {
                     Log.e(TAG, "第" + position + "个被短时的点击：" + chatJSONObjectList.get(position).toString());
-                    Intent intent = new Intent(Main2Activity.this, FriendShowActivity.class);
+                    Intent intent = new Intent(context, FriendShowActivity.class);
                     intent.putExtra("friendJSON", chatJSONObjectList.get(position).toString());
                     startActivity(intent);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             Map<String, String> parameter = new HashMap<>();
-                            parameter.put("user_id", SharedPreferencesUtils.getString(Main2Activity.this, "id", "", "user"));
+                            parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                             try {
                                 parameter.put("friend_id", chatJSONObjectList.get(position).getString("id"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             Message message = new Message();
-                            message.obj = new HttpUtil(Main2Activity.this).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                             getMessageHandler.sendMessage(message);
                         }
                     }).start();
                 }
             });
-            chat_RecyclerView.setLayoutManager(new LinearLayoutManager(Main2Activity.this));
+            chat_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
             chat_RecyclerView.setAdapter(chatRecyclerViewAdapter);
         }
     }
 
     private void getNetFriendRecyclerView() {
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("id", SharedPreferencesUtils.getString(Main2Activity.this, "id", "0", "user"));
+        parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
         Message message = new Message();
-        message.obj = new HttpUtil(Main2Activity.this).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
         friendShowHandler.sendMessage(message);
     }
 
@@ -628,7 +630,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 }
             }).start();
         } else {
-            title_right_ImageView.setOnClickListener(Main2Activity.this);
+            title_right_ImageView.setOnClickListener(this);
             try {
                 String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/friend", "friend.json");
@@ -672,7 +674,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                                 public void run() {
                                     search_EditText.setSelection(search_EditText.getText().length());
                                     search_EditText.requestFocus();
-                                    InputMethodManager manager = ((InputMethodManager) Main2Activity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                                    InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                                     if (manager != null) {
                                         manager.showSoftInput(getCurrentFocus(), 0);
                                     }
@@ -711,8 +713,8 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
                     prompt_TextView.setText("退出登陆中.......");
                 }
-                Intent intent = new Intent(Main2Activity.this, LoginActivity.class);
-                SharedPreferencesUtils.removeKey(Main2Activity.this, "status", "user");
+                Intent intent = new Intent(context, LoginActivity.class);
+                SharedPreferencesUtils.removeKey(context, "status", "user");
                 File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath()
                         + "/tmp/user", "photo.png.cache");
                 if (userPhotoFile.delete()) {
@@ -736,31 +738,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 progressDialog.dismiss();
             }
         });
-    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                initMyView();
-                Toast.makeText(Main2Activity.this, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(Main2Activity.this, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(Main2Activity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(Main2Activity.this, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void updateMyPhoto() {
         Window window = progressDialog.getWindow();
@@ -815,13 +793,37 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
 
     private void showMyPhoto(DialogInterface dialog) {
         dialog.dismiss();
-        Intent intent = new Intent(Main2Activity.this, PhotoShowActivity.class);
+        Intent intent = new Intent(context, PhotoShowActivity.class);
         intent.putExtra("flag", 1);
         startActivity(intent);
-    }
+    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                initMyView();
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     private void selectFromPhoto() {
-        if (ContextCompat.checkSelfPermission(Main2Activity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(Main2Activity.this,
@@ -832,15 +834,15 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, REQUEST_IMAGE_GET);
             } else {
-                Toast.makeText(Main2Activity.this, "未找到图片查看器", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private void selectFromAlbum() {
-        if (ContextCompat.checkSelfPermission(Main2Activity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(Main2Activity.this,
+                || ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(Main2Activity.this,
@@ -943,11 +945,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 try {
                     Thread.sleep(2000);
                     Map<String, String> parameter = new HashMap<>();
-                    parameter.put("id", SharedPreferencesUtils.getString(Main2Activity.this,
+                    parameter.put("id", SharedPreferencesUtils.getString(context,
                             "id", "0", "user"));
                     File updatePhotoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
                     Message message = new Message();
-                    message.obj = new HttpUtil(Main2Activity.this).upLoadImageFile(updatePhotoFile,
+                    message.obj = new HttpUtil(context).upLoadImageFile(updatePhotoFile,
                             ActivityUtil.NET_URL + "/update_user_photo", parameter);
                     uploadUpdatePhotoHandler.sendMessage(message);
                 } catch (InterruptedException e) {
@@ -970,7 +972,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.setDataAndType(FileProvider.getUriForFile(Main2Activity.this,
+            intent.setDataAndType(FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", file), "image/*");
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("crop", "true");
@@ -984,7 +986,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
             startActivityForResult(intent, REQUEST_BIG_IMAGE_CUTTING);
         } else {
-            Toast.makeText(Main2Activity.this, "剪切图片失败", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "剪切图片失败", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1027,7 +1029,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             public void run() {
                 search_EditText.setSelection(search_EditText.getText().length());
                 search_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) Main2Activity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -1070,19 +1072,19 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("phone", phone);
                     Message message = new Message();
-                    if (phone.equals(SharedPreferencesUtils.getString(Main2Activity.this,
+                    if (phone.equals(SharedPreferencesUtils.getString(context,
                             "phone", "", "user"))) {
                         message.what = 1;
                     } else {
                         message.what = 0;
                     }
-                    message.obj = new HttpUtil(Main2Activity.this).postRequest
+                    message.obj = new HttpUtil(context).postRequest
                             (ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
                     searchFriendHandler.sendMessage(message);
                 }
             }).start();
         } else {
-            Toast.makeText(Main2Activity.this, "请输入正确的手机号！", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "请输入正确的手机号！", Toast.LENGTH_LONG).show();
         }
         search_EditText.setText("");
     }
@@ -1120,6 +1122,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -1130,7 +1133,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, REQUEST_IMAGE_GET);
                     } else {
-                        Toast.makeText(Main2Activity.this, "未找到图片查看器", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
@@ -1192,7 +1195,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - CURRENT_BACK_PRESSED_TIME > BACK_PRESSED_INTERVAL) {
                 CURRENT_BACK_PRESSED_TIME = System.currentTimeMillis();
-                Toast.makeText(Main2Activity.this, "再按一次返回键退出", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "再按一次返回键退出", Toast.LENGTH_LONG).show();
                 deletePhotoCacheFile();
                 return false;
             }

@@ -55,6 +55,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private ProgressDialog progressDialog;
     private String ANDROID_ID;
     private CheckBox remember_password_CheckBox;
+    private Context context;
     private final Handler loginHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -64,27 +65,27 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if (jsonObject.getString("code").equals("1")) {
                     JSONObject user = jsonObject.getJSONObject("message");
 
-                    SharedPreferencesUtils.putString(LoginActivity.this, "create_time", user.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "password", user.getString("password"), "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "id", user.getInt("id") + "", "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "login_number", user.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "nick_name", user.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "phone", user.getString("phone"), "user");
-                    SharedPreferencesUtils.putBoolean(LoginActivity.this, "status", true, "user");
-                    SharedPreferencesUtils.putBoolean(LoginActivity.this, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
-                    SharedPreferencesUtils.putString(LoginActivity.this, "photo", user.getString("photo"), "user");
+                    SharedPreferencesUtils.putString(context, "create_time", user.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(context, "password", user.getString("password"), "user");
+                    SharedPreferencesUtils.putString(context, "id", user.getInt("id") + "", "user");
+                    SharedPreferencesUtils.putString(context, "login_number", user.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(context, "nick_name", user.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(context, "phone", user.getString("phone"), "user");
+                    SharedPreferencesUtils.putBoolean(context, "status", true, "user");
+                    SharedPreferencesUtils.putBoolean(context, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
+                    SharedPreferencesUtils.putString(context, "photo", user.getString("photo"), "user");
 
                     saveUserPhoto(user.getString("photo"));
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("status", jsonObject.getString("status"));
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(LoginActivity.this, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             progressDialog.dismiss();
@@ -98,8 +99,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         ANDROID_ID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
         Log.e(TAG, "获取设备的 ANDROID_ID：" + ANDROID_ID);
-        if (SharedPreferencesUtils.getBoolean(LoginActivity.this, "status", false, "user")) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        if (SharedPreferencesUtils.getBoolean(context, "status", false, "user")) {
+            Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
         } else {
             setContentView(R.layout.activity_login);
@@ -109,6 +110,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     private void initView() {
+        context = this;
         menu_more_LinearLayout = findViewById(R.id.menu_more_LinearLayout);
         Button login_register_Button = findViewById(R.id.login_register_Button);
         login_register_Button.setOnClickListener(this);
@@ -118,22 +120,22 @@ public class LoginActivity extends Activity implements OnClickListener {
         root_RelativeLayout = findViewById(R.id.root_RelativeLayout);
         Button login_Button = findViewById(R.id.login_Button);
         login_Button.setOnClickListener(this);
-        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
         remember_password_CheckBox = findViewById(R.id.remember_password_CheckBox);
-        boolean isRememberPassword = SharedPreferencesUtils.getBoolean(LoginActivity.this, "is_remember_password", false, "user");
+        boolean isRememberPassword = SharedPreferencesUtils.getBoolean(context, "is_remember_password", false, "user");
         remember_password_CheckBox.setChecked(isRememberPassword);
 
         login_account_EditText = findViewById(R.id.login_account_EditText);
         login_password_EditText = findViewById(R.id.login_password_EditText);
 
-        login_account_EditText.setText(SharedPreferencesUtils.getString(LoginActivity.this, "login_number", "", "user"));
+        login_account_EditText.setText(SharedPreferencesUtils.getString(context, "login_number", "", "user"));
         login_account_EditText.postDelayed(new Runnable() {
             @Override
             public void run() {
                 login_account_EditText.setSelection(login_account_EditText.getText().length());
                 login_account_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -141,7 +143,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }, 100);
 
         if (isRememberPassword) {
-            login_password_EditText.setText(SharedPreferencesUtils.getString(LoginActivity.this, "password", "", "user"));
+            login_password_EditText.setText(SharedPreferencesUtils.getString(context, "password", "", "user"));
         }
     }
 
@@ -182,7 +184,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     private void register() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(context, RegisterActivity.class);
         startActivity(intent);
     }
 
@@ -190,7 +192,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         // TODO
 //        login_account_EditText.setText(new String("20220922234321"));
 //        login_password_EditText.setText(new String("123456789"));
-        InputMethodManager inputMethodManager = (InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(login_account_EditText.getWindowToken(), 0);
         inputMethodManager.hideSoftInputFromWindow(login_password_EditText.getWindowToken(), 0);
 
@@ -222,7 +224,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 parameter.put("password", login_password);
                 parameter.put("android_id", ANDROID_ID);
                 Message message = new Message();
-                message.obj = new HttpUtil(LoginActivity.this)
+                message.obj = new HttpUtil(context)
                         .postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
                 try {
                     Thread.sleep(2000);
@@ -238,7 +240,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap photoBitmap = new HttpUtil(LoginActivity.this).getImageBitmap(photo);
+                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(photo);
                 if (photoBitmap != null) {
                     ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
                 }

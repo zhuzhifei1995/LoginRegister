@@ -3,6 +3,7 @@ package com.test.chat.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -51,6 +52,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
         }
     };
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +62,10 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     }
 
     private void initView() {
+        context = this;
         Intent intent = getIntent();
         String friendJSON = intent.getStringExtra("friendJSON");
-        progressDialog = new ProgressDialog(FriendShowActivity.this);
+        progressDialog = new ProgressDialog(context);
         Window window = progressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
@@ -115,13 +118,13 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
                 String phone = jsonObject.getString("phone");
                 String photo = jsonObject.getString("photo");
 
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "create_time_friend", create_time, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "password_friend", password, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "id_friend", id, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "login_number_friend", login_number, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "nick_name_friend", nick_name, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "phone_friend", phone, "user");
-                SharedPreferencesUtils.putString(FriendShowActivity.this, "photo_friend", photo, "user");
+                SharedPreferencesUtils.putString(context, "create_time_friend", create_time, "user");
+                SharedPreferencesUtils.putString(context, "password_friend", password, "user");
+                SharedPreferencesUtils.putString(context, "id_friend", id, "user");
+                SharedPreferencesUtils.putString(context, "login_number_friend", login_number, "user");
+                SharedPreferencesUtils.putString(context, "nick_name_friend", nick_name, "user");
+                SharedPreferencesUtils.putString(context, "phone_friend", phone, "user");
+                SharedPreferencesUtils.putString(context, "photo_friend", photo, "user");
 
                 String[] photos = jsonObject.getString("photo").split("/");
                 String friendPhotoName = photos[photos.length - 1] + ".cache";
@@ -151,10 +154,10 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     }
 
     private void showFriendPhoto() {
-        Intent intent = new Intent(FriendShowActivity.this, PhotoShowActivity.class);
+        Intent intent = new Intent(context, PhotoShowActivity.class);
         intent.putExtra("flag", 0);
         String[] photos = SharedPreferencesUtils.getString(
-                FriendShowActivity.this, "photo_friend", "", "user").split("/");
+                context, "photo_friend", "", "user").split("/");
         String friendPhotoName = photos[photos.length - 1] + ".cache";
         intent.putExtra("photoName", friendPhotoName);
         startActivity(intent);
@@ -178,7 +181,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     }
 
     private void sendMessage() {
-        Intent intent = new Intent(FriendShowActivity.this, ChatFriendActivity.class);
+        Intent intent = new Intent(context, ChatFriendActivity.class);
         startActivity(intent);
     }
 

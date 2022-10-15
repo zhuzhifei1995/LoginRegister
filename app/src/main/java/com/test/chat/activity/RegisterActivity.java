@@ -68,6 +68,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
     private static boolean IS_SET_PHOTO_FLAG = false;
     private ProgressDialog progressDialog;
+    private Context context;
     private final Handler registerHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -86,14 +87,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                         }
                     }
                 }).start();
-                Toast.makeText(RegisterActivity.this, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
-                Toast.makeText(RegisterActivity.this, "网络异常！", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 e.printStackTrace();
             }
         }
     };
+    private Activity activity;
     private TextView local_TextView;
     private CheckBox check_agree_CheckBox;
     private EditText phone_number_EditText;
@@ -115,7 +117,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 if (jsonObject.getString("code").equals("1")) {
                     initViewVerificationCode();
                     String verification_code = jsonObject.getString("verification_code");
-                    Toast.makeText(RegisterActivity.this, "已经向您手机发送验证码，请查看", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "已经向您手机发送验证码，请查看", Toast.LENGTH_SHORT).show();
                     verificationCode = verification_code;
                 } else {
                     new Thread(new Runnable() {
@@ -128,7 +130,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                             }
                         }
                     }).start();
-                    Toast.makeText(RegisterActivity.this, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             } catch (JSONException e) {
@@ -144,7 +146,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                         }
                     }
                 }).start();
-                Toast.makeText(RegisterActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -153,7 +155,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
         initViewRegister();
     }
@@ -164,20 +166,22 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void initViewRegister() {
+        context = this;
+        activity = this;
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("手机验证");
         LinearLayout password_setting_LinearLayout = findViewById(R.id.password_setting_LinearLayout);
         password_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RegisterActivity.this, "请先验证你的手机号", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请先验证你的手机号", Toast.LENGTH_SHORT).show();
             }
         });
         LinearLayout photo_setting_LinearLayout = findViewById(R.id.photo_setting_LinearLayout);
         photo_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RegisterActivity.this, "请先验证你的手机号", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请先验证你的手机号", Toast.LENGTH_SHORT).show();
             }
         });
         ImageView title_left_ImageView = findViewById(R.id.title_left_ImageView);
@@ -198,7 +202,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             public void run() {
                 phone_number_EditText.setSelection(phone_number_EditText.getText().length());
                 phone_number_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -226,14 +230,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         password_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RegisterActivity.this, "请输入收到的验证码", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请输入收到的验证码", Toast.LENGTH_SHORT).show();
             }
         });
         LinearLayout photo_setting_LinearLayout = findViewById(R.id.photo_setting_LinearLayout);
         photo_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RegisterActivity.this, "请输入收到的验证码", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请输入收到的验证码", Toast.LENGTH_SHORT).show();
             }
         });
         verification_code_EditText = findViewById(R.id.verification_code_EditText);
@@ -242,7 +246,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             public void run() {
                 verification_code_EditText.setSelection(verification_code_EditText.getText().length());
                 verification_code_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -260,14 +264,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         photo_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RegisterActivity.this, "请设置登录密码", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "请设置登录密码", Toast.LENGTH_SHORT).show();
             }
         });
         LinearLayout phone_verification_LinearLayout = findViewById(R.id.phone_verification_LinearLayout);
         phone_verification_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(register_password_EditText.getWindowToken(), 0);
                 Window window = progressDialog.getWindow();
                 if (window != null) {
@@ -313,7 +317,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             public void run() {
                 register_password_EditText.setSelection(register_password_EditText.getText().length());
                 register_password_EditText.requestFocus();
-                InputMethodManager manager = ((InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
                 if (manager != null) {
                     manager.showSoftInput(getCurrentFocus(), 0);
                 }
@@ -334,7 +338,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         phone_verification_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(register_password_EditText.getWindowToken(), 0);
                 Window window = progressDialog.getWindow();
                 if (window != null) {
@@ -379,7 +383,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         password_setting_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(register_password_EditText.getWindowToken(), 0);
                 Window window = progressDialog.getWindow();
                 if (window != null) {
@@ -428,7 +432,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void showSelectLocal() {
-        final ProgressDialog localPhoneProgressDialog = new ProgressDialog(RegisterActivity.this);
+        final ProgressDialog localPhoneProgressDialog = new ProgressDialog(context);
         Window window = localPhoneProgressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
@@ -495,7 +499,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             phone_number_EditText.requestFocus();
         }
         if (ActivityUtil.isMobileNO(phone) && check_agree_CheckBox.isChecked()) {
-            InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(phone_number_EditText.getWindowToken(), 0);
             getMobileNoCode();
         }
@@ -520,7 +524,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("phone", phone);
                 Message message = new Message();
-                message.obj = new HttpUtil(RegisterActivity.this)
+                message.obj = new HttpUtil(context)
                         .postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
                 codeHandler.sendMessage(message);
             }
@@ -535,7 +539,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void exitRegister() {
-        InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (register_password_EditText != null) {
             inputMethodManager.hideSoftInputFromWindow(register_password_EditText.getWindowToken(), 0);
         }
@@ -545,7 +549,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (verification_code_EditText != null) {
             inputMethodManager.hideSoftInputFromWindow(verification_code_EditText.getWindowToken(), 0);
         }
-        final ProgressDialog exitRegisterProgressDialog = new ProgressDialog(RegisterActivity.this);
+        final ProgressDialog exitRegisterProgressDialog = new ProgressDialog(context);
         Window window = exitRegisterProgressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
@@ -605,12 +609,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 //        verificationCode = new String("123456");
         String inputVerificationCode = verification_code_EditText.getText().toString();
         if (inputVerificationCode.equals(verificationCode)) {
-            InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(verification_code_EditText.getWindowToken(), 0);
             initViewPasswordSet();
             myCount.cancel();
         } else {
-            Toast.makeText(RegisterActivity.this, "验证码输入错误", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "验证码输入错误", Toast.LENGTH_SHORT).show();
         }
         progressDialog.dismiss();
     }
@@ -669,7 +673,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     parameter.put("password", password);
                     parameter.put("phone", phone);
                     Message message = new Message();
-                    message.obj = new HttpUtil(RegisterActivity.this).upLoadImageFile(file, ActivityUtil.NET_URL + "/register_user", parameter);
+                    message.obj = new HttpUtil(context).upLoadImageFile(file, ActivityUtil.NET_URL + "/register_user", parameter);
                     registerHandler.sendMessage(message);
                 }
             }).start();
@@ -707,10 +711,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     @SuppressLint("QueryPermissionsNeeded")
     private void selectFromPhoto() {
         progressDialog.dismiss();
-        if (ContextCompat.checkSelfPermission(RegisterActivity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(RegisterActivity.this,
+            ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -718,21 +722,20 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, REQUEST_IMAGE_GET);
             } else {
-                Toast.makeText(RegisterActivity.this, "未找到图片查看器", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private void selectFromAlbum() {
         progressDialog.dismiss();
-        if (ContextCompat.checkSelfPermission(RegisterActivity.this,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(RegisterActivity.this,
+                || ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(RegisterActivity.this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
         } else {
             photoFromCapture();
         }
@@ -822,7 +825,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             }
             file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
             Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.setDataAndType(FileProvider.getUriForFile(RegisterActivity.this,
+            intent.setDataAndType(FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", file), "image/*");
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("crop", "true");
@@ -836,7 +839,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
             startActivityForResult(intent, REQUEST_BIG_IMAGE_CUTTING);
         } else {
-            Toast.makeText(RegisterActivity.this, "剪切图片失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "剪切图片失败", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -896,7 +899,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, REQUEST_IMAGE_GET);
                     } else {
-                        Toast.makeText(RegisterActivity.this, "未找到图片查看器", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -908,9 +911,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void toReadQQServer() {
-        InputMethodManager inputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(phone_number_EditText.getWindowToken(), 0);
-        Intent intent = new Intent(RegisterActivity.this, WebNetActivity.class);
+        Intent intent = new Intent(context, WebNetActivity.class);
         intent.putExtra("url", "https://www.qq.com/contract.shtml");
         startActivity(intent);
     }
