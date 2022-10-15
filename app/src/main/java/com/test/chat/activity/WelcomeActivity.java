@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
 
@@ -23,7 +24,20 @@ public class WelcomeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        initView();
         initPermission();
+    }
+
+    private void initView() {
+        int randomNumber = (int) (Math.random() * 3);
+        LinearLayout main_LinearLayout = findViewById(R.id.main_LinearLayout);
+        if (randomNumber == 1) {
+            main_LinearLayout.setBackgroundResource(R.drawable.layer_splash_chn_bg);
+        } else if (randomNumber == 2) {
+            main_LinearLayout.setBackgroundResource(R.drawable.layer_splash_math_bg);
+        } else {
+            main_LinearLayout.setBackgroundResource(R.drawable.layer_splash_eng_bg);
+        }
     }
 
     @Override

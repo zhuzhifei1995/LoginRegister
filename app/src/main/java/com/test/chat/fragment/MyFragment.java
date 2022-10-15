@@ -625,6 +625,17 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
+
+//                                            Window window = progressDialog.getWindow();
+//                                            if (window != null) {
+//                                                WindowManager.LayoutParams params = window.getAttributes();
+//                                                params.gravity = Gravity.CENTER;
+//                                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                                                progressDialog.setCancelable(true);
+//                                                localPhoneProgressDialog.show();
+//                                                localPhoneProgressDialog.setContentView(R.layout.local_phone_progress_bar);
+//                                            }
+//                                            /
                                             Map<String, String> parameter = new HashMap<>();
                                             parameter.put("phone", newPhone);
                                             Message message = new Message();
