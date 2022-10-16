@@ -47,6 +47,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.test.chat.R;
 import com.test.chat.activity.LoginActivity;
 import com.test.chat.activity.PhotoShowActivity;
+import com.test.chat.activity.ThemeSettingActivity;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
@@ -324,6 +325,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         my_message_LinearLayout.setOnClickListener(this);
         TextView login_out_TextView = myFragmentView.findViewById(R.id.login_out_TextView);
         login_out_TextView.setOnClickListener(this);
+        TextView theme_setting_TextView = myFragmentView.findViewById(R.id.theme_setting_TextView);
+        theme_setting_TextView.setOnClickListener(this);
         my_SwipeRefreshLayout = myFragmentView.findViewById(R.id.my_SwipeRefreshLayout);
         my_SwipeRefreshLayout.setOnRefreshListener(this);
         TextView account_and_security_TextView = myFragmentView.findViewById(R.id.account_and_security_TextView);
@@ -408,10 +411,17 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             case R.id.create_time_LinearLayout:
                 Toast.makeText(context, "注册时间不能修改！", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.theme_setting_TextView:
+                settingTheme();
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void settingTheme() {
+        startActivity(new Intent(context, ThemeSettingActivity.class));
     }
 
     private void updateNikeName() {

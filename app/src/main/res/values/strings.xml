@@ -81,5 +81,6 @@
     <string name="input_start_password">请输入原始密码</string>
     <string name="input_new_password">请输入修改密码</string>
     <string name="re_input_new_password">请再次输入修改密码</string>
+    <string name="theme_setting">主题设置</string>
 
 </resources>

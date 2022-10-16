@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -276,6 +277,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void isCurrentDeviceLogin() {
+        Log.e(TAG, "isCurrentDeviceLogin: ");
         new Thread(new Runnable() {
             @Override
             public void run() {
