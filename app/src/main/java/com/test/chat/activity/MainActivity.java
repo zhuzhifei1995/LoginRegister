@@ -3,6 +3,7 @@ package com.test.chat.activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -102,6 +103,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             super.handleMessage(message);
         }
     };
+    private String ANDROID_ID;
+    private final Handler isLoginHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(final Message message) {
+            try {
+                JSONObject jsonObject = new JSONObject((String) message.obj).getJSONObject("message");
+                if (!ANDROID_ID.equals(jsonObject.getString("android_id"))) {
+                    SharedPreferencesUtils.putBoolean(context, "status", false, "user");
+                    Toast.makeText(context, "当前账号在其他设备的概率，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(context, LoginActivity.class));
+                    finish();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +131,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void initView() {
         context = this;
+        ANDROID_ID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
         LinearLayout message_bottom_LinearLayout = findViewById(R.id.message_bottom_LinearLayout);
         LinearLayout friend_bottom_LinearLayout = findViewById(R.id.friend_bottom_LinearLayout);
         LinearLayout dynamic_bottom_LinearLayout = findViewById(R.id.dynamic_bottom_LinearLayout);
@@ -235,6 +255,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
+        isCurrentDeviceLogin();
         setBottomSelectImageButton();
         switch (view.getId()) {
             case R.id.message_bottom_LinearLayout:
@@ -252,6 +273,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    private void isCurrentDeviceLogin() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> parameter = new HashMap<>();
+                parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
+                Message message = new Message();
+                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                isLoginHandler.sendMessage(message);
+            }
+        }).start();
     }
 
     private void setBottomSelectImageButton() {

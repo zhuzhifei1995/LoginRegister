@@ -75,8 +75,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private Activity activity;
     private Context context;
     private ProgressDialog progressDialog;
-    private EditText update_verification_code_EditText;
-
     private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
@@ -140,6 +138,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             super.handleMessage(message);
         }
     };
+    private EditText update_verification_code_EditText;
     private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -358,6 +357,10 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         } else {
             Log.e(TAG, "图片为空,加载失败");
             photo_my_ImageView.setImageResource(R.drawable.user_default_photo);
+            Toast.makeText(context, "登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+            SharedPreferencesUtils.putBoolean(context, "status", false, "user");
+            startActivity(new Intent(context, LoginActivity.class));
+            activity.finish();
         }
         TextView nike_name_TextView = myFragmentView.findViewById(R.id.nike_name_TextView);
         String nick_name = SharedPreferencesUtils.getString(context, "nick_name", "", "user");
@@ -1069,6 +1072,12 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         intent.putExtra("scale", true);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, REQUEST_SMALL_IMAGE_CUTTING);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        initMyFragmentView();
+        super.onHiddenChanged(hidden);
     }
 
     @Override

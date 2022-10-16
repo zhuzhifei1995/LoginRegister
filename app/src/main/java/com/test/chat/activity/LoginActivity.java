@@ -64,7 +64,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
                     JSONObject user = jsonObject.getJSONObject("message");
-
                     SharedPreferencesUtils.putString(context, "create_time", user.getString("create_time"), "user");
                     SharedPreferencesUtils.putString(context, "password", user.getString("password"), "user");
                     SharedPreferencesUtils.putString(context, "id", user.getInt("id") + "", "user");
@@ -74,9 +73,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SharedPreferencesUtils.putBoolean(context, "status", true, "user");
                     SharedPreferencesUtils.putBoolean(context, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
                     SharedPreferencesUtils.putString(context, "photo", user.getString("photo"), "user");
-
                     saveUserPhoto(user.getString("photo"));
-
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("status", jsonObject.getString("status"));
                     startActivity(intent);

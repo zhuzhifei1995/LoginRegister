@@ -26,24 +26,38 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         tools:targetApi="q">
-        <activity android:name=".activity.Main2Activity" />
-        <activity android:name=".activity.ChatFriendActivity" />
-        <activity android:name=".activity.FriendShowActivity" />
-        <activity android:name=".activity.PhotoShowActivity" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.ChatFriendActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.FriendShowActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.PhotoShowActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.WelcomeActivity"
-            tools:ignore="IntentFilterExportedReceiver">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.WebNetActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.WebNetActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.MainActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
 
         <provider

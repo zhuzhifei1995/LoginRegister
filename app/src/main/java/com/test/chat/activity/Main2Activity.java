@@ -529,6 +529,14 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             chat_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
             chat_RecyclerView.setAdapter(chatRecyclerViewAdapter);
         }
+    }
+
+    private void getNetFriendRecyclerView() {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
+        Message message = new Message();
+        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+        friendShowHandler.sendMessage(message);
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -557,14 +565,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void getNetFriendRecyclerView() {
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
-        Message message = new Message();
-        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
-        friendShowHandler.sendMessage(message);
-    }
 
     private void initFriendView() {
         setContentView(R.layout.activity_friend);
@@ -827,31 +827,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         } else {
             photoFromCapture();
         }
-    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                initMyView();
-                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(context, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void photoFromCapture() {
         Intent intent;
@@ -891,7 +867,31 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         intent.putExtra("scale", true);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, REQUEST_SMALL_IMAGE_CUTTING);
-    }
+    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                initMyView();
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     private void setSmallImageToImageView(Intent data) {
         Bundle extras = data.getExtras();

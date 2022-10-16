@@ -4,7 +4,7 @@
     android:id="@+id/root_RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/choose_book_grid"
+    android:background="@drawable/theme_one"
     android:orientation="vertical">
 
     <ImageView

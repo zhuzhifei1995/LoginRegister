@@ -45,6 +45,7 @@
                 android:id="@+id/search_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@drawable/button_send_rounded_corners_bg"
                 android:text="@string/search_text" />
         </LinearLayout>
 
@@ -65,7 +66,8 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/friend_SwipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/theme_one">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/friend_RecyclerView"

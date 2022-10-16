@@ -39,6 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
 import com.test.chat.activity.FriendShowActivity;
+import com.test.chat.activity.LoginActivity;
 import com.test.chat.adapter.FriendRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -228,8 +229,11 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
             title_left_ImageView.setImageBitmap(bitmap);
         } else {
             Log.e(TAG, "图片加载失败,图片为空");
-            Toast.makeText(context, "当前未登录,请登录账号！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
             title_left_ImageView.setImageResource(R.drawable.user_default_photo);
+            SharedPreferencesUtils.putBoolean(context, "status", false, "user");
+            startActivity(new Intent(context, LoginActivity.class));
+            activity.finish();
         }
     }
 

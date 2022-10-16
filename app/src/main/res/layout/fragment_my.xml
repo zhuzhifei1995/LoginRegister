@@ -13,7 +13,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/my_SwipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/theme_one">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,7 +53,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/line_view_bg" />
 
@@ -87,7 +88,7 @@
                     <View
                         android:id="@+id/line_message_View"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:background="@drawable/line_view_bg"
                         android:visibility="gone" />
 
@@ -132,7 +133,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
+                            android:layout_height="0.1dp"
                             android:background="@drawable/line_view_bg" />
 
                         <LinearLayout
@@ -167,16 +168,16 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
+                            android:layout_height="0.1dp"
                             android:background="@drawable/line_view_bg"
                             android:visibility="gone" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@drawable/button_rounded_corners_bg"
                             android:orientation="horizontal"
                             android:visibility="gone"
-                            android:background="@drawable/button_rounded_corners_bg"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -200,7 +201,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
+                            android:layout_height="0.1dp"
                             android:background="@drawable/line_view_bg" />
 
                         <LinearLayout
@@ -235,16 +236,16 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
+                            android:layout_height="0.1dp"
                             android:background="@drawable/line_view_bg"
                             android:visibility="gone" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@drawable/button_rounded_corners_bg"
                             android:orientation="horizontal"
                             android:visibility="gone"
-                            android:background="@drawable/button_rounded_corners_bg"
                             tools:ignore="UselessParent">
 
                             <TextView
@@ -270,7 +271,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:background="@drawable/line_view_bg" />
 
                     <TextView
@@ -286,7 +287,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:background="@drawable/line_view_bg" />
 
                     <TextView
@@ -302,7 +303,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:background="@drawable/line_view_bg" />
 
                     <TextView
@@ -318,7 +319,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="0.1dp"
                         android:background="@drawable/line_view_bg" />
 
                 </LinearLayout>
