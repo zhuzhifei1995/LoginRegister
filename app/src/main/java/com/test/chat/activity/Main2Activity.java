@@ -176,6 +176,59 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         }
     };
     private SwipeRefreshLayout my_SwipeRefreshLayout;
+    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
+                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
+                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                } else {
+                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            my_SwipeRefreshLayout.setRefreshing(false);
+            initMyView();
+            super.handleMessage(message);
+        }
+    };
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                initMyView();
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
     private ImageView title_right_ImageView;
     private Button search_Button;
     private List<JSONObject> clickUserList;
@@ -660,34 +713,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         });
         search_Button = findViewById(R.id.search_Button);
         search_Button.setOnClickListener(this);
-    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
-                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
-                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
-                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"));
-                } else {
-                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            my_SwipeRefreshLayout.setRefreshing(false);
-            initMyView();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void loginOut() {
         final Window window = progressDialog.getWindow();
@@ -933,31 +959,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 }
             }
         }).start();
-    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                initMyView();
-                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(context, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void startBigPhotoZoom(Uri uri) {
         File file;
@@ -1239,10 +1241,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             }
         }).start();
     }
-
-
-
-
 
 
 }

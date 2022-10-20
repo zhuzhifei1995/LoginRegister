@@ -1,5 +1,6 @@
 package com.test.chat.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.test.chat.R;
+import com.test.chat.activity.CaptureActivity;
 import com.test.chat.activity.FriendShowActivity;
 import com.test.chat.adapter.FriendRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
@@ -92,10 +95,12 @@ public class MessageFragment extends Fragment {
             super.handleMessage(message);
         }
     };
+    private Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         context = getActivity();
+        activity = getActivity();
         super.onCreate(savedInstanceState);
     }
 
@@ -163,10 +168,23 @@ public class MessageFragment extends Fragment {
     private void initTitleView() {
         TextView top_title_TextView = messageFragmentView.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("消息");
-        Button title_left_Button = messageFragmentView.findViewById(R.id.title_left_Button);
-        title_left_Button.setText("");
-        Button title_right_Button = messageFragmentView.findViewById(R.id.title_right_Button);
-        title_right_Button.setText("");
+        ImageView title_left_ImageView = messageFragmentView.findViewById(R.id.title_left_ImageView);
+        title_left_ImageView.setImageBitmap(null);
+        ImageView title_right_ImageView = messageFragmentView.findViewById(R.id.title_right_ImageView);
+        title_right_ImageView.setImageResource(R.drawable.scan_button);
+        title_right_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentIntegrator integrator = new IntentIntegrator(activity);
+                integrator.setDesiredBarcodeFormats();
+                integrator.setCaptureActivity(CaptureActivity.class);
+                integrator.setPrompt("请对准二维码");
+                integrator.setCameraId(0);
+                integrator.setBeepEnabled(false);
+                integrator.setBarcodeImageEnabled(true);
+                integrator.initiateScan();
+            }
+        });
     }
 
     @Override

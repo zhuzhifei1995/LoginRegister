@@ -1,12 +1,14 @@
 package com.test.chat.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,10 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.test.chat.R;
 import com.test.chat.fragment.DynamicFragment;
 import com.test.chat.fragment.FriendFragment;
@@ -305,6 +310,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onDestroy() {
         userJSONObjectList = null;
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IntentIntegrator.REQUEST_CODE) {
+                IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+                if (intentResult != null && intentResult.getContents() != null) {
+                    String url = intentResult.getContents();
+                    if (url.startsWith("http")) {
+                        Uri uri = Uri.parse(url);
+                        Intent urlIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(urlIntent);
+                    } else {
+                        Log.e(TAG, "onActivityResult: ");
+                    }
+                }
+            }
+        }
     }
 
     @Override

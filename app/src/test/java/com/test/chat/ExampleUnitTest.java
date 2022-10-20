@@ -1,8 +1,8 @@
 package com.test.chat;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ExampleUnitTest {
     @Test
