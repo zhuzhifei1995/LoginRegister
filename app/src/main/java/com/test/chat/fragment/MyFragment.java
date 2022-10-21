@@ -4,9 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +44,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
@@ -329,6 +332,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
     private void initMyFragmentView() {
+        ActivityUtil.setLinearLayoutBackground(myFragmentView.findViewById(R.id.my_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         photo_my_ImageView = myFragmentView.findViewById(R.id.photo_my_ImageView);
         photo_my_ImageView.setOnClickListener(this);
         LinearLayout my_message_LinearLayout = myFragmentView.findViewById(R.id.my_message_LinearLayout);
@@ -426,7 +431,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             case R.id.theme_setting_TextView:
                 settingTheme();
                 break;
-            case  R.id.qr_code_TextView:
+            case R.id.qr_code_TextView:
                 showMyQRCode();
                 break;
             default:
@@ -450,7 +455,30 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
     private void settingTheme() {
-        startActivity(new Intent(context, ThemeSettingActivity.class));
+        Intent intent = new Intent(activity, ThemeSettingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.CART_BROADCAST");
+        BroadcastReceiver mItemViewListClickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String msg = intent.getStringExtra("data");
+                if ("refresh".equals(msg)) {
+                    refresh();
+                }
+            }
+        };
+        broadcastManager.registerReceiver(mItemViewListClickReceiver, intentFilter);
+    }
+
+    private void refresh() {
+        initMyFragmentView();
     }
 
     private void updateNikeName() {
@@ -893,7 +921,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
                     if (intent.resolveActivity(context.getPackageManager()) != null) {
-                        startActivityForResult(intent, REQUEST_IMAGE_GET);
+                        activity.startActivityForResult(intent, REQUEST_IMAGE_GET);
                     } else {
                         Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
                     }
@@ -915,7 +943,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                startActivityForResult(intent, REQUEST_IMAGE_GET);
+                activity.startActivityForResult(intent, REQUEST_IMAGE_GET);
             } else {
                 Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
             }
@@ -947,7 +975,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             pictureUri = Uri.fromFile(pictureFile);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        activity.startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void showMyPhoto(ProgressDialog progressDialog) {
@@ -1082,7 +1110,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             intent.putExtra("return-data", false);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-            startActivityForResult(intent, REQUEST_BIG_IMAGE_CUTTING);
+            activity.startActivityForResult(intent, REQUEST_BIG_IMAGE_CUTTING);
         } else {
             Toast.makeText(context, "剪切图片失败", Toast.LENGTH_LONG).show();
         }
@@ -1110,11 +1138,12 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         intent.putExtra("outputY", 500);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", true);
-        startActivityForResult(intent, REQUEST_SMALL_IMAGE_CUTTING);
+        activity.startActivityForResult(intent, REQUEST_SMALL_IMAGE_CUTTING);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
         initMyFragmentView();
         super.onHiddenChanged(hidden);
     }

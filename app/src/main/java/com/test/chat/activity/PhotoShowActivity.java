@@ -94,7 +94,7 @@ public class PhotoShowActivity extends Activity {
                 initMediaPlayer(voiceName);
             }
 
-        }else if (flag == 4) {
+        } else if (flag == 4) {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
             photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(

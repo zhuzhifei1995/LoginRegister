@@ -63,6 +63,8 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     }
 
     private void initView() {
+        ActivityUtil.setLinearLayoutBackground(findViewById(R.id.friend_show_main_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         Intent intent = getIntent();
         String friendJSON = intent.getStringExtra("friendJSON");
         progressDialog = new ProgressDialog(context);
@@ -117,7 +119,6 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
                 String password = jsonObject.getString("password");
                 String phone = jsonObject.getString("phone");
                 String photo = jsonObject.getString("photo");
-
                 SharedPreferencesUtils.putString(context, "create_time_friend", create_time, "user");
                 SharedPreferencesUtils.putString(context, "password_friend", password, "user");
                 SharedPreferencesUtils.putString(context, "id_friend", id, "user");
@@ -125,7 +126,6 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
                 SharedPreferencesUtils.putString(context, "nick_name_friend", nick_name, "user");
                 SharedPreferencesUtils.putString(context, "phone_friend", phone, "user");
                 SharedPreferencesUtils.putString(context, "photo_friend", photo, "user");
-
                 String[] photos = jsonObject.getString("photo").split("/");
                 String friendPhotoName = photos[photos.length - 1] + ".cache";
                 Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", friendPhotoName);

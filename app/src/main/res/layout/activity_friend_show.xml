@@ -9,308 +9,314 @@
 
     <include layout="@layout/title_back_bar" />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/friend_show_main_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/theme_one"
-        tools:ignore="UselessParent">
+        android:background="@drawable/theme_one">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            tools:ignore="UseCompoundDrawables">
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:visibility="visible"
-                app:cardCornerRadius="60dp">
-
-                <ImageView
-                    android:id="@+id/friend_photo_show_ImageView"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/user_default_photo"
-                    tools:ignore="ContentDescription" />
-
-            </androidx.cardview.widget.CardView>
-
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0.1dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/line_view_bg" />
-
-            <LinearLayout
-                android:id="@+id/friend_show_LinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_rounded_corners_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:lines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:singleLine="true"
-                    android:text="@string/friend_message" />
-
-                <ImageView
-                    android:id="@+id/message_show_ImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/message_no_show"
-                    tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/line_message_View"
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@drawable/line_view_bg"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/friend_show_message_LinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                tools:ignore="UseCompoundDrawables">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_rounded_corners_bg"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    tools:ignore="UselessParent">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="60dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="15dp"
-                        android:text="@string/nike_name_1" />
+                    <ImageView
+                        android:id="@+id/friend_photo_show_ImageView"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/user_default_photo"
+                        tools:ignore="ContentDescription" />
 
-                    <TextView
-                        android:id="@+id/friend_nike_name_TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:lines="1"
-                        android:padding="15dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/line_view_bg" />
 
                 <LinearLayout
+                    android:id="@+id/friend_show_LinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_rounded_corners_bg"
                     android:clickable="true"
                     android:focusable="true"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    tools:ignore="UselessParent">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="15dp"
-                        android:text="@string/login_number_1" />
-
-                    <TextView
-                        android:id="@+id/friend_login_number_TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:lines="1"
-                        android:padding="15dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:singleLine="true"
-                        android:textColor="@color/black" />
+                        android:text="@string/friend_message" />
+
+                    <ImageView
+                        android:id="@+id/message_show_ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/message_no_show"
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@drawable/line_view_bg" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_rounded_corners_bg"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    tools:ignore="UselessParent">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="15dp"
-                        android:text="@string/phone_number_1" />
-
-                    <TextView
-                        android:id="@+id/friend_phone_number_TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:lines="1"
-                        android:padding="15dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@drawable/line_view_bg" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_rounded_corners_bg"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    tools:ignore="UselessParent">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="15dp"
-                        android:text="@string/create_time_1" />
-
-                    <TextView
-                        android:id="@+id/friend_create_time_TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:lines="1"
-                        android:padding="15dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
-
-                <View
+                    android:id="@+id/line_message_View"
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
                     android:background="@drawable/line_view_bg"
                     android:visibility="gone" />
 
                 <LinearLayout
+                    android:id="@+id/friend_show_message_LinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/button_rounded_corners_bg"
-                    android:orientation="horizontal"
-                    tools:ignore="UselessParent">
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_rounded_corners_bg"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="15dp"
-                        android:text="@string/password_1"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="15dp"
+                            android:text="@string/nike_name_1" />
+
+                        <TextView
+                            android:id="@+id/friend_nike_name_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:lines="1"
+                            android:padding="15dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@drawable/line_view_bg" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_rounded_corners_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="15dp"
+                            android:text="@string/login_number_1" />
+
+                        <TextView
+                            android:id="@+id/friend_login_number_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:lines="1"
+                            android:padding="15dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@drawable/line_view_bg" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_rounded_corners_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="15dp"
+                            android:text="@string/phone_number_1" />
+
+                        <TextView
+                            android:id="@+id/friend_phone_number_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:lines="1"
+                            android:padding="15dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@drawable/line_view_bg" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_rounded_corners_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="15dp"
+                            android:text="@string/create_time_1" />
+
+                        <TextView
+                            android:id="@+id/friend_create_time_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:lines="1"
+                            android:padding="15dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@drawable/line_view_bg"
                         android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/friend_password_TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:lines="1"
-                        android:padding="15dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:visibility="gone" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_rounded_corners_bg"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="15dp"
+                            android:text="@string/password_1"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/friend_password_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:lines="1"
+                            android:padding="15dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@drawable/line_view_bg" />
+
+                <TextView
+                    android:id="@+id/send_message_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_rounded_corners_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/send_message" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@drawable/line_view_bg" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_rounded_corners_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/voice_call" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@drawable/line_view_bg" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_rounded_corners_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/video_call" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@drawable/line_view_bg" />
+
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@drawable/line_view_bg" />
-
-            <TextView
-                android:id="@+id/send_message_TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_rounded_corners_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="@string/send_message" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@drawable/line_view_bg" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_rounded_corners_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="@string/voice_call" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@drawable/line_view_bg" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_rounded_corners_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="@string/video_call" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@drawable/line_view_bg" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
+        </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

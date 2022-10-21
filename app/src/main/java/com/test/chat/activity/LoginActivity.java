@@ -73,9 +73,9 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SharedPreferencesUtils.putBoolean(context, "status", true, "user");
                     SharedPreferencesUtils.putBoolean(context, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
                     SharedPreferencesUtils.putString(context, "photo", user.getString("photo"), "user");
-                    SharedPreferencesUtils.putString(context, "qr_code_url", "https://"+user.getString("qr_code_url").substring(2), "user");
-                    saveUserPhoto(user.getString("photo"),"photo.png.cache");
-                    saveUserPhoto("https://"+user.getString("qr_code_url").substring(2),"qr_code.png.cache");
+                    SharedPreferencesUtils.putString(context, "qr_code_url", "https://" + user.getString("qr_code_url").substring(2), "user");
+                    saveUserPhoto(user.getString("photo"), "photo.png.cache");
+                    saveUserPhoto("https://" + user.getString("qr_code_url").substring(2), "qr_code.png.cache");
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("status", jsonObject.getString("status"));
                     startActivity(intent);
@@ -235,7 +235,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }).start();
     }
 
-    private void saveUserPhoto(final String photo,String fileName) {
+    private void saveUserPhoto(final String photo, String fileName) {
         new Thread(new Runnable() {
             @Override
             public void run() {

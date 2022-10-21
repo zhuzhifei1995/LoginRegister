@@ -1,20 +1,24 @@
 package com.test.chat.util;
 
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
+
+import com.test.chat.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class ActivityUtil {
-//    连接电脑正常网络时
+    //    连接电脑正常网络时
 //    public static String NET_URL = "http://192.168.1.4:8080";
     public static String NET_URL = "http://192.168.137.1:8080/";
-//    连接手机的热点时
+    //    连接手机的热点时
 //    public static String NET_URL = "http://192.168.229.139:8080";
     public static String TAG = "com.test.chat.zzf";
 
@@ -38,6 +42,27 @@ public class ActivityUtil {
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]{8,12}");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
+    }
+
+    @SuppressLint("ResourceAsColor")
+    public static void setLinearLayoutBackground(LinearLayout my_fragment_linearLayout, int themeId) {
+        switch (themeId) {
+            case 1:
+                my_fragment_linearLayout.setBackgroundResource(R.drawable.theme_one);
+                break;
+            case 2:
+                my_fragment_linearLayout.setBackgroundResource(R.drawable.theme_two);
+                break;
+            case 3:
+                my_fragment_linearLayout.setBackgroundResource(R.drawable.theme_three);
+                break;
+            case 4:
+                my_fragment_linearLayout.setBackgroundResource(R.drawable.theme_four);
+                break;
+            default:
+                my_fragment_linearLayout.setBackgroundResource(R.color.no_color);
+                break;
+        }
     }
 
 }

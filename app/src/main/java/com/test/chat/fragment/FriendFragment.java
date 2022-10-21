@@ -199,6 +199,8 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void initFragmentView() {
+        ActivityUtil.setLinearLayoutBackground(friendFragmentView.findViewById(R.id.friend_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         progressDialog = new ProgressDialog(context);
         title_left_ImageView = friendFragmentView.findViewById(R.id.title_left_ImageView);
         top_title_TextView = friendFragmentView.findViewById(R.id.top_title_TextView);
@@ -445,6 +447,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
         initFragmentView();
         super.onHiddenChanged(hidden);
     }

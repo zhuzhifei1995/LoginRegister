@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -104,6 +105,30 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Toast.makeText(context, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
             progressDialog.dismiss();
             super.handleMessage(message);
@@ -315,6 +340,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        getSupportFragmentManager().getFragments();
+        if (getSupportFragmentManager().getFragments().size() > 0) {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            for (Fragment fragment : fragments) {
+                fragment.onActivityResult(requestCode, resultCode, intent);
+            }
+        }
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IntentIntegrator.REQUEST_CODE) {
                 IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
@@ -357,31 +389,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         }
     }
-
-    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(context, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

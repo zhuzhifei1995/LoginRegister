@@ -39,11 +39,12 @@
                         tools:ignore="ContentDescription" />
 
                     <Button
+                        android:id="@+id/theme_one_Button"
                         android:layout_width="wrap_content"
                         android:layout_height="42dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/button_bg"
-                        android:text="应用背景" />
+                        android:text="@string/setting_bg" />
 
                 </LinearLayout>
 
@@ -62,11 +63,12 @@
                         tools:ignore="ContentDescription" />
 
                     <Button
+                        android:id="@+id/theme_two_Button"
                         android:layout_width="wrap_content"
                         android:layout_height="42dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/button_bg"
-                        android:text="应用背景" />
+                        android:text="@string/setting_bg" />
 
                 </LinearLayout>
 
@@ -92,11 +94,12 @@
                         tools:ignore="ContentDescription" />
 
                     <Button
+                        android:id="@+id/theme_three_Button"
                         android:layout_width="wrap_content"
                         android:layout_height="42dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/button_bg"
-                        android:text="应用背景" />
+                        android:text="@string/setting_bg" />
 
                 </LinearLayout>
 
@@ -114,11 +117,12 @@
                         tools:ignore="ContentDescription" />
 
                     <Button
+                        android:id="@+id/theme_four_Button"
                         android:layout_width="wrap_content"
                         android:layout_height="42dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/button_bg"
-                        android:text="应用背景" />
+                        android:text="@string/setting_bg" />
 
                 </LinearLayout>
 

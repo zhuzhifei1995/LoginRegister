@@ -112,6 +112,8 @@ public class MessageFragment extends Fragment {
     }
 
     private void initFragmentView() {
+        ActivityUtil.setLinearLayoutBackground(messageFragmentView.findViewById(R.id.message_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         initTitleView();
         initChatRecyclerView();
     }
@@ -188,6 +190,7 @@ public class MessageFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
         initFragmentView();
         super.onHiddenChanged(hidden);
     }

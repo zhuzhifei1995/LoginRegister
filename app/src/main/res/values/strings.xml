@@ -83,5 +83,6 @@
     <string name="re_input_new_password">请再次输入修改密码</string>
     <string name="theme_setting">主题设置</string>
     <string name="my_qr_code">我的二维码名片</string>
+    <string name="setting_bg">应用背景</string>
 
 </resources>

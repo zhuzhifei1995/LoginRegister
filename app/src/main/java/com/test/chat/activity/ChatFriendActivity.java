@@ -141,6 +141,8 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     }
 
     private void initView() {
+        ActivityUtil.setLinearLayoutBackground(findViewById(R.id.chat_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         progressDialog = new ProgressDialog(context);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         String friendName = SharedPreferencesUtils.getString(context, "nick_name_friend", "", "user");
