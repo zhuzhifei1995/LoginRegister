@@ -77,7 +77,6 @@ public class TmpFileUtil {
             Log.e(TAG, "获取文件的文本数据成功：" + fileDir + "/" + fileName);
         } catch (Exception e) {
             Log.e(TAG, "获取文件的文本数据失败, 文件读取失败, 未点击过好友！" + fileDir + "/" + fileName);
-            e.printStackTrace();
         }
         return json.toString();
     }

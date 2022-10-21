@@ -11,11 +11,10 @@ import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class ActivityUtil {
-
-    //    连接电脑正常网络时
+//    连接电脑正常网络时
 //    public static String NET_URL = "http://192.168.1.4:8080";
     public static String NET_URL = "http://192.168.137.1:8080/";
-    //    连接手机的热点时
+//    连接手机的热点时
 //    public static String NET_URL = "http://192.168.229.139:8080";
     public static String TAG = "com.test.chat.zzf";
 

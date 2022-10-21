@@ -94,6 +94,11 @@ public class PhotoShowActivity extends Activity {
                 initMediaPlayer(voiceName);
             }
 
+        }else if (flag == 4) {
+            photo_show_ImageView.setVisibility(View.VISIBLE);
+            voice_LinearLayout.setVisibility(View.GONE);
+            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
+                    Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "qr_code.png.cache"));
         } else {
             finish();
             Toast.makeText(context, "传入的参数错误！", Toast.LENGTH_SHORT).show();

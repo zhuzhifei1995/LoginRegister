@@ -125,8 +125,7 @@ public class MessageFragment extends Fragment {
                 chatJSONObjectList.add(jsonArray.getJSONObject(i));
             }
         } catch (JSONException e) {
-
-            e.printStackTrace();
+            Log.e(TAG, "initChatRecyclerView: 读取失败");
         }
         TextView no_chat_TextView = messageFragmentView.findViewById(R.id.no_chat_TextView);
         if (chatJSONObjectList.size() == 0) {

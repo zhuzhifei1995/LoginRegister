@@ -186,8 +186,18 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                     }
                                 }).start();
                                 SharedPreferencesUtils.putString(context, "phone", phone, "user");
-                                progressDialog.dismiss();
-                                Toast.makeText(context, "修改绑定的手机号成功！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "修改绑定的手机号成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(2000);
+                                            loginOutHandler.sendMessage(new Message());
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
                             } else {
                                 Toast.makeText(context, "验证码输入错误！", Toast.LENGTH_SHORT).show();
                             }
@@ -327,6 +337,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         login_out_TextView.setOnClickListener(this);
         TextView theme_setting_TextView = myFragmentView.findViewById(R.id.theme_setting_TextView);
         theme_setting_TextView.setOnClickListener(this);
+        TextView qr_code_TextView = myFragmentView.findViewById(R.id.qr_code_TextView);
+        qr_code_TextView.setOnClickListener(this);
         my_SwipeRefreshLayout = myFragmentView.findViewById(R.id.my_SwipeRefreshLayout);
         my_SwipeRefreshLayout.setOnRefreshListener(this);
         TextView account_and_security_TextView = myFragmentView.findViewById(R.id.account_and_security_TextView);
@@ -403,21 +415,38 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 showAccountAndSecurity();
                 break;
             case R.id.login_number_LinearLayout:
-                Toast.makeText(context, "登录账号不能修改！", Toast.LENGTH_SHORT).show();
+                loginNumberClick();
                 break;
             case R.id.nike_name_LinearLayout:
                 updateNikeName();
                 break;
             case R.id.create_time_LinearLayout:
-                Toast.makeText(context, "注册时间不能修改！", Toast.LENGTH_SHORT).show();
+                createTimeClick();
                 break;
             case R.id.theme_setting_TextView:
                 settingTheme();
+                break;
+            case  R.id.qr_code_TextView:
+                showMyQRCode();
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void showMyQRCode() {
+        Intent intent = new Intent(context, PhotoShowActivity.class);
+        intent.putExtra("flag", 4);
+        startActivity(intent);
+    }
+
+    private void createTimeClick() {
+        Toast.makeText(context, "注册时间不能修改！", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loginNumberClick() {
+        Toast.makeText(context, "登录账号不能修改！", Toast.LENGTH_SHORT).show();
     }
 
     private void settingTheme() {

@@ -18,11 +18,8 @@ public class CaptureActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_capture);
-
         scan_DecoratedBarcodeView = findViewById(R.id.scan_DecoratedBarcodeView);
-
         captureManager = new CaptureManager(CaptureActivity.this, scan_DecoratedBarcodeView);
         captureManager.initializeFromIntent(getIntent(), savedInstanceState);
         captureManager.decode();

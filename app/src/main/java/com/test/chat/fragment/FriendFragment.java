@@ -358,13 +358,17 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 searchFriend();
                 break;
             case R.id.fragment_friend_LinearLayout:
-                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (search_EditText != null) {
-                    inputMethodManager.hideSoftInputFromWindow(search_EditText.getWindowToken(), 0);
-                }
+                hideFragmentFriendLinearLayout();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void hideFragmentFriendLinearLayout() {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (search_EditText != null) {
+            inputMethodManager.hideSoftInputFromWindow(search_EditText.getWindowToken(), 0);
         }
     }
 

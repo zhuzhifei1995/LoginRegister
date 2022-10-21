@@ -319,18 +319,69 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             if (requestCode == IntentIntegrator.REQUEST_CODE) {
                 IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
                 if (intentResult != null && intentResult.getContents() != null) {
-                    String url = intentResult.getContents();
-                    if (url.startsWith("http")) {
-                        Uri uri = Uri.parse(url);
+                    String result = intentResult.getContents();
+                    if (result.startsWith("http")) {
+                        Uri uri = Uri.parse(result);
                         Intent urlIntent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(urlIntent);
                     } else {
-                        Log.e(TAG, "onActivityResult: ");
+                        Log.e(TAG, "onActivityResult: " + result);
+                        Window window = progressDialog.getWindow();
+                        if (window != null) {
+                            progressDialog.show();
+                            WindowManager.LayoutParams params = window.getAttributes();
+                            params.gravity = Gravity.CENTER;
+                            progressDialog.setCancelable(false);
+                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            progressDialog.setContentView(R.layout.loading_progress_bar);
+                            TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                            prompt_TextView.setText("查找中.......");
+                        }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Map<String, String> parameter = new HashMap<>();
+                                parameter.put("phone", result);
+                                Message message = new Message();
+                                if (result.equals(SharedPreferencesUtils.getString(context, "phone", "", "user"))) {
+                                    message.what = 1;
+                                } else {
+                                    message.what = 0;
+                                }
+                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                                searchFriendHandler.sendMessage(message);
+                            }
+                        }).start();
                     }
                 }
             }
         }
     }
+
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

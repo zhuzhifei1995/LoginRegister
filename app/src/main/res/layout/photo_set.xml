@@ -10,6 +10,7 @@
     <include layout="@layout/title_back_bar" />
 
     <LinearLayout
+        android:background="@drawable/theme_one"
         android:id="@+id/linearLayout01"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
