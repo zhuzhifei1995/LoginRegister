@@ -280,9 +280,9 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             Bitmap bitmap = (Bitmap) message.obj;
             int type = message.what;
             if (bitmap != null) {
-                if (type ==1) {
+                if (type == 1) {
                     ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
-                }else {
+                } else {
                     ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "qr_code.png.cache");
                 }
                 photo_my_ImageView.setImageBitmap(bitmap);
@@ -308,8 +308,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
                     SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
                     SharedPreferencesUtils.putString(context, "qr_code_url", userJSONObject.getString("qr_code_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"),1);
-                    saveUserPhoto(userJSONObject.getString("qr_code_url"),2);
+                    saveUserPhoto(userJSONObject.getString("photo_url"), 1);
+                    saveUserPhoto(userJSONObject.getString("qr_code_url"), 2);
                 } else {
                     Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
                     my_SwipeRefreshLayout.setRefreshing(false);
@@ -1008,7 +1008,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }).start();
     }
 
-    private void saveUserPhoto(final String photo,int type) {
+    private void saveUserPhoto(final String photo, int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
