@@ -47,7 +47,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     private ProgressDialog progressDialog;
     private final Handler waitHandler = new Handler(Looper.getMainLooper()) {
         @Override
-        public void handleMessage(@NotNull Message message) {
+        public void handleMessage(Message message) {
             super.handleMessage(message);
             progressDialog.dismiss();
         }
@@ -128,7 +128,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
                 SharedPreferencesUtils.putString(context, "photo_friend", photo, "user");
                 String[] photos = jsonObject.getString("photo").split("/");
                 String friendPhotoName = photos[photos.length - 1] + ".cache";
-                Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", friendPhotoName);
+                Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_FRIEND_FILE_PATH, friendPhotoName);
                 ImageView friend_photo_show_ImageView = findViewById(R.id.friend_photo_show_ImageView);
                 friend_photo_show_ImageView.setImageBitmap(bitmap);
                 friend_photo_show_ImageView.setOnClickListener(this);
@@ -156,8 +156,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
     private void showFriendPhoto() {
         Intent intent = new Intent(context, PhotoShowActivity.class);
         intent.putExtra("flag", 0);
-        String[] photos = SharedPreferencesUtils.getString(
-                context, "photo_friend", "", "user").split("/");
+        String[] photos = SharedPreferencesUtils.getString(context, "photo_friend", "", "user").split("/");
         String friendPhotoName = photos[photos.length - 1] + ".cache";
         intent.putExtra("photoName", friendPhotoName);
         startActivity(intent);
@@ -185,8 +184,8 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
         startActivity(intent);
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         Log.e(TAG, "好友显示界面的内容被点击：" + view.getId());
         switch (view.getId()) {
@@ -209,7 +208,7 @@ public class FriendShowActivity extends Activity implements View.OnClickListener
 
     @Override
     protected void onDestroy() {
-        TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/message"));
+        TmpFileUtil.deleteFileCache(new File(ActivityUtil.TMP_MESSAGE_FILE_PATH));
         super.onDestroy();
     }
 }

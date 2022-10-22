@@ -66,7 +66,7 @@ public class MessageFragment extends Fragment {
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
                                 }
                             }
                         }).start();
@@ -87,7 +87,7 @@ public class MessageFragment extends Fragment {
                         }).start();
                     }
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
             } catch (Exception e) {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -120,7 +120,7 @@ public class MessageFragment extends Fragment {
 
     private void initChatRecyclerView() {
         final List<JSONObject> chatJSONObjectList = new ArrayList<>();
-        String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
+        String json = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
         try {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
-import androidx.annotation.NonNull;
-
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.test.chat.R;
@@ -44,13 +42,13 @@ public class CaptureActivity extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle bundle) {
+    protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         captureManager.onSaveInstanceState(bundle);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         captureManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 

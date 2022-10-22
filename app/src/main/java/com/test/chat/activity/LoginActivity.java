@@ -241,7 +241,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void run() {
                 Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(photo);
                 if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", fileName);
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_USER_FILE_PATH, fileName);
                 }
             }
         }).start();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -121,7 +120,7 @@ public class HttpUtil {
             ResponseBody responseBody = client.newCall(request).execute().body();
             InputStream inputStream;
             if (responseBody != null) {
-                String soundFileDir = Environment.getExternalStorageDirectory().getPath() + "/tmp/voice/" + voiceName + ".cache";
+                String soundFileDir = ActivityUtil.TMP_VOICE_FILE_PATH +"/" + voiceName + ".cache";
                 inputStream = responseBody.byteStream();
                 TmpFileUtil.writeToTmpFile(soundFileDir, inputStream);
             }

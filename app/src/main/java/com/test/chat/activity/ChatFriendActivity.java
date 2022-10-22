@@ -70,8 +70,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
-    private static final String IMAGE_FILE_NAME = "message_tmp.png.cache";
-    private static final String MESSAGE_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image";
     private static boolean IS_VOICE = false;
     private Context context;
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
@@ -92,7 +90,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
@@ -113,7 +111,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         }).start();
                     }
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -203,7 +201,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         message_RecyclerView = findViewById(R.id.message_RecyclerView);
         messageJSONObjectList = new ArrayList<>();
 
-        String json = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+        String json = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
         try {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -258,8 +256,8 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
 
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         Log.e(TAG, "聊天界面的内容被点击：" + view.getId());
         switch (view.getId()) {
@@ -301,8 +299,8 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 @Override
                 public void run() {
                     String voiceUploadFileName = UUID.randomUUID().toString().replace("-", "");
-                    File voiceTmpFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/voice", "tmp.amr.cache");
-                    File voiceUploadFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/voice", voiceUploadFileName + ".amr.cache");
+                    File voiceTmpFile = new File(ActivityUtil.TMP_VOICE_FILE_PATH,"tmp.amr.cache");
+                    File voiceUploadFile = new File(ActivityUtil.TMP_VOICE_FILE_PATH, voiceUploadFileName + ".amr.cache");
                     TmpFileUtil.copyFile(voiceTmpFile, voiceUploadFile);
                     try {
                         messageJSONObjectList.add(new JSONObject("{"
@@ -450,7 +448,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         Intent intent;
         Uri pictureUri;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirFile = new File(MESSAGE_IMAGE_PATH);
+            File dirFile = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
                     Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
@@ -459,7 +457,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 }
             }
         }
-        File pictureFile = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
+        File pictureFile = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH, "message_tmp.png.cache");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -491,7 +489,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                File dirFile = new File(MESSAGE_IMAGE_PATH);
+                File dirFile = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
                         Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
@@ -499,7 +497,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                         Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                     }
                 }
-                File file = new File(dirFile, IMAGE_FILE_NAME);
+                File file = new File(dirFile, "message_tmp.png.cache");
                 FileOutputStream outputStream;
                 try {
                     outputStream = new FileOutputStream(file);
@@ -519,7 +517,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     public void startBigPhotoZoom(Uri uri) {
         File file;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirFile = new File(MESSAGE_IMAGE_PATH);
+            File dirFile = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
                     Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
@@ -528,7 +526,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 }
             }
 
-            file = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
+            file = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH, "message_tmp.png.cache");
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", file), "image/*");
@@ -566,8 +564,8 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     e.printStackTrace();
                 }
                 message_RecyclerView.scrollToPosition(messageRecyclerViewAdapter.getItemCount() - 1);
-                File messageImageFile = new File(MESSAGE_IMAGE_PATH, messageImage + ".png.cache");
-                TmpFileUtil.copyFile(new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME), messageImageFile);
+                File messageImageFile = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH, messageImage + ".png.cache");
+                TmpFileUtil.copyFile(new File(ActivityUtil.TMP_MESSAGE_FILE_PATH, "message_tmp.png.cache"), messageImageFile);
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                 parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
@@ -602,7 +600,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     }
                     break;
                 case REQUEST_IMAGE_CAPTURE:
-                    File temp = new File(MESSAGE_IMAGE_PATH, IMAGE_FILE_NAME);
+                    File temp = new File(ActivityUtil.TMP_MESSAGE_FILE_PATH, "message_tmp.png.cache");
                     startBigPhotoZoom(Uri.fromFile(temp));
                     break;
                 default:
@@ -641,8 +639,9 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @SuppressLint("WrongConstant")
     private void startRecord() {
-        File voiceDirPath = new File(Environment.getExternalStorageDirectory().getPath(), "/tmp/voice");
+        File voiceDirPath = new File(ActivityUtil.TMP_VOICE_FILE_PATH);
         Toast.makeText(context, "开始录音......", Toast.LENGTH_SHORT).show();
         Window window = progressDialog.getWindow();
         if (window != null) {
@@ -695,7 +694,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         Log.e(TAG, "当前的聊天数据为：" + messageJSONObjectList.toString());
-        TmpFileUtil.writeJSONToFile(messageJSONObjectList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+        TmpFileUtil.writeJSONToFile(messageJSONObjectList.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
         super.onDestroy();
     }
 }

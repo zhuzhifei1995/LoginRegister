@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,7 +15,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -67,19 +65,16 @@ public class PhotoShowActivity extends Activity {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
             String photoName = intent.getStringExtra("photoName");
-            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                    Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", photoName));
+            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_FRIEND_FILE_PATH, photoName));
         } else if (flag == 1) {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
-            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                    Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
+            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache"));
         } else if (flag == 2) {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
             String photoName = intent.getStringExtra("photoName");
-            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                    Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", photoName));
+            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_MESSAGE_FILE_PATH, photoName));
         } else if (flag == 3) {
             photo_show_ImageView.setVisibility(View.GONE);
             String voiceName = intent.getStringExtra("voiceName");
@@ -97,8 +92,7 @@ public class PhotoShowActivity extends Activity {
         } else if (flag == 4) {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
-            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                    Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "qr_code.png.cache"));
+            photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "qr_code.png.cache"));
         } else {
             finish();
             Toast.makeText(context, "传入的参数错误！", Toast.LENGTH_SHORT).show();
@@ -192,7 +186,7 @@ public class PhotoShowActivity extends Activity {
 
     private void initMediaPlayer(String voiceName) {
         try {
-            File file = new File(Environment.getExternalStorageDirectory() + "/tmp/voice", voiceName);
+            File file = new File(ActivityUtil.TMP_VOICE_FILE_PATH, voiceName);
             mediaPlayer.setDataSource(file.getPath());
             mediaPlayer.prepareAsync();
         } catch (Exception e) {
@@ -210,7 +204,7 @@ public class PhotoShowActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initMediaPlayer("");

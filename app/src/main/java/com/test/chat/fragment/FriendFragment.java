@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -81,7 +80,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                             public void run() {
                                 Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
                                 if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", imageName + ".cache");
+                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
                                 }
                             }
                         }).start();
@@ -102,7 +101,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         }).start();
                     }
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/message", "message.json");
+                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
             } catch (Exception e) {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -153,7 +152,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
+                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
                     userJSONObjectList = new ArrayList<>();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         final JSONObject user = jsonArray.getJSONObject(i);
@@ -165,7 +164,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                             @Override
                             public void run() {
                                 Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
                             }
                         }).start();
                     }
@@ -225,7 +224,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         friend_SwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         top_title_TextView.setText("好友");
-        Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+        Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
         if (bitmap != null) {
             Log.e(TAG, "头像图片加载正常");
             title_left_ImageView.setImageBitmap(bitmap);
@@ -376,7 +375,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private void initFriendRecyclerView() {
         try {
-            JSONArray jsonArray = new JSONArray(TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json"));
+            JSONArray jsonArray = new JSONArray(TmpFileUtil.getJSONFileString(ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json"));
             userJSONObjectList = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 final JSONObject user = jsonArray.getJSONObject(i);
@@ -388,7 +387,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (userJSONObjectList != null) {
             try {
                 clickUserList = new ArrayList<>();
-                String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
+                String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
                 JSONArray jsonArray = new JSONArray(clickUserJSON);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     clickUserList.add(jsonArray.getJSONObject(i));
@@ -407,12 +406,12 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     if (clickUserList.size() == 0) {
                         clickUserList.add(userJSONObjectList.get(position));
                     } else {
-                        String clickUserJSON = TmpFileUtil.getJSONFileString(Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
+                        String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
                         if (!clickUserJSON.contains(userJSONObjectList.get(position).toString())) {
                             clickUserList.add(userJSONObjectList.get(position));
                         }
                     }
-                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/chat", "chat.json");
+                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
                     startActivity(intent);
                     new Thread(new Runnable() {
                         @Override

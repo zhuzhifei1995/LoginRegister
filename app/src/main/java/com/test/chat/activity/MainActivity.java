@@ -75,6 +75,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
     private Context context;
+
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", "friend.json");
+                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
                     userJSONObjectList = new ArrayList<>();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         final JSONObject user = jsonArray.getJSONObject(i);
@@ -95,7 +96,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                             @Override
                             public void run() {
                                 Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                                ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
                             }
                         }).start();
                     }

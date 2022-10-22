@@ -37,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -64,8 +63,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_SMALL_IMAGE_CUTTING = 2;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
-    private static final String IMAGE_FILE_NAME = "photo.png.cache";
-    private static final String TMP_PHOTO_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
     private static boolean IS_SET_PHOTO_FLAG = false;
     private ProgressDialog progressDialog;
     private Context context;
@@ -668,7 +665,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    File file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+                    File file = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("password", password);
                     parameter.put("phone", phone);
@@ -746,16 +743,16 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         Intent intent;
         Uri pictureUri;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirFile = new File(TMP_PHOTO_FILE_PATH);
+            File dirFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建失败：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                 } else {
-                    Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建成功：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                 }
             }
         }
-        File pictureFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+        File pictureFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -787,15 +784,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                File dirFile = new File(TMP_PHOTO_FILE_PATH);
+                File dirFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
-                        Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
+                        Log.e(TAG, "文件夹创建失败：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                     } else {
-                        Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
+                        Log.e(TAG, "文件夹创建成功：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                     }
                 }
-                File file = new File(dirFile, IMAGE_FILE_NAME);
+                File file = new File(dirFile, "photo.png.cache");
                 FileOutputStream outputStream;
                 try {
                     outputStream = new FileOutputStream(file);
@@ -815,15 +812,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private void startBigPhotoZoom(Uri uri) {
         File file;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirFile = new File(TMP_PHOTO_FILE_PATH);
+            File dirFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
-                    Log.e(TAG, "文件夹创建失败：" + TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建失败：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                 } else {
-                    Log.e(TAG, "文件夹创建成功：" + TMP_PHOTO_FILE_PATH);
+                    Log.e(TAG, "文件夹创建成功：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
                 }
             }
-            file = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+            file = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(context,
                     getPackageName() + ".fileProvider", file), "image/*");
@@ -844,7 +841,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void setBigImageToImageView() {
-        File photoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+        File photoFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
         Uri tempPhotoUri = Uri.fromFile(photoFile);
         try {
             Bitmap photo = BitmapFactory.decodeStream(getContentResolver().openInputStream(tempPhotoUri));
@@ -880,7 +877,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     }
                     break;
                 case REQUEST_IMAGE_CAPTURE:
-                    File temp = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+                    File temp = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
                     startBigPhotoZoom(Uri.fromFile(temp));
                     break;
                 default:
@@ -890,7 +887,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @SuppressLint("QueryPermissionsNeeded")
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 200:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -914,12 +912,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(phone_number_EditText.getWindowToken(), 0);
         Intent intent = new Intent(context, WebNetActivity.class);
-        intent.putExtra("url", "https://www.qq.com/contract.shtml");
+        intent.putExtra("url", ActivityUtil.QQ_SERVER_URL);
         startActivity(intent);
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         Log.e(TAG, "注册界面的内容被点击：" + view.getId());
         switch (view.getId()) {
@@ -962,10 +960,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void deletePhotoCacheFile() {
-        File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+        File photoCacheFile = new File(ActivityUtil.TMP_REGISTER_FILE_PATH, "photo.png.cache");
         IS_SET_PHOTO_FLAG = false;
         if (photoCacheFile.delete()) {
-            Log.e(TAG, "头像临时图片删除成功：" + photoCacheFile.getAbsolutePath());
+            Log.e(TAG, "头像临时图片删除成功：" + ActivityUtil.TMP_REGISTER_FILE_PATH);
         } else {
             Log.e(TAG, "无头像生成的图片");
         }

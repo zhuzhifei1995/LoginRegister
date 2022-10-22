@@ -84,13 +84,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         public void handleMessage(@NotNull Message message) {
             Intent intent = new Intent(context, LoginActivity.class);
             SharedPreferencesUtils.removeKey(context, "status", "user");
-            File userPhotoFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+            File userPhotoFile = new File(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
             if (userPhotoFile.delete()) {
                 Log.e(TAG, "临时头像图片删除成功：" + userPhotoFile.getAbsolutePath());
             } else {
                 Log.e(TAG, "无临时头像文件图片：" + userPhotoFile.getAbsolutePath());
             }
-            TmpFileUtil.deleteFileCache(new File(Environment.getExternalStorageDirectory().getPath() + "/tmp"));
+            TmpFileUtil.deleteFileCache(new File(ActivityUtil.TMP_FILE_PATH));
             startActivity(intent);
             activity.finish();
             progressDialog.dismiss();
@@ -229,12 +229,10 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.getString("code").equals("1")) {
-                    photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                            Environment.getExternalStorageDirectory().getPath() + "/tmp/update", "photo.png.cache"));
+                    photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache"));
                     Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                    TmpFileUtil.copyFile(
-                            new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update", "photo.png.cache"),
-                            new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache"));
+                    TmpFileUtil.copyFile(new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache"),
+                            new File(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache"));
                 } else {
                     Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
                     SharedPreferencesUtils.removeKey(context, "status", "user");
@@ -243,9 +241,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 }
             } catch (JSONException e) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
-                photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(
-                        Environment.getExternalStorageDirectory().getPath()
-                                + "/tmp/user", "photo.png.cache"));
+                photo_my_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache"));
                 e.printStackTrace();
             }
             super.handleMessage(message);
@@ -281,9 +277,9 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             int type = message.what;
             if (bitmap != null) {
                 if (type == 1) {
-                    ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
                 } else {
-                    ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "qr_code.png.cache");
+                    ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_USER_FILE_PATH, "qr_code.png.cache");
                 }
                 photo_my_ImageView.setImageBitmap(bitmap);
                 initMyFragmentView();
@@ -377,7 +373,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
     private void initMyMessageView() {
-        Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+        Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
         if (bitmap != null) {
             Log.e(TAG, "图片加载正常");
             photo_my_ImageView.setImageBitmap(bitmap);
@@ -921,7 +917,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @SuppressLint("QueryPermissionsNeeded")
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 200:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -961,7 +957,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         Intent intent;
         Uri pictureUri;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dirFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update");
+            File dirFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH);
             if (!dirFile.exists()) {
                 if (!dirFile.mkdirs()) {
                     Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
@@ -970,8 +966,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 }
             }
         }
-        File pictureFile = new File(Environment.getExternalStorageDirectory().getPath()
-                + "/tmp/update", "photo.png.cache");
+        File pictureFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -1032,7 +1027,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         if (extras != null) {
             Bitmap photoBitmap = extras.getParcelable("data");
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                File dirFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update");
+                File dirFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH);
                 if (!dirFile.exists()) {
                     if (!dirFile.mkdirs()) {
                         Log.e(TAG, "文件夹创建失败：" + dirFile.getAbsolutePath());
@@ -1080,8 +1075,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Thread.sleep(1000);
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
-                    File updatePhotoFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update"
-                            , "photo.png.cache");
+                    File updatePhotoFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH,"photo.png.cache");
                     Message message = new Message();
                     message.obj = new HttpUtil(context).upLoadImageFile(updatePhotoFile,
                             ActivityUtil.NET_URL + "/update_user_photo", parameter);
@@ -1104,7 +1098,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Log.e(TAG, "文件夹创建成功：" + dirFile.getAbsolutePath());
                 }
             }
-            file = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update", "photo.png.cache");
+            file = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache");
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(FileProvider.getUriForFile(context,
                     context.getPackageName() + ".fileProvider", file), "image/*");
@@ -1125,7 +1119,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
     private void setBigImageToImageView() {
-        File photoFile = new File(Environment.getExternalStorageDirectory().getPath() + "/tmp/update", "photo.png.cache");
+        File photoFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache");
         Uri tempPhotoUri = Uri.fromFile(photoFile);
         try {
             Bitmap photoBitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(tempPhotoUri));
@@ -1180,8 +1174,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     }
                     break;
                 case REQUEST_IMAGE_CAPTURE:
-                    File temp = new File(Environment.getExternalStorageDirectory().getPath()
-                            + "/tmp/update", "photo.png.cache");
+                    File temp = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache");
                     startBigPhotoZoom(Uri.fromFile(temp));
                     break;
                 default:
