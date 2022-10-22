@@ -278,8 +278,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         @Override
         public void handleMessage(Message message) {
             Bitmap bitmap = (Bitmap) message.obj;
+            int type = message.what;
             if (bitmap != null) {
-                ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                if (type ==1) {
+                    ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                }else {
+                    ImageUtil.saveBitmapToTmpFile(bitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "qr_code.png.cache");
+                }
                 photo_my_ImageView.setImageBitmap(bitmap);
                 initMyFragmentView();
                 my_SwipeRefreshLayout.setRefreshing(false);
@@ -302,7 +307,9 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
                     SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
                     SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                    SharedPreferencesUtils.putString(context, "qr_code_url", userJSONObject.getString("qr_code_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"),1);
+                    saveUserPhoto(userJSONObject.getString("qr_code_url"),2);
                 } else {
                     Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
                     my_SwipeRefreshLayout.setRefreshing(false);
@@ -1001,13 +1008,14 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }).start();
     }
 
-    private void saveUserPhoto(final String photo) {
+    private void saveUserPhoto(final String photo,int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Message message = new Message();
                 try {
                     message.obj = new HttpUtil(context).getImageBitmap(photo);
+                    message.what = type;
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     my_SwipeRefreshLayout.setRefreshing(false);
