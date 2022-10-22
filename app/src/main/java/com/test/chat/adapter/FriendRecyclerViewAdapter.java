@@ -54,7 +54,7 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
                 String photo = jsonObject.getString("photo");
                 String[] photos = photo.split("/");
                 String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                Bitmap bitmap = ImageUtil.getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", tmpBitmapFileName);
+                Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
                 if (bitmap != null) {
                     Log.e(TAG, "initFriendView: 正常");
                     messageRecyclerViewHolder.photo_ImageView.setImageBitmap(bitmap);

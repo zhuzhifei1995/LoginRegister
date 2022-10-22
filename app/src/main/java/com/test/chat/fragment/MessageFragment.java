@@ -119,7 +119,7 @@ public class MessageFragment extends Fragment {
 
     private void initChatRecyclerView() {
         final List<JSONObject> chatJSONObjectList = new ArrayList<>();
-        String json = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
+        String json = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_USER_FILE_PATH, "chat.json");
         try {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {

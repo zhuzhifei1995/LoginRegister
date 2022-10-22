@@ -25,12 +25,11 @@ public class ActivityUtil {
     public static final String TMP_MESSAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message";
     public static final String TMP_VOICE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/voice";
     public static final String TMP_REGISTER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
-    public static final String TMP_CHAT_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/chat";
     public static final String TMP_UPDATE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp";
     //    连接电脑正常网络时
-//    public static String NET_URL = "http://192.168.1.4:8080";
-    public static String NET_URL = "http://192.168.137.1:8080/";
+    public static String NET_URL = "http://192.168.1.4:8080";
+//    public static String NET_URL = "http://192.168.137.1:8080/";
 
     public static boolean isMobileNO(String mobile) {
         Log.e(TAG, "isMobileNO: " + mobile);

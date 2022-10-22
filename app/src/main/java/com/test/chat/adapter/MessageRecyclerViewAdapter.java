@@ -3,7 +3,6 @@ package com.test.chat.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,8 +53,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
             if (sendCode.equals("1")) {
                 messageRecyclerViewHolder.right_message_LinearLayout.setVisibility(View.GONE);
                 messageRecyclerViewHolder.left_message_LinearLayout.setVisibility(View.VISIBLE);
-                Bitmap bitmap = ImageUtil.getBitmapFromFile(
-                        Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
                 messageRecyclerViewHolder.left_message_ImageView.setImageBitmap(bitmap);
                 if (messageType.equals("1")) {
                     messageRecyclerViewHolder.left_message_TextView.setVisibility(View.VISIBLE);
@@ -67,8 +65,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
                     messageRecyclerViewHolder.left_message_TextView.setVisibility(View.GONE);
                     messageRecyclerViewHolder.left_ImageView.setVisibility(View.VISIBLE);
                     messageRecyclerViewHolder.left_voice_ImageView.setVisibility(View.GONE);
-                    messageRecyclerViewHolder.left_ImageView.setImageBitmap(ImageUtil
-                            .getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", message + ".cache"));
+                    messageRecyclerViewHolder.left_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_MESSAGE_FILE_PATH,
+                            message + ".cache"));
                     messageRecyclerViewHolder.left_ImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -100,8 +98,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
                 messageRecyclerViewHolder.right_message_LinearLayout.setVisibility(View.VISIBLE);
                 messageRecyclerViewHolder.left_message_LinearLayout.setVisibility(View.GONE);
                 String[] photos = SharedPreferencesUtils.getString(context, "photo_friend", "", "user").split("/");
-                Bitmap bitmap = ImageUtil.getBitmapFromFile(
-                        Environment.getExternalStorageDirectory().getPath() + "/tmp/friend", photos[photos.length - 1] + ".cache");
+                Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_FRIEND_FILE_PATH, photos[photos.length - 1] + ".cache");
                 messageRecyclerViewHolder.right_message_ImageView.setImageBitmap(bitmap);
                 messageRecyclerViewHolder.right_message_TextView.setText(message);
                 if (messageType.equals("1")) {
@@ -113,8 +110,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
                     messageRecyclerViewHolder.right_message_TextView.setVisibility(View.GONE);
                     messageRecyclerViewHolder.right_ImageView.setVisibility(View.VISIBLE);
                     messageRecyclerViewHolder.right_voice_ImageView.setVisibility(View.GONE);
-                    messageRecyclerViewHolder.right_ImageView.setImageBitmap(ImageUtil
-                            .getBitmapFromFile(Environment.getExternalStorageDirectory().getPath() + "/tmp/message_image", message + ".cache"));
+                    messageRecyclerViewHolder.right_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_MESSAGE_FILE_PATH,
+                            message + ".cache"));
                     messageRecyclerViewHolder.right_ImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

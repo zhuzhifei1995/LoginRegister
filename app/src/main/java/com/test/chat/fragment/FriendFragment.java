@@ -387,12 +387,13 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (userJSONObjectList != null) {
             try {
                 clickUserList = new ArrayList<>();
-                String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
+                String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_USER_FILE_PATH, "chat.json");
                 JSONArray jsonArray = new JSONArray(clickUserJSON);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     clickUserList.add(jsonArray.getJSONObject(i));
                 }
             } catch (JSONException e) {
+                e.printStackTrace();
                 Log.e(TAG, "文件读取失败，未点击过好友");
             }
             friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(userJSONObjectList);
@@ -406,12 +407,12 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     if (clickUserList.size() == 0) {
                         clickUserList.add(userJSONObjectList.get(position));
                     } else {
-                        String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
+                        String clickUserJSON = TmpFileUtil.getJSONFileString(ActivityUtil.TMP_USER_FILE_PATH, "chat.json");
                         if (!clickUserJSON.contains(userJSONObjectList.get(position).toString())) {
                             clickUserList.add(userJSONObjectList.get(position));
                         }
                     }
-                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), ActivityUtil.TMP_CHAT_FILE_PATH, "chat.json");
+                    TmpFileUtil.writeJSONToFile(clickUserList.toString(), ActivityUtil.TMP_USER_FILE_PATH, "chat.json");
                     startActivity(intent);
                     new Thread(new Runnable() {
                         @Override
