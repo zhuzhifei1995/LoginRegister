@@ -38,7 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -1075,7 +1074,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Thread.sleep(1000);
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
-                    File updatePhotoFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH,"photo.png.cache");
+                    File updatePhotoFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, "photo.png.cache");
                     Message message = new Message();
                     message.obj = new HttpUtil(context).upLoadImageFile(updatePhotoFile,
                             ActivityUtil.NET_URL + "/update_user_photo", parameter);

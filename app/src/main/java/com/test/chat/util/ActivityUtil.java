@@ -16,15 +16,10 @@ import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class ActivityUtil {
-    //    连接电脑正常网络时
-//    public static String NET_URL = "http://192.168.1.4:8080";
-    public static String NET_URL = "http://192.168.137.1:8080/";
     //    连接手机的热点时
 //    public static String NET_URL = "http://192.168.229.139:8080";
     public static final String TAG = "com.test.chat.zzf";
-
     public static final String QQ_SERVER_URL = "https://www.qq.com/contract.shtml";
-
     public static final String TMP_FRIEND_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/friend";
     public static final String TMP_USER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/user";
     public static final String TMP_MESSAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message";
@@ -33,6 +28,9 @@ public class ActivityUtil {
     public static final String TMP_CHAT_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/chat";
     public static final String TMP_UPDATE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp";
+    //    连接电脑正常网络时
+//    public static String NET_URL = "http://192.168.1.4:8080";
+    public static String NET_URL = "http://192.168.137.1:8080/";
 
     public static boolean isMobileNO(String mobile) {
         Log.e(TAG, "isMobileNO: " + mobile);

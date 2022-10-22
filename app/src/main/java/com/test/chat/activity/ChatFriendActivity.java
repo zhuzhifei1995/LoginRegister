@@ -299,7 +299,7 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 @Override
                 public void run() {
                     String voiceUploadFileName = UUID.randomUUID().toString().replace("-", "");
-                    File voiceTmpFile = new File(ActivityUtil.TMP_VOICE_FILE_PATH,"tmp.amr.cache");
+                    File voiceTmpFile = new File(ActivityUtil.TMP_VOICE_FILE_PATH, "tmp.amr.cache");
                     File voiceUploadFile = new File(ActivityUtil.TMP_VOICE_FILE_PATH, voiceUploadFileName + ".amr.cache");
                     TmpFileUtil.copyFile(voiceTmpFile, voiceUploadFile);
                     try {

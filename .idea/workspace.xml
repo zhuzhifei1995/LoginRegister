@@ -41,15 +41,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/CaptureActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/CaptureActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/FriendShowActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/PhotoShowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/PhotoShowActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FriendFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FriendFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MessageFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MessageFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MyFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MyFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" afterDir="false" />
@@ -493,7 +488,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666428846693</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="修改Environment.getExternalStorageDirectory().getPath()为常量">
+      <created>1666435729417</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1666435729417</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -537,7 +539,8 @@
     <MESSAGE value="添加二维码加好友的按钮和界面" />
     <MESSAGE value="增加主题设置功能和界面" />
     <MESSAGE value="刷新二维码" />
-    <option name="LAST_COMMIT_MESSAGE" value="刷新二维码" />
+    <MESSAGE value="修改Environment.getExternalStorageDirectory().getPath()为常量" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改Environment.getExternalStorageDirectory().getPath()为常量" />
   </component>
   <component name="WindowStateProjectService">
     <state x="578" y="259" key="#Console" timestamp="1666363389543">
@@ -564,10 +567,10 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="730" y="260" key="AndroidProcessChooserDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1666281413717" />
-    <state x="283" y="44" width="1503" height="955" key="CommitChangelistDialog2" timestamp="1666428840667">
+    <state x="283" y="44" width="1503" height="955" key="CommitChangelistDialog2" timestamp="1666435723179">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="283" y="44" width="1503" height="955" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1666428840667" />
+    <state x="283" y="44" width="1503" height="955" key="CommitChangelistDialog2/0.0.1920.1032@0.0.1920.1032" timestamp="1666435723179" />
     <state x="184" y="85" width="1536" height="853" key="DiffContextDialog" timestamp="1666370771542">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
@@ -616,17 +619,17 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state width="254" height="198" key="ShowFilterAction_Filter_Popup/0.0.1920.1032@0.0.1920.1032" timestamp="1666409804841" />
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2" timestamp="1666428866337">
+    <state x="552" y="248" key="Vcs.Push.Dialog.v2" timestamp="1666435863554">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1666428866337" />
+    <state x="552" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1032@0.0.1920.1032" timestamp="1666435863554" />
     <state x="744" y="427" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1666362841566">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="744" y="427" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1032@0.0.1920.1032" timestamp="1666362841566" />
-    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup" timestamp="1666409808532">
+    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup" timestamp="1666435788237">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1666409808532" />
+    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1032@0.0.1920.1032" timestamp="1666435788237" />
   </component>
 </project>

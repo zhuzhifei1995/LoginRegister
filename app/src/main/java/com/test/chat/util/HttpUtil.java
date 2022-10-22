@@ -120,7 +120,7 @@ public class HttpUtil {
             ResponseBody responseBody = client.newCall(request).execute().body();
             InputStream inputStream;
             if (responseBody != null) {
-                String soundFileDir = ActivityUtil.TMP_VOICE_FILE_PATH +"/" + voiceName + ".cache";
+                String soundFileDir = ActivityUtil.TMP_VOICE_FILE_PATH + "/" + voiceName + ".cache";
                 inputStream = responseBody.byteStream();
                 TmpFileUtil.writeToTmpFile(soundFileDir, inputStream);
             }
