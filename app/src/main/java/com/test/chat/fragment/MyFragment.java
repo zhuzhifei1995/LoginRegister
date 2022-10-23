@@ -405,8 +405,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         password_TextView.setText(password);
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.photo_my_ImageView:
@@ -470,17 +470,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         BroadcastReceiver mItemViewListClickReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                String msg = intent.getStringExtra("data");
-                if ("refresh".equals(msg)) {
-                    refresh();
+                String message = intent.getStringExtra("data");
+                if ("refresh".equals(message)) {
+                    initMyFragmentView();
                 }
             }
         };
         broadcastManager.registerReceiver(mItemViewListClickReceiver, intentFilter);
-    }
-
-    private void refresh() {
-        initMyFragmentView();
     }
 
     private void updateNikeName() {
@@ -914,8 +910,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     @Override
+    @SuppressLint("QueryPermissionsNeeded")
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         switch (requestCode) {
             case 200:
