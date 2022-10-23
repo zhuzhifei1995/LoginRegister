@@ -142,7 +142,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 JSONObject jsonObject = new JSONObject((String) message.obj).getJSONObject("message");
                 if (!ANDROID_ID.equals(jsonObject.getString("android_id"))) {
                     SharedPreferencesUtils.putBoolean(context, "status", false, "user");
-                    Toast.makeText(context, "当前账号在其他设备的概率，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "当前账号在其他设备的登录，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(context, LoginActivity.class));
                     finish();
                 }

@@ -176,7 +176,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         }
     };
     private SwipeRefreshLayout my_SwipeRefreshLayout;
-    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+    private ImageView title_right_ImageView;    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             try {
@@ -204,7 +204,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+    private Button search_Button;    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             if (message.what == 1) {
@@ -229,8 +229,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-    private ImageView title_right_ImageView;
-    private Button search_Button;
     private List<JSONObject> clickUserList;
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -1241,6 +1239,10 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             }
         }).start();
     }
+
+
+
+
 
 
 }

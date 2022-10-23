@@ -34,7 +34,7 @@ public class TmpFileUtil {
         try {
             int index;
             byte[] bytes = new byte[1024];
-            FileOutputStream fileOutputStream = new FileOutputStream(ActivityUtil.TMP_VOICE_FILE_PATH+"/"+voiceName+".cache");
+            FileOutputStream fileOutputStream = new FileOutputStream(ActivityUtil.TMP_VOICE_FILE_PATH + "/" + voiceName + ".cache");
             while ((index = inputStream.read(bytes)) != -1) {
                 fileOutputStream.write(bytes, 0, index);
                 fileOutputStream.flush();

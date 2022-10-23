@@ -20,13 +20,14 @@ public class ActivityUtil {
 //    public static String NET_URL = "http://192.168.229.139:8080";
     public static final String TAG = "com.test.chat.zzf";
     public static final String QQ_SERVER_URL = "https://www.qq.com/contract.shtml";
-    public static final String TMP_FRIEND_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/friend";
-    public static final String TMP_USER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/user";
-    public static final String TMP_MESSAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/message";
-    public static final String TMP_VOICE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/voice";
-    public static final String TMP_REGISTER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/register";
-    public static final String TMP_UPDATE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp/update";
-    public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/tmp";
+
+    public static final String TMP_FRIEND_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/friend";
+    public static final String TMP_USER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/user";
+    public static final String TMP_MESSAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/message";
+    public static final String TMP_VOICE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/voice";
+    public static final String TMP_REGISTER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/register";
+    public static final String TMP_UPDATE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util/update";
+    public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/files/com.test.chat.util";
     //    连接电脑正常网络时
     public static String NET_URL = "http://192.168.1.4:8080";
 //    public static String NET_URL = "http://192.168.137.1:8080/";

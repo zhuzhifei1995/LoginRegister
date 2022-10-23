@@ -101,6 +101,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         if (SharedPreferencesUtils.getBoolean(context, "status", false, "user")) {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
             setContentView(R.layout.activity_login);
             initView();

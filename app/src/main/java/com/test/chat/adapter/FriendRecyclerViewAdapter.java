@@ -3,7 +3,6 @@ package com.test.chat.adapter;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
