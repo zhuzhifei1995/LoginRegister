@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.view.ProgressBarView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -25,6 +27,8 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
 
     private static final String TAG = ActivityUtil.TAG;
     private final List<JSONObject> jsonObjectList;
+    private DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener;
+    private DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener;
 
     public FileRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化FriendRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -40,12 +44,47 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     @SuppressLint("RecyclerView")
     public void onBindViewHolder(@NotNull FileRecyclerViewHolder fileRecyclerViewHolder, int position) {
         JSONObject jsonObject = jsonObjectList.get(position);
+        Log.e(TAG, "onBindViewHolder: " + jsonObject);
         try {
             if (jsonObject != null) {
                 String fileName = jsonObject.getString("file_name");
                 String fileSize = jsonObject.getString("file_size");
+                int downloadFlag = jsonObject.getInt("download_flag");
                 fileRecyclerViewHolder.file_name_TextView.setText(fileName);
-                fileRecyclerViewHolder.file_size_TextView.setText(new String("文件大小："+fileSize));
+                fileRecyclerViewHolder.file_size_TextView.setText(new String("文件大小：" + fileSize));
+                if (downloadFlag == 0) {
+                    fileRecyclerViewHolder.download_ImageView.setVisibility(View.VISIBLE);
+                    fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.update_ImageView.setVisibility(View.GONE);
+                } else if (downloadFlag == 1){
+                    fileRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.delete_ImageView.setVisibility(View.VISIBLE);
+                    fileRecyclerViewHolder.update_ImageView.setVisibility(View.GONE);
+                }else {
+                    fileRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.update_ImageView.setVisibility(View.VISIBLE);
+                }
+                fileRecyclerViewHolder.download_ImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (downloadFileImageViewOnItemClickListener != null) {
+                            downloadFileImageViewOnItemClickListener.onItemClick(position);
+                        } else {
+                            Log.e(TAG, "onClick: 不能点击");
+                        }
+                    }
+                });
+                fileRecyclerViewHolder.delete_ImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (deleteFileImageViewOnItemClickListener != null) {
+                            deleteFileImageViewOnItemClickListener.onItemClick(position);
+                        } else {
+                            Log.e(TAG, "onClick: 不能点击");
+                        }
+                    }
+                });
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -59,15 +98,37 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         return new FileRecyclerViewHolder(view);
     }
 
+    public void setOnDownloadFileImageClickListener(FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
+        this.downloadFileImageViewOnItemClickListener = downloadFileImageViewOnItemClickListener;
+    }
+
+    public void setOnDeleteFileImageClickListener(FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener) {
+        this.deleteFileImageViewOnItemClickListener = deleteFileImageViewOnItemClickListener;
+    }
+
+    public interface DownloadFileImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface DeleteFileImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
     public static class FileRecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView file_name_TextView;
         private final TextView file_size_TextView;
+        private final ImageView delete_ImageView;
+        private final ImageView download_ImageView;
+        private final ImageView update_ImageView;
 
         public FileRecyclerViewHolder(View view) {
             super(view);
             file_name_TextView = view.findViewById(R.id.file_name_TextView);
             file_size_TextView = view.findViewById(R.id.file_size_TextView);
+            delete_ImageView = view.findViewById(R.id.delete_ImageView);
+            download_ImageView = view.findViewById(R.id.download_ImageView);
+            update_ImageView = view.findViewById(R.id.update_ImageView);
         }
     }
 }

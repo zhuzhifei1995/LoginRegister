@@ -97,7 +97,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="@string/dynamic"
+                android:text="@string/net_disk"
                 android:textColor="@color/main_normal" />
 
         </LinearLayout>

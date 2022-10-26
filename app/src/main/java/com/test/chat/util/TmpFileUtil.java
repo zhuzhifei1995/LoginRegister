@@ -13,7 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -46,6 +48,33 @@ public class TmpFileUtil {
             Log.e(TAG, "保存声音文件失败：" + voiceName);
             e.printStackTrace();
         }
+    }
+
+    public static String getFileMD5(String fileDir, String fileName) {
+        File file = new File(fileDir, fileName);
+        if (!file.exists()) {
+            return null;
+        }
+        if (!file.isFile()) {
+            return null;
+        }
+        MessageDigest messageDigest;
+        FileInputStream fileInputStream;
+        byte[] buffer = new byte[1024];
+        int len;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+            fileInputStream = new FileInputStream(file);
+            while ((len = fileInputStream.read(buffer, 0, 1024)) != -1) {
+                messageDigest.update(buffer, 0, len);
+            }
+            fileInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        BigInteger bigInteger = new BigInteger(1, messageDigest.digest());
+        return bigInteger.toString(16);
     }
 
     public static void writeJSONToFile(String json, String fileDir, String fileName) {

@@ -34,10 +34,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.test.chat.R;
-import com.test.chat.fragment.DynamicFragment;
 import com.test.chat.fragment.FriendFragment;
 import com.test.chat.fragment.MessageFragment;
 import com.test.chat.fragment.MyFragment;
+import com.test.chat.fragment.NetDiskFragment;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView my_bottom_TextView;
     private MessageFragment messageFragment;
     private FriendFragment friendFragment;
-    private DynamicFragment dynamicFragment;
+    private NetDiskFragment netDiskFragment;
     private MyFragment myFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
@@ -165,11 +165,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         ANDROID_ID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
         LinearLayout message_bottom_LinearLayout = findViewById(R.id.message_bottom_LinearLayout);
         LinearLayout friend_bottom_LinearLayout = findViewById(R.id.friend_bottom_LinearLayout);
-        LinearLayout dynamic_bottom_LinearLayout = findViewById(R.id.dynamic_bottom_LinearLayout);
+        LinearLayout dynamic_bottom_LinearLayout = findViewById(R.id.net_disk_bottom_LinearLayout);
         LinearLayout my_bottom_LinearLayout = findViewById(R.id.my_bottom_LinearLayout);
         message_bottom_TextView = findViewById(R.id.message_bottom_TextView);
         friend_bottom_TextView = findViewById(R.id.friend_bottom_TextView);
-        dynamic_bottom_TextView = findViewById(R.id.dynamic_bottom_TextView);
+        dynamic_bottom_TextView = findViewById(R.id.net_disk_bottom_TextView);
         my_bottom_TextView = findViewById(R.id.my_bottom_TextView);
 
         message_bottom_LinearLayout.setOnClickListener(this);
@@ -179,7 +179,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         message_bottom_ImageButton = findViewById(R.id.message_bottom_ImageButton);
         friend_bottom_ImageButton = findViewById(R.id.friend_bottom_ImageButton);
-        dynamic_bottom_ImageButton = findViewById(R.id.dynamic_bottom_ImageButton);
+        dynamic_bottom_ImageButton = findViewById(R.id.net_disk_bottom_ImageButton);
         my_bottom_ImageButton = findViewById(R.id.my_bottom_ImageButton);
         setSelect(0);
 
@@ -242,11 +242,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 friend_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 2:
-                if (dynamicFragment == null) {
-                    dynamicFragment = new DynamicFragment();
-                    transaction.add(R.id.content_FrameLayout, dynamicFragment);
+                if (netDiskFragment == null) {
+                    netDiskFragment = new NetDiskFragment();
+                    transaction.add(R.id.content_FrameLayout, netDiskFragment);
                 } else {
-                    transaction.show(dynamicFragment);
+                    transaction.show(netDiskFragment);
                 }
                 dynamic_bottom_ImageButton.setBackgroundResource(R.drawable.dynamic_selected);
                 dynamic_bottom_TextView.setTextColor(Color.BLUE);
@@ -275,8 +275,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (friendFragment != null) {
             fragmentTransaction.hide(friendFragment);
         }
-        if (dynamicFragment != null) {
-            fragmentTransaction.hide(dynamicFragment);
+        if (netDiskFragment != null) {
+            fragmentTransaction.hide(netDiskFragment);
         }
         if (myFragment != null) {
             fragmentTransaction.hide(myFragment);
@@ -295,7 +295,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.friend_bottom_LinearLayout:
                 setSelect(1);
                 break;
-            case R.id.dynamic_bottom_LinearLayout:
+            case R.id.net_disk_bottom_LinearLayout:
                 setSelect(2);
                 break;
             case R.id.my_bottom_LinearLayout:

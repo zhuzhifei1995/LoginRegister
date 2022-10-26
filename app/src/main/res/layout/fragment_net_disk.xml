@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.NetDiskFragment">
+
+    <include
+        android:id="@+id/title_search_bar_net_disk"
+        layout="@layout/title_search_bar" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/title_TabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_search_bar_net_disk"
+        app:tabIndicatorColor="@color/black"
+        app:tabSelectedTextColor="@color/main_select" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/content_ViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_TabLayout" />
+
+</RelativeLayout>

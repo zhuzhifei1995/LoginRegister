@@ -3,24 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragment.DynamicFragment">
-
-    <include layout="@layout/title_search_bar" />
+    tools:context=".fragment.NetDiskFileFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/dynamic_SwipeRefreshLayout"
+        android:id="@+id/net_disk_SwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dynamic_RecyclerView"
+            android:id="@+id/net_disk_RecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </LinearLayout>
