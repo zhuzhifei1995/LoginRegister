@@ -146,7 +146,8 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                                 JSONObject fileJSONObject = fileJSONObjectList.get(position);
                                 int download_flag = fileJSONObject.getInt("download_flag");
                                 if (download_flag == 0) {
-                                    downloadNetDiskFile(context, fileJSONObject.getString("file_name"), fileJSONObject.getString("file_download_url"), position);
+                                    downloadNetDiskFile(context, fileJSONObject.getString("file_name"),
+                                            fileJSONObject.getString("file_download_url"), position);
                                 } else {
                                     Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
                                 }
