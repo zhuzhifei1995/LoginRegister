@@ -371,6 +371,23 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         friend_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
         my_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
         dynamic_TextView.setTextColor(getResources().getColor(R.color.main_select, null));
+    }
+
+    private void saveUserPhoto(final String photo) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(photo);
+                if (photoBitmap != null) {
+                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -399,23 +416,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void saveUserPhoto(final String photo) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(photo);
-                if (photoBitmap != null) {
-                    ImageUtil.saveBitmapToTmpFile(photoBitmap, Environment.getExternalStorageDirectory().getPath() + "/tmp/user", "photo.png.cache");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
 
     private void initMyView() {
         IS_SHOW_MY_MESSAGE = false;
@@ -796,31 +796,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         Intent intent = new Intent(context, PhotoShowActivity.class);
         intent.putExtra("flag", 1);
         startActivity(intent);
-    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            if (message.what == 1) {
-                initMyView();
-                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    String friendJSON = (String) message.obj;
-                    JSONObject jsonObject = new JSONObject(friendJSON);
-                    if (jsonObject.getString("code").equals("1")) {
-                        Intent intent = new Intent(context, FriendShowActivity.class);
-                        intent.putExtra("friendJSON", jsonObject.getString("message"));
-                        startActivity(intent);
-                    }
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-            progressDialog.dismiss();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void selectFromPhoto() {
         if (ContextCompat.checkSelfPermission(context,
@@ -851,7 +827,31 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         } else {
             photoFromCapture();
         }
-    }
+    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            if (message.what == 1) {
+                initMyView();
+                Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String friendJSON = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(friendJSON);
+                    if (jsonObject.getString("code").equals("1")) {
+                        Intent intent = new Intent(context, FriendShowActivity.class);
+                        intent.putExtra("friendJSON", jsonObject.getString("message"));
+                        startActivity(intent);
+                    }
+                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
 
     private void photoFromCapture() {
         Intent intent;
