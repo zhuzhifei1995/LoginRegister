@@ -1,16 +1,23 @@
 package com.test.chat.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,7 +67,6 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
         @Override
         public void handleMessage(@NonNull Message message) {
             String fileName = (String) message.obj;
-            Toast.makeText(context, fileName + "文件下载成功！", Toast.LENGTH_SHORT).show();
             try {
                 File downloadFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileName + ".download");
                 TmpFileUtil.copyFile(downloadFile, new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileName + ".cache"));
@@ -75,6 +81,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 e.printStackTrace();
             }
             Log.e(TAG, "download success");
+            Toast.makeText(context, fileName + "文件下载成功！", Toast.LENGTH_SHORT).show();
             super.handleMessage(message);
         }
     };
@@ -148,15 +155,43 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                     public void onItemClick(int position) {
                         Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
                         try {
-                            Toast.makeText(context, "正在删除文件：" + fileJSONObjectList.get(position).getString("file_name"), Toast.LENGTH_SHORT).show();
-                            File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObjectList.get(position).getString("file_name") + ".cache");
-                            if (deleteFile.delete()) {
-                                fileJSONObjectList.get(position).put("download_flag", 0);
-                                Toast.makeText(context, "删除文件：" + fileJSONObjectList.get(position).getString("file_name") + " 成功！", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, "删除文件：" + fileJSONObjectList.get(position).getString("file_name") + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                            String deleteFileName = fileJSONObjectList.get(position).getString("file_name");
+                            ProgressDialog progressDialog = new ProgressDialog(context);
+                            Window window = progressDialog.getWindow();
+                            if (window != null) {
+                                progressDialog.show();
+                                WindowManager.LayoutParams params = window.getAttributes();
+                                params.gravity = Gravity.CENTER;
+                                progressDialog.setCancelable(true);
+                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                progressDialog.setContentView(R.layout.exit_progress_bar);
+                                TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
+                                dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
                             }
-                            fileRecyclerViewAdapter.notifyDataSetChanged();
+                            progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    progressDialog.dismiss();
+                                }
+                            });
+                            progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, deleteFileName + ".cache");
+                                    if (deleteFile.delete()) {
+                                        try {
+                                            fileJSONObjectList.get(position).put("download_flag", 0);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Toast.makeText(context, "删除文件：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, "删除文件：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                    }
+                                    fileRecyclerViewAdapter.notifyDataSetChanged();
+                                    progressDialog.dismiss();
+                                }
+                            });
                         } catch (JSONException e) {
                             Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
