@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.test.chat.R;
+import com.test.chat.util.ActivityUtil;
 
 public class BlankFragment extends Fragment {
+
+    private static final String TAG = ActivityUtil.TAG;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,4 +24,5 @@ public class BlankFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
+
 }

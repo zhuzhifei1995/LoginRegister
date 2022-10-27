@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/root_friend_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/root_friend_LinearLayout"
         android:background="@drawable/recycler_view_item_bg"
         android:paddingStart="30dp"
         android:paddingTop="20dp"
