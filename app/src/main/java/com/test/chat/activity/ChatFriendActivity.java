@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressLint("NotifyDataSetChanged")
 public class ChatFriendActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = ActivityUtil.TAG;
@@ -287,7 +288,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void cancelVoice() {
         progressDialog.dismiss();
         messageRecyclerViewAdapter.notifyDataSetChanged();
@@ -409,7 +409,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         finish();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void sendMessage() {
         messageRecyclerViewAdapter.notifyDataSetChanged();
         final String message = send_message_EditText.getText().toString();
@@ -546,7 +545,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void sendImageMessage() {
         messageRecyclerViewAdapter.notifyDataSetChanged();
         new Thread(new Runnable() {

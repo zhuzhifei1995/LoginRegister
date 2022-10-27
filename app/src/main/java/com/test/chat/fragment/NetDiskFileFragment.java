@@ -53,6 +53,7 @@ import okio.Okio;
 import okio.Sink;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressLint("NotifyDataSetChanged")
 public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ActivityUtil.TAG;
@@ -63,7 +64,6 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
     private SwipeRefreshLayout net_disk_SwipeRefreshLayout;
     private FileRecyclerViewAdapter fileRecyclerViewAdapter;
     private final Handler downloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void handleMessage(@NonNull Message message) {
             String fileName = (String) message.obj;
@@ -81,11 +81,23 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 e.printStackTrace();
             }
             Log.e(TAG, "download success");
-            Toast.makeText(context, fileName + "文件下载成功！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, fileName + " 文件下载成功！", Toast.LENGTH_SHORT).show();
             super.handleMessage(message);
         }
     };
-    @SuppressLint("NotifyDataSetChanged")
+    private final Handler failDownloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            Toast.makeText(context, "创建文件下载任务失败，网络异常！", Toast.LENGTH_SHORT).show();
+            try {
+                fileJSONObjectList.get(message.what).put("download_flag", 0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            fileRecyclerViewAdapter.notifyDataSetChanged();
+            super.handleMessage(message);
+        }
+    };
     private final Handler getDownloadFilesHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
@@ -119,90 +131,89 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                     }
                     fileJSONObjectList.add(fileJSONObject);
                 }
+                if (fileJSONObjectList != null) {
+                    fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
+                    net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
+                    net_disk_SwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
+                    fileRecyclerViewAdapter.setOnDownloadFileImageClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Log.e(TAG, "onItemClick: 开始下载" + fileJSONObjectList.get(position));
+                            try {
+                                fileRecyclerViewAdapter.notifyDataSetChanged();
+                                JSONObject fileJSONObject = fileJSONObjectList.get(position);
+                                int download_flag = fileJSONObject.getInt("download_flag");
+                                if (download_flag == 0) {
+                                    downloadNetDiskFile(context, fileJSONObject.getString("file_name"), fileJSONObject.getString("file_download_url"), position);
+                                } else {
+                                    Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(context, "创建文件下载任务失败！", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    fileRecyclerViewAdapter.setOnDeleteFileImageClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
+                            try {
+                                String deleteFileName = fileJSONObjectList.get(position).getString("file_name");
+                                ProgressDialog progressDialog = new ProgressDialog(context);
+                                Window window = progressDialog.getWindow();
+                                if (window != null) {
+                                    progressDialog.show();
+                                    WindowManager.LayoutParams params = window.getAttributes();
+                                    params.gravity = Gravity.CENTER;
+                                    progressDialog.setCancelable(true);
+                                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    progressDialog.setContentView(R.layout.exit_progress_bar);
+                                    TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
+                                    dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
+                                }
+                                progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                                progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, deleteFileName + ".cache");
+                                        if (deleteFile.delete()) {
+                                            try {
+                                                fileJSONObjectList.get(position).put("download_flag", 0);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Toast.makeText(context, "删除文件：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, "删除文件：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                        }
+                                        fileRecyclerViewAdapter.notifyDataSetChanged();
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
             } catch (JSONException e) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                 net_disk_SwipeRefreshLayout.setRefreshing(false);
                 e.printStackTrace();
             }
             super.handleMessage(message);
-            if (fileJSONObjectList != null) {
-                fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
-                net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
-                net_disk_SwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
-                fileRecyclerViewAdapter.setOnDownloadFileImageClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        Log.e(TAG, "onItemClick: 开始下载" + fileJSONObjectList.get(position));
-                        try {
-                            fileRecyclerViewAdapter.notifyDataSetChanged();
-                            JSONObject fileJSONObject = fileJSONObjectList.get(position);
-                            int download_flag = fileJSONObject.getInt("download_flag");
-                            if (download_flag == 0) {
-                                downloadNetDiskFile(context, fileJSONObject.getString("file_name"), fileJSONObject.getString("file_download_url"), position);
-                            } else {
-                                Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(context, "创建文件下载任务失败！", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                fileRecyclerViewAdapter.setOnDeleteFileImageClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
-                        try {
-                            String deleteFileName = fileJSONObjectList.get(position).getString("file_name");
-                            ProgressDialog progressDialog = new ProgressDialog(context);
-                            Window window = progressDialog.getWindow();
-                            if (window != null) {
-                                progressDialog.show();
-                                WindowManager.LayoutParams params = window.getAttributes();
-                                params.gravity = Gravity.CENTER;
-                                progressDialog.setCancelable(true);
-                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                progressDialog.setContentView(R.layout.exit_progress_bar);
-                                TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                                dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
-                            }
-                            progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    progressDialog.dismiss();
-                                }
-                            });
-                            progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, deleteFileName + ".cache");
-                                    if (deleteFile.delete()) {
-                                        try {
-                                            fileJSONObjectList.get(position).put("download_flag", 0);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Toast.makeText(context, "删除文件：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(context, "删除文件：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
-                                    }
-                                    fileRecyclerViewAdapter.notifyDataSetChanged();
-                                    progressDialog.dismiss();
-                                }
-                            });
-                        } catch (JSONException e) {
-                            Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
         }
     };
 
-    @SuppressLint("NotifyDataSetChanged")
     private void downloadNetDiskFile(Context context, String downFileName, String fileDownloadUrl, int position) {
         long startTime = System.currentTimeMillis();
         Toast.makeText(context, "创建文件下载任务，开始下载文件：" + downFileName, Toast.LENGTH_SHORT).show();
@@ -217,9 +228,11 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                Toast.makeText(context, "创建文件下载任务失败！", Toast.LENGTH_SHORT).show();
+                Message message = new Message();
+                message.what = position;
+                failDownloadNetDiskFileHandler.sendMessage(message);
                 Log.e(TAG, "download failed");
+                e.printStackTrace();
             }
 
             @Override
