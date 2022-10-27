@@ -43,47 +43,30 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="文件下载">
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/NetDiskFragmentPagerAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/CustomListView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/ProgressBarView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/update_button.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/update_normal.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/update_pressed.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk_file.xml" afterDir="false" />
+    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileRecyclerViewAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/DynamicFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ImageUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ImageUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/TmpFileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/TmpFileUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_dynamic.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_dynamic.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/file_list_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/file_list_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/foot_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/foot_select.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_dynamic.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/main_foot_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/main_foot_select.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk_file.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk_file.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/friend_list_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/friend_list_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[eb95234d]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[ZXXWVKOFFUA6EA9P]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -113,9 +96,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="layoutResourceFile_vertical" />
-        <option value="resourceFile" />
         <option value="layoutResourceFile" />
         <option value="Class" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
@@ -157,7 +140,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="DEBUGGABLE_DEVICE" value="oppo-pbet00-eb95234d" />
+    <property name="DEBUGGABLE_DEVICE" value="youxuepai-p770-ZXXWVKOFFUA6EA9P" />
     <property name="DEBUGGABLE_PROCESS" value="com.test.chat" />
     <property name="DEBUGGER_ID" value="Auto" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="eb95234d" />
@@ -662,7 +645,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666541423925</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="增加文件下载">
+      <created>1666801718065</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1666801718065</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -707,6 +697,7 @@
     <MESSAGE value="修改Environment.getExternalStorageDirectory().getPath()为常量" />
     <MESSAGE value="更新" />
     <MESSAGE value="文件下载" />
-    <option name="LAST_COMMIT_MESSAGE" value="文件下载" />
+    <MESSAGE value="增加文件下载" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加文件下载" />
   </component>
 </project>

@@ -15,7 +15,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.test.chat.R;
 import com.test.chat.adapter.NetDiskFragmentPagerAdapter;
 import com.test.chat.util.ActivityUtil;
-import com.test.chat.util.TmpFileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +29,6 @@ public class NetDiskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         netDiskFragmentView = layoutInflater.inflate(R.layout.fragment_net_disk, viewGroup, false);
-        String md5 = TmpFileUtil.getFileMD5(ActivityUtil.TMP_DOWNLOAD_PATH, "tmp.txt");
-        if (md5 != null) {
-            Log.e(TAG, "onCreateView: " + md5);
-        }
         initFragmentView();
         return netDiskFragmentView;
     }

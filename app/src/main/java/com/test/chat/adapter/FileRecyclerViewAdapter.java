@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -14,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
-import com.test.chat.view.ProgressBarView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -44,7 +45,6 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     @SuppressLint("RecyclerView")
     public void onBindViewHolder(@NotNull FileRecyclerViewHolder fileRecyclerViewHolder, int position) {
         JSONObject jsonObject = jsonObjectList.get(position);
-        Log.e(TAG, "onBindViewHolder: " + jsonObject);
         try {
             if (jsonObject != null) {
                 String fileName = jsonObject.getString("file_name");
@@ -56,14 +56,22 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
                     fileRecyclerViewHolder.download_ImageView.setVisibility(View.VISIBLE);
                     fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
                     fileRecyclerViewHolder.update_ImageView.setVisibility(View.GONE);
-                } else if (downloadFlag == 1){
+                    fileRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
+                } else if (downloadFlag == 1) {
                     fileRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
                     fileRecyclerViewHolder.delete_ImageView.setVisibility(View.VISIBLE);
                     fileRecyclerViewHolder.update_ImageView.setVisibility(View.GONE);
-                }else {
+                    fileRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
+                } else if (downloadFlag == 2) {
                     fileRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
                     fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
                     fileRecyclerViewHolder.update_ImageView.setVisibility(View.VISIBLE);
+                    fileRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
+                } else if (downloadFlag == 3) {
+                    fileRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.update_ImageView.setVisibility(View.GONE);
+                    fileRecyclerViewHolder.downing_ImageView.setVisibility(View.VISIBLE);
                 }
                 fileRecyclerViewHolder.download_ImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -83,6 +91,12 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
                         } else {
                             Log.e(TAG, "onClick: 不能点击");
                         }
+                    }
+                });
+                fileRecyclerViewHolder.root_file_LinearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e(TAG, "onClick: 外层被点击");
                     }
                 });
             }
@@ -121,6 +135,8 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         private final ImageView delete_ImageView;
         private final ImageView download_ImageView;
         private final ImageView update_ImageView;
+        private final ProgressBar downing_ImageView;
+        private final LinearLayout root_file_LinearLayout;
 
         public FileRecyclerViewHolder(View view) {
             super(view);
@@ -129,6 +145,8 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
             delete_ImageView = view.findViewById(R.id.delete_ImageView);
             download_ImageView = view.findViewById(R.id.download_ImageView);
             update_ImageView = view.findViewById(R.id.update_ImageView);
+            downing_ImageView = view.findViewById(R.id.downing_ProgressBar);
+            root_file_LinearLayout = view.findViewById(R.id.root_file_LinearLayout);
         }
     }
 }

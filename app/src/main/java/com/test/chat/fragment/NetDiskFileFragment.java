@@ -51,10 +51,25 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
     private static final String TAG = ActivityUtil.TAG;
     private View netDiskFileFragmentView;
     private Context context;
+    private final Handler downloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            Toast.makeText(context, message.obj + "文件下载成功！", Toast.LENGTH_SHORT).show();
+            try {
+                fileJSONObjectList.get(message.what).put("download_flag",1);
+                fileRecyclerViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.e(TAG, "download success");
+            super.handleMessage(message);
+        }
+    };
     private RecyclerView net_disk_RecyclerView;
     private List<JSONObject> fileJSONObjectList;
     private SwipeRefreshLayout net_disk_SwipeRefreshLayout;
-
+    private FileRecyclerViewAdapter fileRecyclerViewAdapter;
     @SuppressLint("NotifyDataSetChanged")
     private final Handler getDownloadFilesHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -65,20 +80,20 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 fileJSONObjectList = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject fileJSONObject = jsonArray.getJSONObject(i);
-                    File downFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") +".cache");
-                    if (downFile.exists()){
-                        String fileMD5 = TmpFileUtil.getFileMD5(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") +".cache");
-                        if (fileMD5 != null){
-                            if (fileMD5.equals(fileJSONObject.getString("md5_number"))){
+                    File downFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") + ".cache");
+                    if (downFile.exists()) {
+                        String fileMD5 = TmpFileUtil.getFileMD5(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") + ".cache");
+                        if (fileMD5 != null) {
+                            if (fileMD5.equals(fileJSONObject.getString("md5_number"))) {
                                 fileJSONObject.put("download_flag", 1);
-                            }else {
+                            } else {
                                 fileJSONObject.put("download_flag", 2);
                             }
-                        }else {
+                        } else {
                             fileJSONObject.put("download_flag", 1);
                         }
-                        Log.e(TAG, "handleMessage: " +  fileMD5);
-                    }else {
+                        Log.e(TAG, "handleMessage: " + fileMD5);
+                    } else {
                         fileJSONObject.put("download_flag", 0);
                     }
                     fileJSONObjectList.add(fileJSONObject);
@@ -90,7 +105,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
             }
             super.handleMessage(message);
             if (fileJSONObjectList != null) {
-                FileRecyclerViewAdapter fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
+                fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
                 net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
                 net_disk_SwipeRefreshLayout.setRefreshing(false);
@@ -104,8 +119,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                             JSONObject fileJSONObject = fileJSONObjectList.get(position);
                             int download_flag = fileJSONObject.getInt("download_flag");
                             if (download_flag == 0) {
-                                downloadNetDiskFile(context,fileJSONObject.getString("file_name"),fileJSONObject.getString("file_download_url"));
-                                fileJSONObject.put("download_flag", 1);
+                                downloadNetDiskFile(context, fileJSONObject.getString("file_name"), fileJSONObject.getString("file_download_url"), position);
                             } else {
                                 Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
                             }
@@ -121,6 +135,14 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                         Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
                         try {
                             Toast.makeText(context, "正在删除文件：" + fileJSONObjectList.get(position).getString("file_name"), Toast.LENGTH_SHORT).show();
+                            File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObjectList.get(position).getString("file_name") + ".cache");
+                            if (deleteFile.delete()) {
+                                fileJSONObjectList.get(position).put("download_flag", 0);
+                                Toast.makeText(context, "删除文件：" + fileJSONObjectList.get(position).getString("file_name") + " 成功！", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "删除文件：" + fileJSONObjectList.get(position).getString("file_name") + " 失败！", Toast.LENGTH_SHORT).show();
+                            }
+                            fileRecyclerViewAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
@@ -131,10 +153,16 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
         }
     };
 
-    private void downloadNetDiskFile(Context context,String downFileName, String fileDownloadUrl) {
+    @SuppressLint("NotifyDataSetChanged")
+    private void downloadNetDiskFile(Context context, String downFileName, String fileDownloadUrl, int position) {
         long startTime = System.currentTimeMillis();
         Toast.makeText(context, "创建文件下载任务，开始下载文件：" + downFileName, Toast.LENGTH_SHORT).show();
-
+        try {
+            fileJSONObjectList.get(position).put("download_flag",3);
+            fileRecyclerViewAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.e(TAG, "开始下载时间：startTime=" + startTime);
         Request request = new Request.Builder().url(fileDownloadUrl).build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {
@@ -145,28 +173,41 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 Log.e(TAG, "download failed");
             }
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response){
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         BufferedSink bufferedSink;
-                        File downFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, downFileName+".cache");
-                        try {
-                            if (!downFile.exists()){
-                                if (downFile.createNewFile()){
-                                    Log.e(TAG, "onResponse: 文件创建成功");
-                                }else {
-                                    Log.e(TAG, "onResponse: 文件创建失败");
-                                }
+                        File downFold = new File(ActivityUtil.TMP_DOWNLOAD_PATH);
+                        if (!downFold.exists()) {
+                            if (!downFold.mkdir()) {
+                                Log.e(TAG, "onResponse: 下载文件夹创建成功");
+                            } else {
+                                Log.e(TAG, "onResponse: 下载文件夹创建失败");
                             }
+                        }
+                        File downFile = new File(downFold, downFileName + ".cache");
+                        if (!downFile.exists()) {
+                            try {
+                                if (!downFile.createNewFile()) {
+                                    Log.e(TAG, "onResponse: 下载文件创建成功");
+                                } else {
+                                    Log.e(TAG, "onResponse: 下载文件创建失败");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try {
                             Sink sink = Okio.sink(downFile);
                             bufferedSink = Okio.buffer(sink);
                             bufferedSink.writeAll(Objects.requireNonNull(response.body()).source());
                             bufferedSink.close();
                             Message message = new Message();
                             message.obj = downFileName;
+                            message.what = position;
                             downloadNetDiskFileHandler.sendMessage(message);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -175,15 +216,6 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
             }
         });
     }
-
-    private final Handler downloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message message) {
-            Toast.makeText(context, message.obj + "文件下载成功！", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "download success");
-            super.handleMessage(message);
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

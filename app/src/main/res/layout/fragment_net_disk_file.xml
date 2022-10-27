@@ -11,11 +11,11 @@
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:clickable="true"
+            android:focusable="true"
             android:id="@+id/net_disk_RecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true" />
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
