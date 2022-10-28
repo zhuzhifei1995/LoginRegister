@@ -2,6 +2,7 @@ package com.test.chat.util;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -54,6 +55,16 @@ public class ActivityUtil {
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]{8,12}");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
+    }
+
+    public static int getApkVersionCode(Context context) {
+        int versionCode = 0;
+        try {
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionCode;
     }
 
     @SuppressLint("ResourceAsColor")

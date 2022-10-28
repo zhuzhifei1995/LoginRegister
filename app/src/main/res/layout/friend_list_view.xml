@@ -20,12 +20,12 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/button_center_bg"
-            app:cardCornerRadius="30dp">
+            app:cardCornerRadius="10dp">
 
             <ImageView
                 android:id="@+id/photo_ImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/user_default_photo"
                 tools:ignore="ContentDescription" />
 

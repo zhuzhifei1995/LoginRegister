@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -77,6 +78,29 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private View myFragmentView;
     private Activity activity;
     private Context context;
+    private final Handler updateApkHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            int versionCode = ActivityUtil.getApkVersionCode(context);
+            Log.e(TAG, "当前应用版本号：" + versionCode);
+            String apkJson = (String) message.obj;
+            try {
+                JSONObject jsonObject = new JSONObject(apkJson);
+                int newVersionCode = jsonObject.getInt("version_code");
+                if (newVersionCode > versionCode) {
+                    Log.e(TAG, "handleMessage: 应用需要更新");
+                    Toast.makeText(context, "有新版本更新！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e(TAG, "handleMessage: 应用不需要更新");
+                    Toast.makeText(context, "当前应用版本已经是最新！", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "handleMessage: 应用不需要更新");
+                e.printStackTrace();
+            }
+            super.handleMessage(message);
+        }
+    };
     private ProgressDialog progressDialog;
     private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -356,6 +380,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         nike_name_LinearLayout.setOnClickListener(this);
         LinearLayout create_time_LinearLayout = myFragmentView.findViewById(R.id.create_time_LinearLayout);
         create_time_LinearLayout.setOnClickListener(this);
+        TextView update_apk_TextView = myFragmentView.findViewById(R.id.update_apk_TextView);
+        update_apk_TextView.setOnClickListener(this);
         initTitleView();
         initMyMessageView();
     }
@@ -436,10 +462,23 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             case R.id.qr_code_TextView:
                 showMyQRCode();
                 break;
+            case R.id.update_apk_TextView:
+                updateApk();
             default:
                 break;
         }
 
+    }
+
+    private void updateApk() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.obj = new HttpUtil(context).getRequest(ActivityUtil.NET_URL + "/get_apk_update_file");
+                updateApkHandler.sendMessage(message);
+            }
+        }).start();
     }
 
     private void showMyQRCode() {
