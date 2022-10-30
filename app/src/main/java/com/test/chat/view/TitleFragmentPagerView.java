@@ -44,7 +44,7 @@ public class TitleFragmentPagerView extends FragmentPagerAdapter {
                 fragmentTransaction.remove(fragment);
             }
         }
-        fragmentTransaction.add(viewGroup.getId(), getItem(position)).attach(getItem(position)).commit();
+        fragmentTransaction.add(viewGroup.getId(), getItem(position)).attach(getItem(position)).commitAllowingStateLoss();
         return getItem(position);
     }
 
