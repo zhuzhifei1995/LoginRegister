@@ -43,7 +43,7 @@ public class ActivityUtil {
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files";
 
     //    连接电脑正常网络时
-    public static String NET_URL = "http://192.168.1.4:8080";
+    public static String NET_URL = "http://192.168.1.3:8080";
 //    public static String NET_URL = "http://192.168.137.1:8080/";
 
     public static boolean isMobileNO(String mobile) {

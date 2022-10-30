@@ -86,5 +86,6 @@
     <string name="my_qr_code">我的二维码名片</string>
     <string name="setting_bg">应用背景</string>
     <string name="check_apk_update">检测更新</string>
+    <string name="install">安装</string>
 
 </resources>

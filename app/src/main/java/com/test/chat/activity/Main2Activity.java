@@ -786,6 +786,20 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void selectFromAlbum() {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Main2Activity.this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
+        } else {
+            photoFromCapture();
+        }
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -814,20 +828,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void selectFromAlbum() {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(Main2Activity.this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
-        } else {
-            photoFromCapture();
-        }
-    }
 
     private void photoFromCapture() {
         Intent intent;
@@ -1214,7 +1214,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 friendSwipeRefreshHandler.sendMessage(new Message());
             }
         }).start();
-    }    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
+    }
+
+
+
+    private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             if (message.what == 1) {
@@ -1239,10 +1243,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-
-
-
 
 
 }

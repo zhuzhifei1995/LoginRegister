@@ -21,10 +21,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.test.chat.R;
 import com.test.chat.activity.LoginActivity;
-import com.test.chat.view.TitleFragmentPagerView;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
+import com.test.chat.view.TitleFragmentPagerView;
 
 import java.util.ArrayList;
 import java.util.List;

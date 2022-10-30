@@ -163,6 +163,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TmpFileUtil.deleteDownloadFileCache(new File(ActivityUtil.TMP_DOWNLOAD_PATH));
+        TmpFileUtil.deleteDownloadFileCache(new File(ActivityUtil.TMP_APK_FILE_PATH));
         setContentView(R.layout.activity_main);
         initView();
     }
