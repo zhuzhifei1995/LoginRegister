@@ -30,6 +30,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
 
     private static final String TAG = ActivityUtil.TAG;
     private final List<JSONObject> jsonObjectList;
+    private DownloadApkImageViewOnItemClickListener downloadApkImageViewOnItemClickListener;
 
     public ApkRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -44,6 +45,22 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     @Override
     @SuppressLint("RecyclerView")
     public void onBindViewHolder(@NotNull ApkRecyclerViewHolder apkRecyclerViewHolder, int position) {
+        apkRecyclerViewHolder.root_apk_LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "onClick: 外层被点击");
+            }
+        });
+        apkRecyclerViewHolder.download_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (downloadApkImageViewOnItemClickListener != null) {
+                    downloadApkImageViewOnItemClickListener.onItemClick(position);
+                } else {
+                    Log.e(TAG, "onClick: 不能点击");
+                }
+            }
+        });
         JSONObject jsonObject = jsonObjectList.get(position);
         try {
             String apkName = jsonObject.getString("apk_name");
@@ -68,12 +85,22 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         return new ApkRecyclerViewHolder(view);
     }
 
+    public interface DownloadApkImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnDownloadApkImageViewClickListener(ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
+        this.downloadApkImageViewOnItemClickListener = downloadFileImageViewOnItemClickListener;
+    }
+
     public static class ApkRecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView apk_name_TextView;
         private final TextView apk_size_TextView;
         private final TextView apk_update_time_TextView;
         private final ImageView apk_icon_ImageView;
+        private final LinearLayout root_apk_LinearLayout;
+        private final ImageView download_ImageView;
 
         public ApkRecyclerViewHolder(View view) {
             super(view);
@@ -81,6 +108,9 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             apk_size_TextView = view.findViewById(R.id.apk_size_TextView);
             apk_update_time_TextView = view.findViewById(R.id.apk_update_time_TextView);
             apk_icon_ImageView = view.findViewById(R.id.apk_icon_ImageView);
+            root_apk_LinearLayout = view.findViewById(R.id.root_apk_LinearLayout);
+            download_ImageView = view.findViewById(R.id.download_ImageView);
+
         }
     }
 }

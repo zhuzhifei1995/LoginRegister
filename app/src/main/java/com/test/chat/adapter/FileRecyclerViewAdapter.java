@@ -123,15 +123,15 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         return new FileRecyclerViewHolder(view);
     }
 
-    public void setOnDownloadFileImageClickListener(FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
+    public void setOnDownloadFileImageViewClickListener(FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
         this.downloadFileImageViewOnItemClickListener = downloadFileImageViewOnItemClickListener;
     }
 
-    public void setOnDeleteFileImageClickListener(FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener) {
+    public void setOnDeleteFileImageViewClickListener(FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener) {
         this.deleteFileImageViewOnItemClickListener = deleteFileImageViewOnItemClickListener;
     }
 
-    public void setOnUpdateFileImageClickListener(FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener) {
+    public void setOnUpdateFileImageViewClickListener(FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener) {
         this.updateFileImageViewOnItemClickListener = updateFileImageViewOnItemClickListener;
     }
 

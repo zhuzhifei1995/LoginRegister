@@ -29,7 +29,6 @@ import java.util.List;
 public class AppListDetailsFragment extends Fragment{
 
     private static final String TAG = ActivityUtil.TAG;
-    private String kindLink;
     private View appListDetailsFragmentView;
     private List<JSONObject> jsonObjectList;
     private Context context;
@@ -37,8 +36,7 @@ public class AppListDetailsFragment extends Fragment{
     public AppListDetailsFragment() {
     }
 
-    public AppListDetailsFragment(String kindLink, List<JSONObject> jsonObjectList) {
-        this.kindLink = kindLink;
+    public AppListDetailsFragment(List<JSONObject> jsonObjectList) {
         this.jsonObjectList = jsonObjectList;
     }
 
@@ -59,6 +57,12 @@ public class AppListDetailsFragment extends Fragment{
     private void initFragmentView() {
         RecyclerView apk_file_RecyclerView = appListDetailsFragmentView.findViewById(R.id.apk_file_RecyclerView);
         ApkRecyclerViewAdapter apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
+        apkRecyclerViewAdapter.setOnDownloadApkImageViewClickListener(new ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
         apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
         apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
     }

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/root_file_LinearLayout"
+        android:id="@+id/root_apk_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackground"
@@ -78,6 +78,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
+                android:visibility="gone"
                 android:background="@drawable/delete_button"
                 tools:ignore="ContentDescription" />
 
@@ -94,6 +95,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
+                android:visibility="gone"
                 android:background="@drawable/update_button"
                 tools:ignore="ContentDescription" />
 
@@ -102,6 +104,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
+                android:visibility="gone"
                 android:indeterminateDrawable="@drawable/loading_progress" />
 
         </LinearLayout>

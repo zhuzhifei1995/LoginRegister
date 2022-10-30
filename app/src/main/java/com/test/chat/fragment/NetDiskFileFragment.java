@@ -146,7 +146,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                     net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
                     net_disk_SwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
-                    fileRecyclerViewAdapter.setOnDownloadFileImageClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
+                    fileRecyclerViewAdapter.setOnDownloadFileImageViewClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
                             Log.e(TAG, "onItemClick: 开始下载" + fileJSONObjectList.get(position));
@@ -166,7 +166,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                             }
                         }
                     });
-                    fileRecyclerViewAdapter.setOnUpdateFileImageClickListener(new FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener() {
+                    fileRecyclerViewAdapter.setOnUpdateFileImageViewClickListener(new FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
                             Log.e(TAG, "onItemClick: 开始更新" + fileJSONObjectList.get(position));
@@ -186,7 +186,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                             }
                         }
                     });
-                    fileRecyclerViewAdapter.setOnDeleteFileImageClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
+                    fileRecyclerViewAdapter.setOnDeleteFileImageViewClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
                             Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));

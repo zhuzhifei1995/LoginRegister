@@ -38,7 +38,8 @@ public class ActivityUtil {
     public static final String TMP_REGISTER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/register";
     public static final String TMP_UPDATE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/update";
     public static final String TMP_DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/download";
-    public static final String TMP_APK_ICON_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/icon";
+    public static final String TMP_APK_ICON_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/icon";
+    public static final String TMP_APK_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/apk";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files";
 
     //    连接电脑正常网络时

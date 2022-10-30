@@ -48,7 +48,6 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     private TabLayout app_store_title_TabLayout;
     private ViewPager app_store_content_ViewPager;
     private SwipeRefreshLayout app_store_SwipeRefreshLayout;
-    private List<JSONObject> jsonObjectList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,9 +98,8 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                     JSONArray jsonArray = new JSONObject((String) message.obj).getJSONArray("message");
                     List<Fragment> fragments = new ArrayList<>();
                     for (int i = 0;i<jsonArray.length();i++){
-                        String kindLink = jsonArray.getJSONObject(i).getString("kind_link");
                         JSONArray apkJSONArray = jsonArray.getJSONObject(i).getJSONArray("apk_list");
-                        jsonObjectList = new ArrayList<>();
+                        List<JSONObject> jsonObjectList = new ArrayList<>();
                         for (int j = 0;j<apkJSONArray.length();j++){
                             JSONObject apkJSONObject = apkJSONArray.getJSONObject(j);
                             jsonObjectList.add(apkJSONObject);
@@ -115,7 +113,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 }
                             }).start();
                         }
-                        AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment(kindLink, jsonObjectList);
+                        AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment(jsonObjectList);
                         fragments.add(appListDetailsFragment);
                     }
                     TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
