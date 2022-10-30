@@ -30,6 +30,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     private final List<JSONObject> jsonObjectList;
     private DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener;
     private DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener;
+    private UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener;
 
     public FileRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化FriendRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -93,6 +94,16 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
                         }
                     }
                 });
+                fileRecyclerViewHolder.update_ImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (updateFileImageViewOnItemClickListener != null) {
+                            updateFileImageViewOnItemClickListener.onItemClick(position);
+                        } else {
+                            Log.e(TAG, "onClick: 不能点击");
+                        }
+                    }
+                });
                 fileRecyclerViewHolder.root_file_LinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -120,11 +131,19 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         this.deleteFileImageViewOnItemClickListener = deleteFileImageViewOnItemClickListener;
     }
 
+    public void setOnUpdateFileImageClickListener(FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener) {
+        this.updateFileImageViewOnItemClickListener = updateFileImageViewOnItemClickListener;
+    }
+
     public interface DownloadFileImageViewOnItemClickListener {
         void onItemClick(int position);
     }
 
     public interface DeleteFileImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface UpdateFileImageViewOnItemClickListener {
         void onItemClick(int position);
     }
 

@@ -31,9 +31,9 @@ import okhttp3.ResponseBody;
 public class HttpUtil {
 
     private static final String TAG = ActivityUtil.TAG;
-    private static final long READ_TIMEOUT = 6000;
+    private static final long READ_TIMEOUT = 60000;
     private static final long WRITE_TIMEOUT = 6000;
-    private static final long CONNECT_TIMEOUT = 6000;
+    private static final long CONNECT_TIMEOUT = 60000;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String JSON_RESULT = "";
     private final OkHttpClient client;
@@ -47,12 +47,12 @@ public class HttpUtil {
         this.context = context;
     }
 
-    public String getRequest(String url) {
+    public String getRequest(String url) throws IOException {
         Log.e(TAG, "请求的地址链接：" + url);
         Log.e(TAG, url);
         Request request = new Request.Builder().url(url).build();
+        Response response = client.newCall(request).execute();
         try {
-            Response response = client.newCall(request).execute();
             assert response.body() != null;
             JSON_RESULT = Objects.requireNonNull(response.body()).string();
             Log.e(TAG, JSON_RESULT);

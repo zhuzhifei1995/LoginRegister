@@ -15,7 +15,6 @@
         android:background="@null"
         android:gravity="center_vertical"
         android:lines="1"
-        android:text="@string/return_text"
         android:textColor="#ffffffff"
         android:textSize="15sp"
         tools:ignore="RtlHardcoded" />
@@ -39,7 +38,6 @@
         android:background="@null"
         android:gravity="center"
         android:lines="1"
-        android:text="@string/return_text"
         android:textColor="#ffffffff"
         android:textSize="12sp" />
 

@@ -83,6 +83,31 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/app_store_bottom_LinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/app_store_bottom_ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/app_store"
+            android:clickable="false"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/app_store_bottom_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_store"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/my_bottom_LinearLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"

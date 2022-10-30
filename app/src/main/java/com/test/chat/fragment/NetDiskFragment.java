@@ -21,7 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.test.chat.R;
 import com.test.chat.activity.LoginActivity;
-import com.test.chat.adapter.NetDiskFragmentPagerAdapter;
+import com.test.chat.view.TitleFragmentPagerView;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
@@ -61,18 +61,18 @@ public class NetDiskFragment extends Fragment {
             startActivity(new Intent(context, LoginActivity.class));
             activity.finish();
         }
-        TabLayout title_TabLayout = netDiskFragmentView.findViewById(R.id.title_TabLayout);
-        ViewPager content_ViewPager = netDiskFragmentView.findViewById(R.id.content_ViewPager);
+        TabLayout net_disk_title_TabLayout = netDiskFragmentView.findViewById(R.id.net_disk_title_TabLayout);
+        ViewPager net_disk_content_ViewPager = netDiskFragmentView.findViewById(R.id.net_disk_content_ViewPager);
         List<Fragment> fragments = new ArrayList<>();
         NetDiskFileFragment netDiskFileFragment = new NetDiskFileFragment();
         BlankFragment blankFragment = new BlankFragment();
         fragments.add(netDiskFileFragment);
         fragments.add(blankFragment);
-        NetDiskFragmentPagerAdapter netDiskFragmentPagerAdapter = new NetDiskFragmentPagerAdapter(requireActivity().getSupportFragmentManager(), fragments);
-        content_ViewPager.setAdapter(netDiskFragmentPagerAdapter);
-        title_TabLayout.setupWithViewPager(content_ViewPager);
-        Objects.requireNonNull(title_TabLayout.getTabAt(0)).setText("在线网盘");
-        Objects.requireNonNull(title_TabLayout.getTabAt(1)).setText("本地文件");
+        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
+        net_disk_content_ViewPager.setAdapter(titleFragmentPagerView);
+        net_disk_title_TabLayout.setupWithViewPager(net_disk_content_ViewPager);
+        Objects.requireNonNull(net_disk_title_TabLayout.getTabAt(0)).setText("在线网盘");
+        Objects.requireNonNull(net_disk_title_TabLayout.getTabAt(1)).setText("本地文件");
     }
 
     @Override

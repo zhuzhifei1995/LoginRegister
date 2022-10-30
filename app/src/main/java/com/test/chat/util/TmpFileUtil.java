@@ -77,6 +77,32 @@ public class TmpFileUtil {
         return bigInteger.toString(16);
     }
 
+    public static String getOneFileMD5(File file) {
+        if (!file.exists()) {
+            return null;
+        }
+        if (!file.isFile()) {
+            return null;
+        }
+        MessageDigest messageDigest;
+        FileInputStream fileInputStream;
+        byte[] buffer = new byte[1024];
+        int len;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+            fileInputStream = new FileInputStream(file);
+            while ((len = fileInputStream.read(buffer, 0, 1024)) != -1) {
+                messageDigest.update(buffer, 0, len);
+            }
+            fileInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        BigInteger bigInteger = new BigInteger(1, messageDigest.digest());
+        return bigInteger.toString(16);
+    }
+
     public static void writeJSONToFile(String json, String fileDir, String fileName) {
         Log.e(TAG, "文件开始写入数据：" + fileDir + "/" + fileName);
         try {
@@ -177,4 +203,25 @@ public class TmpFileUtil {
             deleteFileCache(file);
         }
     }
+
+    public static void deleteDownloadFileCache(File dirFile) {
+        if (dirFile == null || !dirFile.exists() || !dirFile.isDirectory()) {
+            Log.e(TAG, "要删除的临时下载文件夹不存在！");
+            return;
+        }
+        for (File file : Objects.requireNonNull(dirFile.listFiles())) {
+            if (file.isFile()) {
+                if (file.getName().endsWith(".download")) {
+                    if (file.delete()) {
+                        Log.e(TAG, "删除临时下载文件成功：" + file.getAbsolutePath());
+                    } else {
+                        Log.e(TAG, "要删除的临时下载文件不存在！");
+                    }
+                }
+            } else if (file.isDirectory())
+                Log.e(TAG, "要删除的临时下载文件是文件夹：" + file.getAbsolutePath());
+            deleteDownloadFileCache(file);
+        }
+    }
+
 }

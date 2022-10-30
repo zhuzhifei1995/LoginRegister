@@ -2,6 +2,7 @@ package com.test.chat.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.test.chat.R;
+import com.test.chat.fragment.AppStoreFragment;
 import com.test.chat.fragment.FriendFragment;
 import com.test.chat.fragment.MessageFragment;
 import com.test.chat.fragment.MyFragment;
@@ -48,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,14 +66,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageButton friend_bottom_ImageButton;
     private ImageButton dynamic_bottom_ImageButton;
     private ImageButton my_bottom_ImageButton;
+    private ImageButton app_store_bottom_ImageButton;
     private TextView message_bottom_TextView;
     private TextView friend_bottom_TextView;
     private TextView dynamic_bottom_TextView;
     private TextView my_bottom_TextView;
+    private TextView app_store_bottom_TextView;
     private MessageFragment messageFragment;
     private FriendFragment friendFragment;
     private NetDiskFragment netDiskFragment;
     private MyFragment myFragment;
+    private AppStoreFragment appStoreFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
     private Context context;
@@ -156,6 +162,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TmpFileUtil.deleteDownloadFileCache(new File(ActivityUtil.TMP_DOWNLOAD_PATH));
         setContentView(R.layout.activity_main);
         initView();
     }
@@ -167,22 +174,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         LinearLayout friend_bottom_LinearLayout = findViewById(R.id.friend_bottom_LinearLayout);
         LinearLayout dynamic_bottom_LinearLayout = findViewById(R.id.net_disk_bottom_LinearLayout);
         LinearLayout my_bottom_LinearLayout = findViewById(R.id.my_bottom_LinearLayout);
+        LinearLayout app_store_bottom_LinearLayout = findViewById(R.id.app_store_bottom_LinearLayout);
         message_bottom_TextView = findViewById(R.id.message_bottom_TextView);
         friend_bottom_TextView = findViewById(R.id.friend_bottom_TextView);
         dynamic_bottom_TextView = findViewById(R.id.net_disk_bottom_TextView);
         my_bottom_TextView = findViewById(R.id.my_bottom_TextView);
-
+        app_store_bottom_TextView = findViewById(R.id.app_store_bottom_TextView);
         message_bottom_LinearLayout.setOnClickListener(this);
         friend_bottom_LinearLayout.setOnClickListener(this);
         dynamic_bottom_LinearLayout.setOnClickListener(this);
         my_bottom_LinearLayout.setOnClickListener(this);
-
+        app_store_bottom_LinearLayout.setOnClickListener(this);
         message_bottom_ImageButton = findViewById(R.id.message_bottom_ImageButton);
         friend_bottom_ImageButton = findViewById(R.id.friend_bottom_ImageButton);
-        dynamic_bottom_ImageButton = findViewById(R.id.net_disk_bottom_ImageButton);
         my_bottom_ImageButton = findViewById(R.id.my_bottom_ImageButton);
+        dynamic_bottom_ImageButton = findViewById(R.id.net_disk_bottom_ImageButton);
+        app_store_bottom_ImageButton = findViewById(R.id.app_store_bottom_ImageButton);
         setSelect(0);
-
         initFriendFragmentData();
     }
 
@@ -261,7 +269,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 my_bottom_ImageButton.setBackgroundResource(R.drawable.my_selected);
                 my_bottom_TextView.setTextColor(Color.BLUE);
                 break;
-
+            case 4:
+                if (appStoreFragment == null) {
+                    appStoreFragment = new AppStoreFragment();
+                    transaction.add(R.id.content_FrameLayout, appStoreFragment);
+                } else {
+                    transaction.show(appStoreFragment);
+                }
+                app_store_bottom_ImageButton.setBackgroundResource(R.drawable.app_store_selected);
+                app_store_bottom_TextView.setTextColor(Color.BLUE);
+                break;
             default:
                 break;
         }
@@ -281,10 +298,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (myFragment != null) {
             fragmentTransaction.hide(myFragment);
         }
+        if (appStoreFragment != null) {
+            fragmentTransaction.hide(appStoreFragment);
+        }
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         isCurrentDeviceLogin();
         setBottomSelectImageButton();
@@ -300,6 +320,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.my_bottom_LinearLayout:
                 setSelect(3);
+                break;
+            case R.id.app_store_bottom_LinearLayout:
+                setSelect(4);
                 break;
             default:
                 break;
@@ -329,11 +352,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dynamic_bottom_TextView.setTextColor(Color.BLACK);
         my_bottom_ImageButton.setBackgroundResource(R.drawable.my_normal);
         my_bottom_TextView.setTextColor(Color.BLACK);
+        app_store_bottom_ImageButton.setBackgroundResource(R.drawable.app_store_normal);
+        app_store_bottom_TextView.setTextColor(Color.BLACK);
     }
 
     @Override
     protected void onDestroy() {
         userJSONObjectList = null;
+        NotificationManager notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+        notificationManager.cancelAll();
         super.onDestroy();
     }
 

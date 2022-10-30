@@ -12,17 +12,19 @@
         layout="@layout/title_search_bar" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/title_TabLayout"
+        android:id="@+id/net_disk_title_TabLayout"
+        app:tabMode="auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_search_bar_net_disk"
-        app:tabIndicatorColor="@color/black"
+        app:tabBackground="@drawable/tab_layout_bg"
+        app:tabIndicatorColor="@color/gray"
         app:tabSelectedTextColor="@color/main_select" />
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/content_ViewPager"
+        android:id="@+id/net_disk_content_ViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title_TabLayout" />
+        android:layout_below="@id/net_disk_title_TabLayout" />
 
 </RelativeLayout>

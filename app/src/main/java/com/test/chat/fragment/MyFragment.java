@@ -64,8 +64,19 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Sink;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -78,30 +89,66 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private View myFragmentView;
     private Activity activity;
     private Context context;
+    private ProgressDialog progressDialog;
+    private final Handler downloadApkFileHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            String downFileName = (String) message.obj;
+            ActivityUtil.showDownloadNotification(context, "", -1, "应用更新下载完成！", 1);
+            File downloadFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, downFileName + ".download");
+            File cacheFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, downFileName + ".cache");
+            TmpFileUtil.copyFile(downloadFile, cacheFile);
+            if (downloadFile.delete()) {
+                Log.e(TAG, "handleMessage: 临时更新apk文件删除成功");
+            } else {
+                Log.e(TAG, "handleMessage: 临时更新apk文件删除失败");
+            }
+            Log.e(TAG, "download success");
+            installUpdateApk(cacheFile, downFileName);
+            progressDialog.dismiss();
+            super.handleMessage(message);
+        }
+    };
     private final Handler updateApkHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
             int versionCode = ActivityUtil.getApkVersionCode(context);
             Log.e(TAG, "当前应用版本号：" + versionCode);
-            String apkJson = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(apkJson);
-                int newVersionCode = jsonObject.getInt("version_code");
-                if (newVersionCode > versionCode) {
-                    Log.e(TAG, "handleMessage: 应用需要更新");
-                    Toast.makeText(context, "有新版本更新！", Toast.LENGTH_SHORT).show();
-                } else {
+            if (message.what == 1) {
+                String apkJson = (String) message.obj;
+                try {
+                    JSONObject jsonObject = new JSONObject(apkJson);
+                    int newVersionCode = jsonObject.getInt("version_code");
+                    String apkFileName = jsonObject.getString("apk_file_name");
+                    String apkDownloadUrl = jsonObject.getString("apk_download_url");
+                    String md5Number = jsonObject.getString("md5_number");
+                    if (newVersionCode > versionCode) {
+                        Log.e(TAG, "handleMessage: 应用需要更新");
+                        File cacheFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, apkFileName + ".cache");
+                        if (cacheFile.exists()) {
+                            if (!md5Number.equals(TmpFileUtil.getOneFileMD5(cacheFile))) {
+                                downloadApkFile(apkDownloadUrl, apkFileName);
+                            } else {
+                                installUpdateApk(cacheFile, apkFileName);
+                            }
+                        } else {
+                            downloadApkFile(apkDownloadUrl, apkFileName);
+                        }
+                    } else {
+                        Log.e(TAG, "handleMessage: 应用不需要更新");
+                        Toast.makeText(context, "当前应用版本已经是最新！", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
                     Log.e(TAG, "handleMessage: 应用不需要更新");
                     Toast.makeText(context, "当前应用版本已经是最新！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                Log.e(TAG, "handleMessage: 应用不需要更新");
-                e.printStackTrace();
+            } else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
         }
     };
-    private ProgressDialog progressDialog;
     private final Handler loginOutHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
@@ -343,6 +390,72 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     };
     private EditText dialog_nike_name_EditText;
 
+    private void installUpdateApk(File cacheFile, String downFileName) {
+        File apkFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, downFileName);
+        TmpFileUtil.copyFile(cacheFile, apkFile);
+        ActivityUtil.installApk(context, apkFile);
+    }
+
+    private void downloadApkFile(String url, String downFileName) {
+        long startTime = System.currentTimeMillis();
+        progressDialog = new ProgressDialog(context);
+        Window window = progressDialog.getWindow();
+        if (window != null) {
+            progressDialog.show();
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.CENTER;
+            progressDialog.setCancelable(false);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            progressDialog.setContentView(R.layout.loading_progress_bar);
+            TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+            prompt_TextView.setText(new String("更新文件下载中...."));
+        }
+        ActivityUtil.showDownloadNotification(context, "", -1, "应用更新文件下载中......", 0);
+        Log.e(TAG, "开始下载时间：startTime=" + startTime);
+        Request request = new Request.Builder().url(url).build();
+        new OkHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+                Toast.makeText(context, "创建下载文件任务失败！", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "download failed");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                BufferedSink bufferedSink;
+                File downFold = new File(ActivityUtil.TMP_UPDATE_FILE_PATH);
+                if (!downFold.exists()) {
+                    if (downFold.mkdir()) {
+                        Log.e(TAG, "onResponse: 下载文件夹创建成功");
+                    } else {
+                        Log.e(TAG, "onResponse: 下载文件夹创建失败");
+                    }
+                }
+                File downFile = new File(downFold, downFileName + ".download");
+                if (!downFile.exists()) {
+                    try {
+                        if (downFile.createNewFile()) {
+                            Log.e(TAG, "onResponse: 下载文件创建成功");
+                        } else {
+                            Log.e(TAG, "onResponse: 下载文件创建失败");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Sink sink = Okio.sink(downFile);
+                bufferedSink = Okio.buffer(sink);
+                bufferedSink.writeAll(Objects.requireNonNull(response.body()).source());
+                bufferedSink.close();
+                Message message = new Message();
+                message.obj = downFileName;
+                downloadApkFileHandler.sendMessage(message);
+                Log.e(TAG, "totalTime=" + (System.currentTimeMillis() - startTime));
+            }
+        });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activity = getActivity();
@@ -475,7 +588,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             @Override
             public void run() {
                 Message message = new Message();
-                message.obj = new HttpUtil(context).getRequest(ActivityUtil.NET_URL + "/get_apk_update_file");
+                try {
+                    message.obj = new HttpUtil(context).getRequest(ActivityUtil.NET_URL + "/get_apk_update_file");
+                    message.what = 1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    message.what = 0;
+                }
                 updateApkHandler.sendMessage(message);
             }
         }).start();
