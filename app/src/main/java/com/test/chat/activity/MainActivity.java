@@ -132,7 +132,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     }
                     Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
-                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }

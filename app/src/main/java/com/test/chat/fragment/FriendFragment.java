@@ -60,6 +60,8 @@ import java.util.Objects;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
+    public FriendFragment(){}
+
     private static final String TAG = ActivityUtil.TAG;
     private View friendFragmentView;
     private Activity activity;

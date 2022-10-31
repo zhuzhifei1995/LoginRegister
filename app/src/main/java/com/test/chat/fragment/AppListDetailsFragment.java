@@ -31,14 +31,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.test.chat.R;
 import com.test.chat.adapter.ApkRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.HttpUtil;
 import com.test.chat.util.TmpFileUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -56,10 +61,11 @@ public class AppListDetailsFragment extends Fragment {
 
     private static final String TAG = ActivityUtil.TAG;
     private View appListDetailsFragmentView;
-    private final List<JSONObject> jsonObjectList;
+    private final JSONObject kindJSONObject;
+    private List<JSONObject> jsonObjectList;
     private Context context;
     private ApkRecyclerViewAdapter apkRecyclerViewAdapter;
-    private final Handler downloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler downloadApkHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
             JSONObject jsonObject = (JSONObject) message.obj;
@@ -88,7 +94,7 @@ public class AppListDetailsFragment extends Fragment {
             super.handleMessage(message);
         }
     };
-    private final Handler failDownloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler failDownloadApkFileHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
             Toast.makeText(context, "创建文件下载任务失败，网络异常！", Toast.LENGTH_SHORT).show();
@@ -102,8 +108,8 @@ public class AppListDetailsFragment extends Fragment {
         }
     };
 
-    public AppListDetailsFragment(List<JSONObject> jsonObjectList) {
-        this.jsonObjectList = jsonObjectList;
+    public AppListDetailsFragment(JSONObject kindJSONObject) {
+        this.kindJSONObject = kindJSONObject;
     }
 
     @Override
@@ -120,123 +126,151 @@ public class AppListDetailsFragment extends Fragment {
         return appListDetailsFragmentView;
     }
 
-    private void initFragmentView() {
-        for (int i = 0;i<jsonObjectList.size();i++){
+    private final Handler getApkListHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
             try {
-                File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, jsonObjectList.get(i).getString("apk_name")
-                        +"_"+jsonObjectList.get(i).getString("apk_id")+ ".download");
-                if (downloadFile.exists()){
-                    jsonObjectList.get(i).put("download_flag",2);
-                }else {
-                    File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, jsonObjectList.get(i).getString("apk_name")
-                            +"_"+jsonObjectList.get(i).getString("apk_id")+ ".cache");
-                    if (cacheFile.exists()){
-                        jsonObjectList.get(i).put("download_flag",1);
-                    }else {
-                        jsonObjectList.get(i).put("download_flag",0);
+                JSONObject jsonObject = new JSONObject((String) message.obj);
+                if (jsonObject.getString("code").equals("1")){
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    jsonObjectList = new ArrayList<>();
+                    for (int i = 0;i<jsonArray.length();i++){
+                        jsonObjectList.add(jsonArray.getJSONObject(i));
                     }
+                    for (int i = 0;i<jsonObjectList.size();i++){
+                        try {
+                            File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, jsonObjectList.get(i).getString("apk_name")
+                                    +"_"+jsonObjectList.get(i).getString("apk_id")+ ".download");
+                            if (downloadFile.exists()){
+                                jsonObjectList.get(i).put("download_flag",2);
+                            }else {
+                                File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, jsonObjectList.get(i).getString("apk_name")
+                                        +"_"+jsonObjectList.get(i).getString("apk_id")+ ".cache");
+                                if (cacheFile.exists()){
+                                    jsonObjectList.get(i).put("download_flag",1);
+                                }else {
+                                    jsonObjectList.get(i).put("download_flag",0);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }else {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                 }
+                RecyclerView apk_file_RecyclerView = appListDetailsFragmentView.findViewById(R.id.apk_file_RecyclerView);
+                apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
+                apkRecyclerViewAdapter.setOnDownloadApkImageViewClickListener(new ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        try {
+                            downloadApkFile(context, jsonObjectList.get(position)
+                                    , jsonObjectList.get(position).getString("apk_download_url"), position);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                apkRecyclerViewAdapter.setOnInstallImageViewClickListener(new ApkRecyclerViewAdapter.InstallImageViewOnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        try {
+                            String apkFileName = jsonObjectList.get(position).getString("apk_name") + "_"+jsonObjectList.get(position).getString("apk_id");
+                            File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName+ ".cache");
+                            File apkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName+ ".apk");
+                            TmpFileUtil.copyFile(cacheFile,apkFile);
+                            ActivityUtil.installApk(context,apkFile);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                apkRecyclerViewAdapter.setOnDeleteImageViewClickListener(new ApkRecyclerViewAdapter.DeleteImageViewOnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Log.e(TAG, "onItemClick: 正在删除安装包" + jsonObjectList.get(position));
+                        try {
+                            String deleteFileName = jsonObjectList.get(position).getString("apk_name");;
+                            ProgressDialog progressDialog = new ProgressDialog(context);
+                            Window window = progressDialog.getWindow();
+                            if (window != null) {
+                                progressDialog.show();
+                                WindowManager.LayoutParams params = window.getAttributes();
+                                params.gravity = Gravity.CENTER;
+                                progressDialog.setCancelable(true);
+                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                progressDialog.setContentView(R.layout.exit_progress_bar);
+                                TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
+                                dialog_message_TextView.setText(new String("是否删除安装包： " + deleteFileName + "？"));
+                            }
+                            progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    progressDialog.dismiss();
+                                }
+                            });
+                            progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    try {
+                                        File deleteFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName+
+                                                "_"+jsonObjectList.get(position).getString("apk_id") + ".cache");
+                                        File deleteApkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName+
+                                                "_"+jsonObjectList.get(position).getString("apk_id") + ".apk");
+                                        if (deleteFile.delete()) {
+                                            jsonObjectList.get(position).put("download_flag", 0);
+                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                        }
+                                        if (deleteApkFile.delete()) {
+                                                jsonObjectList.get(position).put("download_flag", 0);
+                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    apkRecyclerViewAdapter.notifyDataSetChanged();
+                                    progressDialog.dismiss();
+                                }
+                            });
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "删除安装包失败！", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            super.handleMessage(message);
         }
-        RecyclerView apk_file_RecyclerView = appListDetailsFragmentView.findViewById(R.id.apk_file_RecyclerView);
-        apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
-        apkRecyclerViewAdapter.setOnDownloadApkImageViewClickListener(new ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener() {
+    };
+
+    private void initFragmentView() {
+        new Thread(new Runnable() {
             @Override
-            public void onItemClick(int position) {
+            public void run() {
+                Message message = new Message();
                 try {
-                    downloadNetDiskFile(context, jsonObjectList.get(position)
-                            , jsonObjectList.get(position).getString("apk_download_url"), position);
-                } catch (JSONException e) {
+                    Map<String, String> parameter = new HashMap<>();
+                    parameter.put("kind_link", kindJSONObject.getString("kind_link"));
+                    parameter.put("kind_name", kindJSONObject.getString("kind_name"));
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL+"/get_apk_list_by_kind_link",parameter);
+                    getApkListHandler.sendMessage(message);
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }
-        });
-        apkRecyclerViewAdapter.setOnInstallImageViewClickListener(new ApkRecyclerViewAdapter.InstallImageViewOnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                try {
-                    String apkFileName = jsonObjectList.get(position).getString("apk_name") + "_"+jsonObjectList.get(position).getString("apk_id");
-                    File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName+ ".cache");
-                    File apkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName+ ".apk");
-                    TmpFileUtil.copyFile(cacheFile,apkFile);
-                    ActivityUtil.installApk(context,apkFile);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        apkRecyclerViewAdapter.setOnDeleteImageViewClickListener(new ApkRecyclerViewAdapter.DeleteImageViewOnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Log.e(TAG, "onItemClick: 正在删除安装包" + jsonObjectList.get(position));
-                try {
-                    String deleteFileName = jsonObjectList.get(position).getString("apk_name");;
-                    ProgressDialog progressDialog = new ProgressDialog(context);
-                    Window window = progressDialog.getWindow();
-                    if (window != null) {
-                        progressDialog.show();
-                        WindowManager.LayoutParams params = window.getAttributes();
-                        params.gravity = Gravity.CENTER;
-                        progressDialog.setCancelable(true);
-                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        progressDialog.setContentView(R.layout.exit_progress_bar);
-                        TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                        dialog_message_TextView.setText(new String("是否删除安装包： " + deleteFileName + "？"));
-                    }
-                    progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            progressDialog.dismiss();
-                        }
-                    });
-                    progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            try {
-                                File deleteFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName+
-                                        "_"+jsonObjectList.get(position).getString("apk_id") + ".cache");
-                                File deleteApkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName+
-                                        "_"+jsonObjectList.get(position).getString("apk_id") + ".apk");
-                                if (deleteFile.delete()) {
-                                    try {
-                                        jsonObjectList.get(position).put("download_flag", 0);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
-                                }
-                                if (deleteApkFile.delete()) {
-                                    try {
-                                        jsonObjectList.get(position).put("download_flag", 0);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            apkRecyclerViewAdapter.notifyDataSetChanged();
-                            progressDialog.dismiss();
-                        }
-                    });
-                } catch (JSONException e) {
-                    Toast.makeText(context, "删除安装包失败！", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
-        });
-        apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
+        }).start();
     }
 
-    private void downloadNetDiskFile(Context context, JSONObject jsonObject, String fileDownloadUrl, int position) {
+    private void downloadApkFile(Context context, JSONObject jsonObject, String fileDownloadUrl, int position) {
         long startTime = System.currentTimeMillis();
         String  downFileName = null;
         try {
@@ -259,7 +293,7 @@ public class AppListDetailsFragment extends Fragment {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Message message = new Message();
                 message.what = position;
-                failDownloadNetDiskFileHandler.sendMessage(message);
+                failDownloadApkFileHandler.sendMessage(message);
                 Log.e(TAG, "download failed");
                 e.printStackTrace();
             }
@@ -305,7 +339,7 @@ public class AppListDetailsFragment extends Fragment {
                                 Message message = new Message();
                                 message.obj = jsonObject;
                                 message.what = position;
-                                downloadNetDiskFileHandler.sendMessage(message);
+                                downloadApkHandler.sendMessage(message);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

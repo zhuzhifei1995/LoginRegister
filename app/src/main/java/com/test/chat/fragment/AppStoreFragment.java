@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,37 +51,28 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void handleMessage(@NonNull Message message) {
             if (message.what == 1) {
                 try {
-                    JSONArray jsonArray = new JSONObject((String) message.obj).getJSONArray("message");
-                    List<Fragment> fragments = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONArray apkJSONArray = jsonArray.getJSONObject(i).getJSONArray("apk_list");
-                        List<JSONObject> jsonObjectList = new ArrayList<>();
-                        for (int j = 0; j < apkJSONArray.length(); j++) {
-                            JSONObject apkJSONObject = apkJSONArray.getJSONObject(j);
-                            apkJSONObject.put("download_flag", 0);
-                            jsonObjectList.add(apkJSONObject);
-                            String apkIcon = apkJSONObject.getString("apk_icon");
-                            String apkFileName = apkJSONObject.getString("apk_name") +"_"+apkJSONObject.getString("apk_id")+ ".cache";
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Bitmap bitmap = new HttpUtil(context).getImageBitmap(apkIcon);
-                                    ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_APK_ICON_PATH, apkFileName);
-                                }
-                            }).start();
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (jsonObject.getString("code").equals("1")){
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        List<Fragment> fragments = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject kindJSONObject = jsonArray.getJSONObject(i);
+                            AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment(kindJSONObject);
+                            fragments.add(appListDetailsFragment);
                         }
-                        AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment(jsonObjectList);
-                        fragments.add(appListDetailsFragment);
-                    }
-                    TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
-                    app_store_content_ViewPager.setAdapter(titleFragmentPagerView);
-                    app_store_title_TabLayout.setupWithViewPager(app_store_content_ViewPager);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        String kindName = jsonArray.getJSONObject(i).getString("kind_name");
-                        Objects.requireNonNull(app_store_title_TabLayout.getTabAt(i)).setText(kindName);
+                        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
+                        app_store_content_ViewPager.setAdapter(titleFragmentPagerView);
+                        app_store_title_TabLayout.setupWithViewPager(app_store_content_ViewPager);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            String kindName = jsonArray.getJSONObject(i).getString("kind_name");
+                            Objects.requireNonNull(app_store_title_TabLayout.getTabAt(i)).setText(kindName);
+                        }
                         app_store_SwipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
+                    }else {
+                        app_store_SwipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     app_store_SwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
@@ -104,14 +96,18 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         appStoreFragment = inflater.inflate(R.layout.fragment_app_store, container, false);
+        initTitleView();
+        initFragmentView();
+        return appStoreFragment;
+    }
+
+    private void initTitleView(){
         TextView top_title_TextView = appStoreFragment.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText(new String("应用商城"));
         ImageView title_left_ImageView = appStoreFragment.findViewById(R.id.title_left_ImageView);
         title_left_ImageView.setVisibility(View.GONE);
         ImageView title_right_ImageView = appStoreFragment.findViewById(R.id.title_right_ImageView);
         title_right_ImageView.setImageResource(R.drawable.down_button);
-        initFragmentView();
-        return appStoreFragment;
     }
 
     private void initFragmentView() {
@@ -128,7 +124,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 Message message = new Message();
                 try {
                     message.what = 1;
-                    message.obj = new HttpUtil(context).getRequest(ActivityUtil.NET_URL + "/get_all_kind");
+                    message.obj = new HttpUtil(context).getRequest(ActivityUtil.NET_URL + "/get_all_apk_kind");
                 } catch (IOException e) {
                     message.what = 0;
                     e.printStackTrace();

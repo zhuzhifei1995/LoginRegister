@@ -63,6 +63,8 @@ import okio.Sink;
 @SuppressLint("NotifyDataSetChanged")
 public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    public NetDiskFileFragment(){}
+
     private static final String TAG = ActivityUtil.TAG;
     private View netDiskFileFragmentView;
     private Context context;

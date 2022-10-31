@@ -33,6 +33,8 @@ import java.util.Objects;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class NetDiskFragment extends Fragment {
 
+    public NetDiskFragment(){}
+
     private static final String TAG = ActivityUtil.TAG;
     private View netDiskFragmentView;
     private Context context;
