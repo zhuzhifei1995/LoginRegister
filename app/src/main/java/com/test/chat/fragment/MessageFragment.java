@@ -46,9 +46,6 @@ import java.util.Map;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MessageFragment extends Fragment {
 
-    public MessageFragment(){
-    }
-
     private static final String TAG = ActivityUtil.TAG;
     private View messageFragmentView;
     private Context context;
@@ -98,6 +95,9 @@ public class MessageFragment extends Fragment {
         }
     };
     private Activity activity;
+
+    public MessageFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

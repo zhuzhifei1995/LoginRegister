@@ -86,6 +86,14 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         });
         JSONObject jsonObject = jsonObjectList.get(position);
         try {
+            String apkName = jsonObject.getString("apk_name");
+            Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_APK_ICON_PATH, apkName
+                    + "_" + jsonObjectList.get(position).getString("apk_id") + ".cache");
+            if (bitmap == null) {
+                apkRecyclerViewHolder.apk_icon_ImageView.setImageResource(R.mipmap.ic_launcher);
+            } else {
+                apkRecyclerViewHolder.apk_icon_ImageView.setImageBitmap(bitmap);
+            }
             int downloadFlag = jsonObject.getInt("download_flag");
             if (downloadFlag == 0) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.VISIBLE);
@@ -102,14 +110,6 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
                 apkRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.install_Button.setVisibility(View.GONE);
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.VISIBLE);
-            }
-            String apkName = jsonObject.getString("apk_name");
-            Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_APK_ICON_PATH, apkName
-                    +"_"+jsonObjectList.get(position).getString("apk_id")+ ".cache");
-            if (bitmap == null) {
-                apkRecyclerViewHolder.apk_icon_ImageView.setImageResource(R.mipmap.ic_launcher);
-            } else {
-                apkRecyclerViewHolder.apk_icon_ImageView.setImageBitmap(bitmap);
             }
             apkRecyclerViewHolder.apk_name_TextView.setText(apkName);
             apkRecyclerViewHolder.apk_size_TextView.setText(new String("应用大小：" + jsonObject.getString("apk_size")));
@@ -130,23 +130,23 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         this.downloadApkImageViewOnItemClickListener = downloadFileImageViewOnItemClickListener;
     }
 
-    public interface DownloadApkImageViewOnItemClickListener {
-        void onItemClick(int position);
-    }
-
     public void setOnInstallImageViewClickListener(ApkRecyclerViewAdapter.InstallImageViewOnItemClickListener installImageViewOnItemClickListener) {
         this.installImageViewOnItemClickListener = installImageViewOnItemClickListener;
-    }
-
-    public interface InstallImageViewOnItemClickListener {
-        void onItemClick(int position);
     }
 
     public void setOnDeleteImageViewClickListener(ApkRecyclerViewAdapter.DeleteImageViewOnItemClickListener deleteImageViewOnItemClickListener) {
         this.deleteImageViewOnItemClickListener = deleteImageViewOnItemClickListener;
     }
 
-    public interface  DeleteImageViewOnItemClickListener{
+    public interface DownloadApkImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface InstallImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface DeleteImageViewOnItemClickListener {
         void onItemClick(int position);
     }
 

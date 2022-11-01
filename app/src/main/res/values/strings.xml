@@ -87,5 +87,6 @@
     <string name="setting_bg">应用背景</string>
     <string name="check_apk_update">检测更新</string>
     <string name="install">安装</string>
+    <string name="loading">加载中，请稍后......</string>
 
 </resources>

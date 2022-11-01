@@ -15,9 +15,10 @@ import com.test.chat.util.ActivityUtil;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class BlankFragment extends Fragment {
 
-    public BlankFragment(){}
-
     private static final String TAG = ActivityUtil.TAG;
+
+    public BlankFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

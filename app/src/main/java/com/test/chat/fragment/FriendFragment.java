@@ -60,8 +60,6 @@ import java.util.Objects;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
-    public FriendFragment(){}
-
     private static final String TAG = ActivityUtil.TAG;
     private View friendFragmentView;
     private Activity activity;
@@ -185,6 +183,9 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
     };
 
+    public FriendFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activity = getActivity();
@@ -215,6 +216,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         friend_SwipeRefreshLayout = friendFragmentView.findViewById(R.id.friend_SwipeRefreshLayout);
         friend_SwipeRefreshLayout.setOnRefreshListener(this);
         friend_RecyclerView = friendFragmentView.findViewById(R.id.friend_RecyclerView);
+        friend_RecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
         LinearLayout fragment_friend_LinearLayout = friendFragmentView.findViewById(R.id.fragment_friend_LinearLayout);
         fragment_friend_LinearLayout.setOnClickListener(this);
         initTitleView();

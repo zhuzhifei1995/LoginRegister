@@ -1,9 +1,12 @@
 package com.test.chat.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 
@@ -51,4 +54,8 @@ public class ImageUtil {
         }
     }
 
+    public static void setImageBitmap(Bitmap bitmap, Context context, ImageView imageView) {
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+        imageView.setImageDrawable(bitmapDrawable);
+    }
 }

@@ -4,7 +4,6 @@ package com.test.chat.fragment;
 import static com.test.chat.util.ActivityUtil.showDownloadNotification;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -63,14 +62,12 @@ import okio.Sink;
 @SuppressLint("NotifyDataSetChanged")
 public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public NetDiskFileFragment(){}
-
     private static final String TAG = ActivityUtil.TAG;
     private View netDiskFileFragmentView;
     private Context context;
     private RecyclerView net_disk_RecyclerView;
     private List<JSONObject> fileJSONObjectList;
-    private SwipeRefreshLayout net_disk_SwipeRefreshLayout;
+    private View loading_layout;
     private FileRecyclerViewAdapter fileRecyclerViewAdapter;
     private final Handler downloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -146,8 +143,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                     fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
                     net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
                     net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
-                    net_disk_SwipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(context, "加载成功！", Toast.LENGTH_SHORT).show();
+                    loading_layout.setVisibility(View.GONE);
                     fileRecyclerViewAdapter.setOnDownloadFileImageViewClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
@@ -239,12 +235,14 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 }
             } catch (JSONException e) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                net_disk_SwipeRefreshLayout.setRefreshing(false);
                 e.printStackTrace();
             }
             super.handleMessage(message);
         }
     };
+
+    public NetDiskFileFragment() {
+    }
 
     private void downloadNetDiskFile(Context context, String downFileName, String fileDownloadUrl, int position) {
         long startTime = System.currentTimeMillis();
@@ -316,7 +314,6 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         context = getContext();
-        Activity activity = getActivity();
         super.onCreate(savedInstanceState);
     }
 
@@ -330,9 +327,11 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
 
     private void initFragmentView() {
         net_disk_RecyclerView = netDiskFileFragmentView.findViewById(R.id.net_disk_RecyclerView);
-        net_disk_SwipeRefreshLayout = netDiskFileFragmentView.findViewById(R.id.net_disk_SwipeRefreshLayout);
+        SwipeRefreshLayout net_disk_SwipeRefreshLayout = netDiskFileFragmentView.findViewById(R.id.net_disk_SwipeRefreshLayout);
         net_disk_SwipeRefreshLayout.setOnRefreshListener(this);
-        net_disk_SwipeRefreshLayout.setRefreshing(true);
+        loading_layout = netDiskFileFragmentView.findViewById(R.id.loading_layout);
+        net_disk_SwipeRefreshLayout.setRefreshing(false);
+        loading_layout.setVisibility(View.VISIBLE);
         net_disk_SwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         new Thread(new Runnable() {
@@ -349,7 +348,6 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        net_disk_SwipeRefreshLayout.setRefreshing(true);
         initFragmentView();
     }
 }

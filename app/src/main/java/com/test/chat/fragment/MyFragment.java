@@ -81,8 +81,6 @@ import okio.Sink;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
-    public MyFragment(){}
-
     private static final String TAG = ActivityUtil.TAG;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -391,6 +389,9 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     };
     private EditText dialog_nike_name_EditText;
+
+    public MyFragment() {
+    }
 
     private void installUpdateApk(File cacheFile, String downFileName) {
         File apkFile = new File(ActivityUtil.TMP_UPDATE_FILE_PATH, downFileName);
