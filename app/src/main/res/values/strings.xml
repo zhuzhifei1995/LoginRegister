@@ -74,7 +74,6 @@
     <string name="select_image_style">请选择一种上传头像的方式</string>
     <string name="exit_register">是否确认退出注册？</string>
     <string name="tip">提 示</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="input_nick_name">请输入昵称</string>
     <string name="update_password">修改密码</string>
@@ -86,7 +85,6 @@
     <string name="my_qr_code">我的二维码名片</string>
     <string name="setting_bg">应用背景</string>
     <string name="check_apk_update">检测更新</string>
-    <string name="install">安装</string>
     <string name="loading">加载中，请稍后......</string>
 
 </resources>

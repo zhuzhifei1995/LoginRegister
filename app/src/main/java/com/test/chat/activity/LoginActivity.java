@@ -223,8 +223,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 parameter.put("password", login_password);
                 parameter.put("android_id", ANDROID_ID);
                 Message message = new Message();
-                message.obj = new HttpUtil(context)
-                        .postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
+                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {

@@ -61,6 +61,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                         TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
                         app_store_content_ViewPager.setAdapter(titleFragmentPagerView);
                         app_store_title_TabLayout.setupWithViewPager(app_store_content_ViewPager);
+                        app_store_content_ViewPager.setOffscreenPageLimit(1);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             String kindName = jsonArray.getJSONObject(i).getString("kind_name");
                             Objects.requireNonNull(app_store_title_TabLayout.getTabAt(i)).setText(kindName);

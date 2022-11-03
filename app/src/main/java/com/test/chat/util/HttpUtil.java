@@ -13,6 +13,8 @@ import com.test.chat.R;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +34,7 @@ public class HttpUtil {
 
     private static final String TAG = ActivityUtil.TAG;
     private static final long READ_TIMEOUT = 60000;
-    private static final long WRITE_TIMEOUT = 6000;
+    private static final long WRITE_TIMEOUT = 60000;
     private static final long CONNECT_TIMEOUT = 60000;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String JSON_RESULT = "";
@@ -74,7 +76,7 @@ public class HttpUtil {
             }
             formBody = builder.build();
         }
-        Request request = null;
+        Request request;
         if (formBody == null) {
             request = new Request.Builder().url(url).get().build();
         } else {
@@ -92,6 +94,25 @@ public class HttpUtil {
             e.printStackTrace();
         }
         return JSON_RESULT;
+    }
+
+    public Bitmap getImageToBitmap(String imageUrl) {
+        Bitmap bitmap;
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(60000);
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            conn.connect();
+            InputStream inputStream = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+        } catch (Exception e) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.loading_progress);
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     public Bitmap getImageBitmap(String imageUrl) {

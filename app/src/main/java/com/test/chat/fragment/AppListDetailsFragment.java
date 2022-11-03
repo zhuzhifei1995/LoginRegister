@@ -35,6 +35,7 @@ import com.test.chat.adapter.ApkRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
+import com.test.chat.util.SilentInstallManager;
 import com.test.chat.util.TmpFileUtil;
 
 import org.json.JSONArray;
@@ -112,6 +113,14 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
             super.handleMessage(message);
         }
     };
+
+    private final Handler saveBitmapHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            ImageUtil.saveBitmapToTmpFile((Bitmap) message.obj, ActivityUtil.TMP_APK_ICON_PATH, message.getData().getString("apkFileName"));
+            super.handleMessage(message);
+        }
+    };
     private final Handler getApkListHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
@@ -137,8 +146,12 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                                 @Override
                                 public void run() {
                                     try {
-                                        Bitmap bitmap = new HttpUtil(context).getImageBitmap(apkIcon);
-                                        ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_APK_ICON_PATH, apkFileName);
+                                        Message msg= new Message();
+                                        Bundle bundle = new Bundle();
+                                        msg.obj = new HttpUtil(context).getImageToBitmap(apkIcon);
+                                        bundle.putString("apkFileName",apkFileName);
+                                        msg.setData(bundle);
+                                        saveBitmapHandler.sendMessage(msg);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -184,7 +197,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                             File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".cache");
                             File apkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".apk");
                             TmpFileUtil.copyFile(cacheFile, apkFile);
-                            ActivityUtil.installApk(context, apkFile);
+                            ActivityUtil.silentInstallApk(apkFile,context);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -292,16 +305,17 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("kind_link", kindJSONObject.getString("kind_link"));
                     parameter.put("kind_name", kindJSONObject.getString("kind_name"));
+                    parameter.put("kind_page","1");
                     message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_apk_list_by_kind_link", parameter);
-                    getApkListHandler.sendMessage(message);
                 } catch (Exception e) {
                     message.obj = "{" +
-                            "        'code': '1'," +
+                            "        'code': '0'," +
                             "        'status': '获取应用分类成功！'," +
                             "        'message': []" +
                             "    }";
                     e.printStackTrace();
                 }
+                getApkListHandler.sendMessage(message);
             }
         }).start();
     }

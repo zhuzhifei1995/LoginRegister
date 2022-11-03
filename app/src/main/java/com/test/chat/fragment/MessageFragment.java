@@ -157,7 +157,11 @@ public class MessageFragment extends Fragment {
                                 e.printStackTrace();
                             }
                             Message message = new Message();
-                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            try {
+                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             getMessageHandler.sendMessage(message);
                         }
                     }).start();

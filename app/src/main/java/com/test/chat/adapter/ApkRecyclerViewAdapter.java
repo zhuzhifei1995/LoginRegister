@@ -64,7 +64,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
                 }
             }
         });
-        apkRecyclerViewHolder.install_Button.setOnClickListener(new View.OnClickListener() {
+        apkRecyclerViewHolder.install_ImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (installImageViewOnItemClickListener != null) {
@@ -98,17 +98,17 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             if (downloadFlag == 0) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.VISIBLE);
                 apkRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
-                apkRecyclerViewHolder.install_Button.setVisibility(View.GONE);
+                apkRecyclerViewHolder.install_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
             } else if (downloadFlag == 1) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.delete_ImageView.setVisibility(View.VISIBLE);
-                apkRecyclerViewHolder.install_Button.setVisibility(View.GONE);
+                apkRecyclerViewHolder.install_ImageView.setVisibility(View.VISIBLE);
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
             } else if (downloadFlag == 2) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);
-                apkRecyclerViewHolder.install_Button.setVisibility(View.GONE);
+                apkRecyclerViewHolder.install_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.VISIBLE);
             }
             apkRecyclerViewHolder.apk_name_TextView.setText(apkName);
@@ -159,7 +159,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         private final LinearLayout root_apk_LinearLayout;
         private final ImageView delete_ImageView;
         private final ImageView download_ImageView;
-        private final Button install_Button;
+        private final ImageView install_ImageView;
         private final ProgressBar downing_ImageView;
 
         public ApkRecyclerViewHolder(View view) {
@@ -171,7 +171,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             root_apk_LinearLayout = view.findViewById(R.id.root_apk_LinearLayout);
             delete_ImageView = view.findViewById(R.id.delete_ImageView);
             download_ImageView = view.findViewById(R.id.download_ImageView);
-            install_Button = view.findViewById(R.id.install_Button);
+            install_ImageView = view.findViewById(R.id.install_ImageView);
             downing_ImageView = view.findViewById(R.id.downing_ProgressBar);
         }
     }

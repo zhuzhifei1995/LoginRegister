@@ -9,6 +9,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,10 +22,13 @@ import androidx.core.content.FileProvider;
 import com.test.chat.R;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressLint("PrivateApi")
 public class ActivityUtil {
     //    连接手机的热点时
 //    public static String NET_URL = "http://192.168.229.139:8080";
@@ -145,6 +149,33 @@ public class ActivityUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static boolean silentInstallApk(File apkFile, Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Class<? extends PackageManager> packageManagerClass = packageManager.getClass();
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Class<?> packageInstallObserverClass = Class.forName("android.app.PackageInstallObserver");
+                Constructor<?> constructor =packageInstallObserverClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                Object installObserver =constructor.newInstance();
+                Method method = packageManagerClass.getDeclaredMethod("installPackage",
+                        Uri.class,packageInstallObserverClass,int.class,String.class);
+                method.setAccessible(true);
+                method.invoke(packageManager,Uri.fromFile(apkFile),installObserver,2,null);
+            }else {
+                Method method = packageManagerClass.getDeclaredMethod("installPackage", Uri.class,
+                        Class.forName("android.content.pm.IPackageInstallObserver"),int.class,String.class);
+                method.setAccessible(true);
+                method.invoke(packageManager,Uri.fromFile(apkFile),null,2,null);
+            }
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

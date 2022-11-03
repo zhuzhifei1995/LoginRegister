@@ -1055,7 +1055,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                         message.what = 0;
                     }
                     message.obj = new HttpUtil(context).postRequest
-                            (ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                                (ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
                     searchFriendHandler.sendMessage(message);
                 }
             }).start();

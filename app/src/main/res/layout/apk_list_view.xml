@@ -73,14 +73,13 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/install_Button"
-                android:layout_width="51dp"
-                android:layout_height="21dp"
+            <ImageView
+                android:id="@+id/install_ImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:background="@drawable/button_bg"
-                android:text="@string/install"
-                android:visibility="visible" />
+                android:background="@drawable/install_button"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/delete_ImageView"
@@ -97,6 +96,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/download_button"
+                android:visibility="gone"
                 tools:ignore="ContentDescription" />
 
             <ProgressBar
