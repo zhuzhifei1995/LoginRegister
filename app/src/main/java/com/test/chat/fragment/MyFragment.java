@@ -368,7 +368,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 photo_my_ImageView.setImageBitmap(bitmap);
                 initMyFragmentView();
                 my_SwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(message);
         }
@@ -391,7 +390,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                         SharedPreferencesUtils.putString(context, "qr_code_url", userJSONObject.getString("qr_code_url"), "user");
                         saveUserPhoto(userJSONObject.getString("photo_url"), 1);
                         saveUserPhoto(userJSONObject.getString("qr_code_url"), 2);
-
+                        Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     }

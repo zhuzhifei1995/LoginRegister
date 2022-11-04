@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressLint("RecyclerView")
 public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerViewAdapter.ApkRecyclerViewHolder> {
 
     private static final String TAG = ActivityUtil.TAG;
@@ -45,7 +46,6 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     }
 
     @Override
-    @SuppressLint("RecyclerView")
     public void onBindViewHolder(@NotNull ApkRecyclerViewHolder apkRecyclerViewHolder, int position) {
         apkRecyclerViewHolder.root_apk_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
