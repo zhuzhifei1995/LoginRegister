@@ -170,45 +170,48 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private final Handler updatePasswordHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    SharedPreferencesUtils.putString(context, "password", "", "user");
-                    SharedPreferencesUtils.putBoolean(context, "is_remember_password", false, "user");
-                    progressDialog.dismiss();
-                    Window window = progressDialog.getWindow();
-                    if (window != null) {
-                        WindowManager.LayoutParams params = window.getAttributes();
-                        params.gravity = Gravity.CENTER;
-                        progressDialog.setCancelable(false);
-                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        progressDialog.show();
-                        progressDialog.setContentView(R.layout.loading_progress_bar);
-                        TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
-                        prompt_TextView.setText("退出登陆中.......");
-                    }
-                    Toast.makeText(context, "修改密码成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(2000);
-                                loginOutHandler.sendMessage(new Message());
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        SharedPreferencesUtils.putString(context, "password", "", "user");
+                        SharedPreferencesUtils.putBoolean(context, "is_remember_password", false, "user");
+                        progressDialog.dismiss();
+                        Window window = progressDialog.getWindow();
+                        if (window != null) {
+                            WindowManager.LayoutParams params = window.getAttributes();
+                            params.gravity = Gravity.CENTER;
+                            progressDialog.setCancelable(false);
+                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            progressDialog.show();
+                            progressDialog.setContentView(R.layout.loading_progress_bar);
+                            TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
+                            prompt_TextView.setText("退出登陆中.......");
                         }
-                    }).start();
-                } else {
-                    progressDialog.dismiss();
+                        Toast.makeText(context, "修改密码成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                    loginOutHandler.sendMessage(new Message());
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+                    } else {
+                        Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
                     Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                progressDialog.dismiss();
+            }else {
                 Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
+            progressDialog.dismiss();
             super.handleMessage(message);
         }
     };
@@ -216,76 +219,83 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            super.handleMessage(message);
-            Log.e(TAG, "handleMessage: " + message.obj);
-            try {
-                JSONObject jsonObject = new JSONObject((String) message.obj);
-                if (jsonObject.getString("code").equals("1")) {
-                    String phone = jsonObject.getString("phone");
-                    String verificationCode = jsonObject.getString("verification_code");
-                    progressDialog.dismiss();
-                    Window window = progressDialog.getWindow();
-                    if (window != null) {
-                        WindowManager.LayoutParams params = window.getAttributes();
-                        params.gravity = Gravity.CENTER;
-                        progressDialog.setCancelable(false);
-                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        progressDialog.show();
-                        progressDialog.setContentView(R.layout.verification_code_progress_bar);
-                        window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-                        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        update_verification_code_EditText = progressDialog.findViewById(R.id.update_verification_code_EditText);
-                        update_verification_code_EditText.requestFocus();
-                    }
-                    TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
-                    cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            progressDialog.dismiss();
+            if(message.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (jsonObject.getString("code").equals("1")) {
+                        String phone = jsonObject.getString("phone");
+                        String verificationCode = jsonObject.getString("verification_code");
+                        progressDialog.dismiss();
+                        Window window = progressDialog.getWindow();
+                        if (window != null) {
+                            WindowManager.LayoutParams params = window.getAttributes();
+                            params.gravity = Gravity.CENTER;
+                            progressDialog.setCancelable(false);
+                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            progressDialog.show();
+                            progressDialog.setContentView(R.layout.verification_code_progress_bar);
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            update_verification_code_EditText = progressDialog.findViewById(R.id.update_verification_code_EditText);
+                            update_verification_code_EditText.requestFocus();
                         }
-                    });
-                    TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
-                    confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (verificationCode.equals(update_verification_code_EditText.getText().toString())) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Map<String, String> parameter = new HashMap<>();
-                                        parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
-                                        parameter.put("phone", phone);
-                                        new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_phone_by_id", parameter);
-                                    }
-                                }).start();
-                                SharedPreferencesUtils.putString(context, "phone", phone, "user");
-                                Toast.makeText(context, "修改绑定的手机号成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(2000);
-                                            loginOutHandler.sendMessage(new Message());
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }).start();
-                            } else {
-                                Toast.makeText(context, "验证码输入错误！", Toast.LENGTH_SHORT).show();
+                        TextView cancel_update_TextView = progressDialog.findViewById(R.id.cancel_update_TextView);
+                        cancel_update_TextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                progressDialog.dismiss();
                             }
-                        }
-                    });
+                        });
+                        TextView confirm_update_TextView = progressDialog.findViewById(R.id.confirm_update_TextView);
+                        confirm_update_TextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (verificationCode.equals(update_verification_code_EditText.getText().toString())) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Map<String, String> parameter = new HashMap<>();
+                                            parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
+                                            parameter.put("phone", phone);
+                                            try {
+                                                new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_phone_by_id", parameter);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
+                                    SharedPreferencesUtils.putString(context, "phone", phone, "user");
+                                    Toast.makeText(context, "修改绑定的手机号成功，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(2000);
+                                                loginOutHandler.sendMessage(new Message());
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
+                                } else {
+                                    Toast.makeText(context, "验证码输入错误！", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
-                } else {
-                    Toast.makeText(context, "修改失败，该号码已绑定账号！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "修改失败，该号码已绑定账号！", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
             }
+            super.handleMessage(message);
         }
     };
     private EditText update_phone_number_EditText;
@@ -322,19 +332,23 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private final Handler updateNikeNameHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NotNull Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    SharedPreferencesUtils.putString(context, "nick_name", jsonObject.getString("nick_name"), "user");
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
-                    initMyFragmentView();
-                } else {
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        SharedPreferencesUtils.putString(context, "nick_name", jsonObject.getString("nick_name"), "user");
+                        Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                        initMyFragmentView();
+                    } else {
+                        Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
                     Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
+            }else {
                 Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
             super.handleMessage(message);
             progressDialog.dismiss();
@@ -362,29 +376,33 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
-                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
-                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
-                    SharedPreferencesUtils.putString(context, "qr_code_url", userJSONObject.getString("qr_code_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"), 1);
-                    saveUserPhoto(userJSONObject.getString("qr_code_url"), 2);
-                } else {
-                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
-                    my_SwipeRefreshLayout.setRefreshing(false);
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                        SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
+                        SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
+                        SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
+                        SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
+                        SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
+                        SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
+                        SharedPreferencesUtils.putString(context, "qr_code_url", userJSONObject.getString("qr_code_url"), "user");
+                        saveUserPhoto(userJSONObject.getString("photo_url"), 1);
+                        saveUserPhoto(userJSONObject.getString("qr_code_url"), 2);
+
+                    } else {
+                        Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                Toast.makeText(context, "刷新失败！", Toast.LENGTH_SHORT).show();
-                my_SwipeRefreshLayout.setRefreshing(false);
-                e.printStackTrace();
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
+            my_SwipeRefreshLayout.setRefreshing(false);
             super.handleMessage(message);
         }
     };
@@ -696,7 +714,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                             parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                             parameter.put("nick_name", newNickName);
                             Message message = new Message();
-                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_user_nike_name_by_id", parameter);
+                            try {
+                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_user_nike_name_by_id", parameter);
+                                message.what = 1;
+                            } catch (IOException e) {
+                                message.what = 0;
+                                e.printStackTrace();
+                            }
                             updateNikeNameHandler.sendMessage(message);
                         }
                     }).start();
@@ -781,7 +805,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                                 parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                                                 parameter.put("password", newPassword);
                                                 Message message = new Message();
-                                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_password_by_id", parameter);
+                                                try {
+                                                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/update_password_by_id", parameter);
+                                                    message.what = 1;
+                                                } catch (IOException e) {
+                                                    message.what = 0;
+                                                    e.printStackTrace();
+                                                }
                                                 updatePasswordHandler.sendMessage(message);
                                             }
                                         }).start();
@@ -916,7 +946,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                             Map<String, String> parameter = new HashMap<>();
                                             parameter.put("phone", newPhone);
                                             Message message = new Message();
-                                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
+                                            try {
+                                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
+                                                message.what = 1;
+                                            } catch (IOException e) {
+                                                message.what = 0;
+                                                e.printStackTrace();
+                                            }
                                             codeHandler.sendMessage(message);
                                         }
                                     }).start();
@@ -1153,7 +1189,13 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("id", id);
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 mySwipeRefreshHandler.sendMessage(message);
             }
         }).start();

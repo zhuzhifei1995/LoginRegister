@@ -38,6 +38,7 @@ import com.test.chat.util.SharedPreferencesUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,33 +59,37 @@ public class LoginActivity extends Activity implements OnClickListener {
     private final Handler loginHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONObject user = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(context, "create_time", user.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(context, "password", user.getString("password"), "user");
-                    SharedPreferencesUtils.putString(context, "id", user.getInt("id") + "", "user");
-                    SharedPreferencesUtils.putString(context, "login_number", user.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(context, "nick_name", user.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(context, "phone", user.getString("phone"), "user");
-                    SharedPreferencesUtils.putBoolean(context, "status", true, "user");
-                    SharedPreferencesUtils.putBoolean(context, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
-                    SharedPreferencesUtils.putString(context, "photo", user.getString("photo"), "user");
-                    SharedPreferencesUtils.putString(context, "qr_code_url", user.getString("qr_code_url"), "user");
-                    saveUserPhoto(user.getString("photo"), "photo.png.cache");
-                    saveUserPhoto(user.getString("qr_code_url"), "qr_code.png.cache");
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("status", jsonObject.getString("status"));
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONObject user = jsonObject.getJSONObject("message");
+                        SharedPreferencesUtils.putString(context, "create_time", user.getString("create_time"), "user");
+                        SharedPreferencesUtils.putString(context, "password", user.getString("password"), "user");
+                        SharedPreferencesUtils.putString(context, "id", user.getInt("id") + "", "user");
+                        SharedPreferencesUtils.putString(context, "login_number", user.getString("login_number"), "user");
+                        SharedPreferencesUtils.putString(context, "nick_name", user.getString("nick_name"), "user");
+                        SharedPreferencesUtils.putString(context, "phone", user.getString("phone"), "user");
+                        SharedPreferencesUtils.putBoolean(context, "status", true, "user");
+                        SharedPreferencesUtils.putBoolean(context, "is_remember_password", remember_password_CheckBox.isChecked(), "user");
+                        SharedPreferencesUtils.putString(context, "photo", user.getString("photo"), "user");
+                        SharedPreferencesUtils.putString(context, "qr_code_url", user.getString("qr_code_url"), "user");
+                        saveUserPhoto(user.getString("photo"), "photo.png.cache");
+                        saveUserPhoto(user.getString("qr_code_url"), "qr_code.png.cache");
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.putExtra("status", jsonObject.getString("status"));
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
+            }else {
                 Toast.makeText(context, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
             progressDialog.dismiss();
         }
@@ -223,7 +228,13 @@ public class LoginActivity extends Activity implements OnClickListener {
                 parameter.put("password", login_password);
                 parameter.put("android_id", ANDROID_ID);
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/login_user", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {

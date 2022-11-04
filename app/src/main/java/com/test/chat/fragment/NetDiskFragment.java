@@ -49,6 +49,8 @@ public class NetDiskFragment extends Fragment {
     }
 
     private void initFragmentView() {
+        ActivityUtil.setLinearLayoutBackground(netDiskFragmentView.findViewById(R.id.net_disk_main_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         TextView top_title_TextView = netDiskFragmentView.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("我的网盘");
         ImageView title_left_ImageView = netDiskFragmentView.findViewById(R.id.title_left_ImageView);

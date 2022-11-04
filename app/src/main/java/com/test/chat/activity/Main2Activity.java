@@ -60,6 +60,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -271,7 +272,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                             e.printStackTrace();
                         }
                         Message message = new Message();
-                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                        try {
+                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         getMessageHandler.sendMessage(message);
                     }
                 }).start();
@@ -429,7 +434,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                         Map<String, String> parameter = new HashMap<>();
                         parameter.put("id", id);
                         Message message = new Message();
-                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                        try {
+                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         mySwipeRefreshHandler.sendMessage(message);
                     }
                 }).start();
@@ -520,7 +529,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                                 e.printStackTrace();
                             }
                             Message message = new Message();
-                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            try {
+                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             getMessageHandler.sendMessage(message);
                         }
                     }).start();
@@ -535,7 +548,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         Map<String, String> parameter = new HashMap<>();
         parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
         Message message = new Message();
-        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+        try {
+            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         friendShowHandler.sendMessage(message);
     }
 
@@ -1054,8 +1071,11 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     } else {
                         message.what = 0;
                     }
-                    message.obj = new HttpUtil(context).postRequest
-                                (ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                    try {
+                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     searchFriendHandler.sendMessage(message);
                 }
             }).start();

@@ -52,6 +52,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,43 +109,49 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                final JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    initViewVerificationCode();
-                    String verification_code = jsonObject.getString("verification_code");
-                    Toast.makeText(context, "已经向您手机发送验证码，请查看", Toast.LENGTH_SHORT).show();
-                    verificationCode = verification_code;
-                } else {
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    final JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        initViewVerificationCode();
+                        String verification_code = jsonObject.getString("verification_code");
+                        Toast.makeText(context, "已经向您手机发送验证码，请查看", Toast.LENGTH_SHORT).show();
+                        verificationCode = verification_code;
+                    } else {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+                        Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 Thread.sleep(1000);
                             } catch (Exception e) {
+                                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
                         }
                     }).start();
-                    Toast.makeText(context, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
-                progressDialog.dismiss();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1000);
-                            progressDialog.dismiss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+
+            }else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
+            progressDialog.dismiss();
         }
     };
 
@@ -521,8 +528,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("phone", phone);
                 Message message = new Message();
-                message.obj = new HttpUtil(context)
-                        .postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/phone_is_register_user", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 codeHandler.sendMessage(message);
             }
         }).start();

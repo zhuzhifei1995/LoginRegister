@@ -51,6 +51,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,44 +68,48 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
-                for (int i = 0; i < messagesJSONArray.length(); i++) {
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
-                        final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
-                        final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
-                                if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
+            if (message.what ==1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
+                    for (int i = 0; i < messagesJSONArray.length(); i++) {
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
+                            final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
+                            final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
+                                    if (photoBitmap != null) {
+                                        ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
+                                    }
                                 }
-                            }
-                        }).start();
-                    }
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
-                        final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
-                        final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                            }).start();
+                        }
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
+                            final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
+                            final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        }).start();
+                            }).start();
+                        }
                     }
+                    TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
+                } catch (Exception e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
-            } catch (Exception e) {
+            }else {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
             }
             super.handleMessage(message);
         }
@@ -116,7 +121,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         public void handleMessage(Message message) {
             if (message.what == 1) {
                 Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
+            } else if(message.what == 2){
                 try {
                     String friendJSON = (String) message.obj;
                     JSONObject jsonObject = new JSONObject(friendJSON);
@@ -130,6 +135,8 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
             super.handleMessage(message);
@@ -147,35 +154,39 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
-                    userJSONObjectList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        final JSONObject user = jsonArray.getJSONObject(i);
-                        userJSONObjectList.add(user);
-                        final String photo = user.getString("photo");
-                        String[] photos = photo.split("/");
-                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
-                            }
-                        }).start();
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
+                        userJSONObjectList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            final JSONObject user = jsonArray.getJSONObject(i);
+                            userJSONObjectList.add(user);
+                            final String photo = user.getString("photo");
+                            String[] photos = photo.split("/");
+                            final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
+                                    ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
+                                }
+                            }).start();
+                        }
+                        Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                        friend_SwipeRefreshLayout.setRefreshing(false);
                     }
-                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "刷新失败，网络异常！", Toast.LENGTH_LONG).show();
                     friend_SwipeRefreshLayout.setRefreshing(false);
+                    Log.e(TAG, "获取数据失败！");
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
+            }else {
                 Toast.makeText(context, "刷新失败，网络异常！", Toast.LENGTH_LONG).show();
-                friend_SwipeRefreshLayout.setRefreshing(false);
-                Log.e(TAG, "获取数据失败！");
-                e.printStackTrace();
             }
             initFriendRecyclerView();
             friend_SwipeRefreshLayout.setRefreshing(false);
@@ -280,7 +291,13 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 friendShowHandler.sendMessage(message);
             }
         }).start();
@@ -339,8 +356,13 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         message.what = 1;
                     } else {
                         message.what = 0;
+                        try {
+                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            message.what = 3;
+                        }
                     }
-                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
                     searchFriendHandler.sendMessage(message);
                 }
             }).start();
@@ -429,7 +451,13 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                 e.printStackTrace();
                             }
                             Message message = new Message();
-                            message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                            try {
+                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                                message.what = 1;
+                            } catch (IOException e) {
+                                message.what =0;
+                                e.printStackTrace();
+                            }
                             getMessageHandler.sendMessage(message);
                         }
                     }).start();

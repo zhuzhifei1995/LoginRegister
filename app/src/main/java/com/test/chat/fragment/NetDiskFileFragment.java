@@ -109,133 +109,137 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
     private final Handler getDownloadFilesHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
-            try {
-                JSONObject jsonObject = new JSONObject((String) message.obj);
-                JSONArray jsonArray = jsonObject.getJSONArray("message");
-                fileJSONObjectList = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject fileJSONObject = jsonArray.getJSONObject(i);
-                    String cacheFileName = fileJSONObject.getString("file_name") + ".cache";
-                    File cacheFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, cacheFileName);
-                    if (cacheFile.exists()) {
-                        String fileMD5 = TmpFileUtil.getFileMD5(ActivityUtil.TMP_DOWNLOAD_PATH, cacheFileName);
-                        if (fileMD5 != null) {
-                            if (fileMD5.equals(fileJSONObject.getString("md5_number"))) {
-                                fileJSONObject.put("download_flag", 1);
+            if (message.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    fileJSONObjectList = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject fileJSONObject = jsonArray.getJSONObject(i);
+                        String cacheFileName = fileJSONObject.getString("file_name") + ".cache";
+                        File cacheFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, cacheFileName);
+                        if (cacheFile.exists()) {
+                            String fileMD5 = TmpFileUtil.getFileMD5(ActivityUtil.TMP_DOWNLOAD_PATH, cacheFileName);
+                            if (fileMD5 != null) {
+                                if (fileMD5.equals(fileJSONObject.getString("md5_number"))) {
+                                    fileJSONObject.put("download_flag", 1);
+                                } else {
+                                    fileJSONObject.put("download_flag", 2);
+                                }
                             } else {
-                                fileJSONObject.put("download_flag", 2);
+                                fileJSONObject.put("download_flag", 1);
                             }
+                            Log.e(TAG, "handleMessage: " + fileMD5);
                         } else {
-                            fileJSONObject.put("download_flag", 1);
+                            File downloadFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") + ".download");
+                            if (downloadFile.exists()) {
+                                fileJSONObject.put("download_flag", 3);
+                            } else {
+                                fileJSONObject.put("download_flag", 0);
+                            }
                         }
-                        Log.e(TAG, "handleMessage: " + fileMD5);
-                    } else {
-                        File downloadFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, fileJSONObject.getString("file_name") + ".download");
-                        if (downloadFile.exists()) {
-                            fileJSONObject.put("download_flag", 3);
-                        } else {
-                            fileJSONObject.put("download_flag", 0);
-                        }
+                        fileJSONObjectList.add(fileJSONObject);
                     }
-                    fileJSONObjectList.add(fileJSONObject);
-                }
-                if (fileJSONObjectList != null) {
-                    fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
-                    net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
-                    loading_layout.setVisibility(View.GONE);
-                    fileRecyclerViewAdapter.setOnDownloadFileImageViewClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Log.e(TAG, "onItemClick: 开始下载" + fileJSONObjectList.get(position));
-                            try {
-                                fileRecyclerViewAdapter.notifyDataSetChanged();
-                                JSONObject fileJSONObject = fileJSONObjectList.get(position);
-                                int download_flag = fileJSONObject.getInt("download_flag");
-                                if (download_flag == 0) {
-                                    downloadNetDiskFile(context, fileJSONObject.getString("file_name"),
-                                            fileJSONObject.getString("file_download_url"), position);
-                                } else {
-                                    Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(context, "创建文件下载任务失败！", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    fileRecyclerViewAdapter.setOnUpdateFileImageViewClickListener(new FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Log.e(TAG, "onItemClick: 开始更新" + fileJSONObjectList.get(position));
-                            try {
-                                fileRecyclerViewAdapter.notifyDataSetChanged();
-                                JSONObject fileJSONObject = fileJSONObjectList.get(position);
-                                int download_flag = fileJSONObject.getInt("download_flag");
-                                if (download_flag == 2) {
-                                    downloadNetDiskFile(context, fileJSONObject.getString("file_name"),
-                                            fileJSONObject.getString("file_download_url"), position);
-                                } else {
-                                    Toast.makeText(context, "文件正在更新中！", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(context, "创建文件更新任务失败！", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    fileRecyclerViewAdapter.setOnDeleteFileImageViewClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
-                            try {
-                                String deleteFileName = fileJSONObjectList.get(position).getString("file_name");
-                                ProgressDialog progressDialog = new ProgressDialog(context);
-                                Window window = progressDialog.getWindow();
-                                if (window != null) {
-                                    progressDialog.show();
-                                    WindowManager.LayoutParams params = window.getAttributes();
-                                    params.gravity = Gravity.CENTER;
-                                    progressDialog.setCancelable(true);
-                                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                    progressDialog.setContentView(R.layout.exit_progress_bar);
-                                    TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                                    dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
-                                }
-                                progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        progressDialog.dismiss();
+                    if (fileJSONObjectList != null) {
+                        fileRecyclerViewAdapter = new FileRecyclerViewAdapter(fileJSONObjectList);
+                        net_disk_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        net_disk_RecyclerView.setAdapter(fileRecyclerViewAdapter);
+                        loading_layout.setVisibility(View.GONE);
+                        fileRecyclerViewAdapter.setOnDownloadFileImageViewClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Log.e(TAG, "onItemClick: 开始下载" + fileJSONObjectList.get(position));
+                                try {
+                                    fileRecyclerViewAdapter.notifyDataSetChanged();
+                                    JSONObject fileJSONObject = fileJSONObjectList.get(position);
+                                    int download_flag = fileJSONObject.getInt("download_flag");
+                                    if (download_flag == 0) {
+                                        downloadNetDiskFile(context, fileJSONObject.getString("file_name"),
+                                                fileJSONObject.getString("file_download_url"), position);
+                                    } else {
+                                        Toast.makeText(context, "文件正在下载中！", Toast.LENGTH_SHORT).show();
                                     }
-                                });
-                                progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, deleteFileName + ".cache");
-                                        if (deleteFile.delete()) {
-                                            try {
-                                                fileJSONObjectList.get(position).put("download_flag", 0);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                            Toast.makeText(context, "删除文件：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(context, "删除文件：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    Toast.makeText(context, "创建文件下载任务失败！", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        fileRecyclerViewAdapter.setOnUpdateFileImageViewClickListener(new FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Log.e(TAG, "onItemClick: 开始更新" + fileJSONObjectList.get(position));
+                                try {
+                                    fileRecyclerViewAdapter.notifyDataSetChanged();
+                                    JSONObject fileJSONObject = fileJSONObjectList.get(position);
+                                    int download_flag = fileJSONObject.getInt("download_flag");
+                                    if (download_flag == 2) {
+                                        downloadNetDiskFile(context, fileJSONObject.getString("file_name"),
+                                                fileJSONObject.getString("file_download_url"), position);
+                                    } else {
+                                        Toast.makeText(context, "文件正在更新中！", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    Toast.makeText(context, "创建文件更新任务失败！", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        fileRecyclerViewAdapter.setOnDeleteFileImageViewClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Log.e(TAG, "onItemClick: 正在删除" + fileJSONObjectList.get(position));
+                                try {
+                                    String deleteFileName = fileJSONObjectList.get(position).getString("file_name");
+                                    ProgressDialog progressDialog = new ProgressDialog(context);
+                                    Window window = progressDialog.getWindow();
+                                    if (window != null) {
+                                        progressDialog.show();
+                                        WindowManager.LayoutParams params = window.getAttributes();
+                                        params.gravity = Gravity.CENTER;
+                                        progressDialog.setCancelable(true);
+                                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        progressDialog.setContentView(R.layout.exit_progress_bar);
+                                        TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
+                                        dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
+                                    }
+                                    progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            progressDialog.dismiss();
                                         }
-                                        fileRecyclerViewAdapter.notifyDataSetChanged();
-                                        progressDialog.dismiss();
-                                    }
-                                });
-                            } catch (JSONException e) {
-                                Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
+                                    });
+                                    progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            File deleteFile = new File(ActivityUtil.TMP_DOWNLOAD_PATH, deleteFileName + ".cache");
+                                            if (deleteFile.delete()) {
+                                                try {
+                                                    fileJSONObjectList.get(position).put("download_flag", 0);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Toast.makeText(context, "删除文件：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(context, "删除文件：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                            }
+                                            fileRecyclerViewAdapter.notifyDataSetChanged();
+                                            progressDialog.dismiss();
+                                        }
+                                    });
+                                } catch (JSONException e) {
+                                    Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
+            }else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
             super.handleMessage(message);
         }
@@ -340,7 +344,13 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                 Message message = new Message();
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("login_number", SharedPreferencesUtils.getString(context, "login_number", "", "login_number"));
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_download_files", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_download_files", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 getDownloadFilesHandler.sendMessage(message);
             }
         }).start();

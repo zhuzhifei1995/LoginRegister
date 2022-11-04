@@ -65,7 +65,7 @@ public class HttpUtil {
         return JSON_RESULT;
     }
 
-    public String postRequest(String url, Map<String, String> parameter) {
+    public String postRequest(String url, Map<String, String> parameter) throws IOException {
         Log.e(TAG, "请求的地址链接：" + url);
         Log.e(TAG, "请求的地址参数：" + parameter);
         FormBody formBody = null;
@@ -82,17 +82,17 @@ public class HttpUtil {
         } else {
             request = new Request.Builder().url(url).post(formBody).build();
         }
-        try {
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                throw new Exception("Unexpected code " + response);
-            }
-            JSON_RESULT = Objects.requireNonNull(response.body()).string();
-            Log.e(TAG, JSON_RESULT);
-        } catch (Exception e) {
-            Log.e(TAG, "HttpUtils postRequest()出错");
-            e.printStackTrace();
+//        try {
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) {
+            throw new IOException("Unexpected code " + response);
         }
+        JSON_RESULT = Objects.requireNonNull(response.body()).string();
+        Log.e(TAG, JSON_RESULT);
+//        } catch (Exception e) {
+//            Log.e(TAG, "HttpUtils postRequest()出错");
+//            e.printStackTrace();
+//        }
         return JSON_RESULT;
     }
 

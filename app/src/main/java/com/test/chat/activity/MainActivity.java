@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,33 +85,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final Handler friendShowHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
-                    userJSONObjectList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        final JSONObject user = jsonArray.getJSONObject(i);
-                        userJSONObjectList.add(user);
-                        final String photo = user.getString("photo");
-                        String[] photos = photo.split("/");
-                        final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
-                                ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
-                            }
-                        }).start();
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        TmpFileUtil.writeJSONToFile(jsonArray.toString(), ActivityUtil.TMP_FRIEND_FILE_PATH, "friend.json");
+                        userJSONObjectList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            final JSONObject user = jsonArray.getJSONObject(i);
+                            userJSONObjectList.add(user);
+                            final String photo = user.getString("photo");
+                            String[] photos = photo.split("/");
+                            final String tmpBitmapFileName = photos[photos.length - 1] + ".cache";
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap bitmap = new HttpUtil(context).getImageBitmap(photo);
+                                    ImageUtil.saveBitmapToTmpFile(bitmap, ActivityUtil.TMP_FRIEND_FILE_PATH, tmpBitmapFileName);
+                                }
+                            }).start();
+                        }
                     }
+                    Toast.makeText(context, "初始化数据成功！", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                    e.printStackTrace();
                 }
-                Toast.makeText(context, "初始化数据成功！", Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                Toast.makeText(context, "加载失败，请连接网络！", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-                e.printStackTrace();
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
             super.handleMessage(message);
@@ -121,7 +126,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void handleMessage(Message message) {
             if (message.what == 1) {
                 Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else {
+            } else if (message.what == 0){
                 try {
                     String friendJSON = (String) message.obj;
                     JSONObject jsonObject = new JSONObject(friendJSON);
@@ -135,6 +140,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
             super.handleMessage(message);
@@ -144,16 +151,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final Handler isLoginHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(final Message message) {
-            try {
-                JSONObject jsonObject = new JSONObject((String) message.obj).getJSONObject("message");
-                if (!ANDROID_ID.equals(jsonObject.getString("android_id"))) {
-                    SharedPreferencesUtils.putBoolean(context, "status", false, "user");
-                    Toast.makeText(context, "当前账号在其他设备的登录，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(context, LoginActivity.class));
-                    finish();
+            if (message.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj).getJSONObject("message");
+                    if (!ANDROID_ID.equals(jsonObject.getString("android_id"))) {
+                        SharedPreferencesUtils.putBoolean(context, "status", false, "user");
+                        Toast.makeText(context, "当前账号在其他设备的登录，登录信息失效，请重新登录！", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(message);
         }
@@ -214,7 +226,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_all_user", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -338,7 +356,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Map<String, String> parameter = new HashMap<>();
                 parameter.put("id", SharedPreferencesUtils.getString(context, "id", "0", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_id", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 isLoginHandler.sendMessage(message);
             }
         }).start();
@@ -407,8 +431,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                     message.what = 1;
                                 } else {
                                     message.what = 0;
+                                    try {
+                                        message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
+                                    } catch (IOException e) {
+                                        message.what = 2;
+                                        e.printStackTrace();
+                                    }
                                 }
-                                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/query_user_by_phone", parameter);
                                 searchFriendHandler.sendMessage(message);
                             }
                         }).start();

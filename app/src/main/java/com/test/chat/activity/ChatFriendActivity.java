@@ -76,45 +76,50 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
-                Log.e(TAG, "handleMessage: " + jsonObject.getString("message"));
-                for (int i = 0; i < messagesJSONArray.length(); i++) {
-                    Log.e(TAG, "handleMessage messagesJSONArray: " + messagesJSONArray.getJSONObject(i));
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
-                        final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
-                        final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
-                                if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
+                    Log.e(TAG, "handleMessage: " + jsonObject.getString("message"));
+                    for (int i = 0; i < messagesJSONArray.length(); i++) {
+                        Log.e(TAG, "handleMessage messagesJSONArray: " + messagesJSONArray.getJSONObject(i));
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
+                            final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
+                            final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
+                                    if (photoBitmap != null) {
+                                        ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
-                            }
-                        }).start();
+                            }).start();
+                        }
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
+                            final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
+                            final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
+                                }
+                            }).start();
+                        }
                     }
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
-                        final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
-                        final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
-                            }
-                        }).start();
-                    }
+                    TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
+                } catch (Exception e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
-            } catch (Exception e) {
-                e.printStackTrace();
+            }else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
         }
@@ -402,7 +407,13 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                 parameter.put("user_id", SharedPreferencesUtils.getString(context, "id", "", "user"));
                 parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                 Message message = new Message();
-                message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                try {
+                    message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
+                    message.what = 1;
+                } catch (IOException e) {
+                    message.what = 0;
+                    e.printStackTrace();
+                }
                 getMessageHandler.sendMessage(message);
             }
         }).start();
@@ -433,7 +444,15 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     parameter.put("friend_id", SharedPreferencesUtils.getString(context, "id_friend", "", "user"));
                     parameter.put("message", message);
                     parameter.put("message_type", 1 + "");
-                    new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/send_message", parameter);
+                    Message msg = new Message();
+                    try {
+                        new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/send_message", parameter);
+                        msg.what = 1;
+                    } catch (IOException e) {
+                        msg.what = 0;
+                        e.printStackTrace();
+                    }
+                    sendMessageHandler.sendMessage(msg);
                 }
             }).start();
         } else {
@@ -442,6 +461,17 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
         }
     }
 
+    private final Handler sendMessageHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            if (message.what == 0){
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(context, "消息发送成功！", Toast.LENGTH_SHORT).show();
+            }
+            super.handleMessage(message);
+        }
+    };
 
     private void photoFromCapture() {
         Intent intent;

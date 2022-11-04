@@ -52,52 +52,55 @@ public class MessageFragment extends Fragment {
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            String json = (String) message.obj;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
-                for (int i = 0; i < messagesJSONArray.length(); i++) {
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
-                        final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
-                        final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
-                                if (photoBitmap != null) {
-                                    ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
+            if (message.what == 1) {
+                try {
+                    String json = (String) message.obj;
+                    JSONObject jsonObject = new JSONObject(json);
+                    final JSONArray messagesJSONArray = jsonObject.getJSONArray("message");
+                    for (int i = 0; i < messagesJSONArray.length(); i++) {
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("2")) {
+                            final String messageImageUrl = messagesJSONArray.getJSONObject(i).getString("message_image_url");
+                            final String imageName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap photoBitmap = new HttpUtil(context).getImageBitmap(messageImageUrl);
+                                    if (photoBitmap != null) {
+                                        ImageUtil.saveBitmapToTmpFile(photoBitmap, ActivityUtil.TMP_MESSAGE_FILE_PATH, imageName + ".cache");
+                                    }
                                 }
-                            }
-                        }).start();
-                    }
-                    if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
-                        final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
-                        final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                            }).start();
+                        }
+                        if (messagesJSONArray.getJSONObject(i).getString("message_type").equals("3")) {
+                            final String messageVoiceUrl = messagesJSONArray.getJSONObject(i).getString("message_voice_url");
+                            final String voiceName = messagesJSONArray.getJSONObject(i).getString("message");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        new HttpUtil(context).getSoundFile(messageVoiceUrl, voiceName);
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        }).start();
+                            }).start();
+                        }
                     }
+                    TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
+                } catch (Exception e) {
+                    Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
-                TmpFileUtil.writeJSONToFile(messagesJSONArray.toString(), ActivityUtil.TMP_MESSAGE_FILE_PATH, "message.json");
-            } catch (Exception e) {
+            }else {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
             }
             super.handleMessage(message);
         }
     };
     private Activity activity;
 
-    public MessageFragment() {
-    }
+    public MessageFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,8 +161,10 @@ public class MessageFragment extends Fragment {
                             }
                             Message message = new Message();
                             try {
+                                message.what = 1;
                                 message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                             } catch (Exception e) {
+                                message.what = 0;
                                 e.printStackTrace();
                             }
                             getMessageHandler.sendMessage(message);

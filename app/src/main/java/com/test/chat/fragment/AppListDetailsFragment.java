@@ -124,148 +124,152 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
     private final Handler getApkListHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
-            try {
-                JSONObject jsonObject = new JSONObject((String) message.obj);
-                if (jsonObject.getString("code").equals("1")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("message");
-                    jsonObjectList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        jsonObjectList.add(jsonArray.getJSONObject(i));
-                    }
-                    apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
-                    apkRecyclerViewAdapter.notifyDataSetChanged();
-                    apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
-                    loading_layout.setVisibility(View.GONE);
-                    for (int i = 0; i < jsonObjectList.size(); i++) {
-                        try {
-                            JSONObject apkJSONObject = jsonObjectList.get(i);
-                            String apkIcon = apkJSONObject.getString("apk_icon");
-                            String apkFileName = apkJSONObject.getString("apk_name") + "_" + apkJSONObject.getString("apk_id") + ".cache";
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Message msg= new Message();
-                                        Bundle bundle = new Bundle();
-                                        msg.obj = new HttpUtil(context).getImageToBitmap(apkIcon);
-                                        bundle.putString("apkFileName",apkFileName);
-                                        msg.setData(bundle);
-                                        saveBitmapHandler.sendMessage(msg);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+            if (message.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        jsonObjectList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            jsonObjectList.add(jsonArray.getJSONObject(i));
+                        }
+                        apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
+                        apkRecyclerViewAdapter.notifyDataSetChanged();
+                        apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
+                        loading_layout.setVisibility(View.GONE);
+                        for (int i = 0; i < jsonObjectList.size(); i++) {
+                            try {
+                                JSONObject apkJSONObject = jsonObjectList.get(i);
+                                String apkIcon = apkJSONObject.getString("apk_icon");
+                                String apkFileName = apkJSONObject.getString("apk_name") + "_" + apkJSONObject.getString("apk_id") + ".cache";
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Message msg = new Message();
+                                            Bundle bundle = new Bundle();
+                                            msg.obj = new HttpUtil(context).getImageToBitmap(apkIcon);
+                                            bundle.putString("apkFileName", apkFileName);
+                                            msg.setData(bundle);
+                                            saveBitmapHandler.sendMessage(msg);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-                                }
-                            }).start();
-                            File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                    + "_" + apkJSONObject.getString("apk_id") + ".download");
-                            if (downloadFile.exists()) {
-                                apkJSONObject.put("download_flag", 2);
-                            } else {
-                                File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                        + "_" + apkJSONObject.getString("apk_id") + ".cache");
-                                if (cacheFile.exists()) {
-                                    apkJSONObject.put("download_flag", 1);
+                                }).start();
+                                File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                        + "_" + apkJSONObject.getString("apk_id") + ".download");
+                                if (downloadFile.exists()) {
+                                    apkJSONObject.put("download_flag", 2);
                                 } else {
-                                    apkJSONObject.put("download_flag", 0);
-                                }
-                            }
-                            apkRecyclerViewAdapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                }
-                apkRecyclerViewAdapter.setOnDownloadApkImageViewClickListener(new ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        try {
-                            downloadApkFile(context, jsonObjectList.get(position)
-                                    , jsonObjectList.get(position).getString("apk_download_url"), position);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                apkRecyclerViewAdapter.setOnInstallImageViewClickListener(new ApkRecyclerViewAdapter.InstallImageViewOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        try {
-                            String apkFileName = jsonObjectList.get(position).getString("apk_name") + "_" + jsonObjectList.get(position).getString("apk_id");
-                            File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".cache");
-                            File apkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".apk");
-                            TmpFileUtil.copyFile(cacheFile, apkFile);
-                            ActivityUtil.silentInstallApk(apkFile,context);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                apkRecyclerViewAdapter.setOnDeleteImageViewClickListener(new ApkRecyclerViewAdapter.DeleteImageViewOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        Log.e(TAG, "onItemClick: 正在删除安装包" + jsonObjectList.get(position));
-                        try {
-                            String deleteFileName = jsonObjectList.get(position).getString("apk_name");
-                            ;
-                            ProgressDialog progressDialog = new ProgressDialog(context);
-                            Window window = progressDialog.getWindow();
-                            if (window != null) {
-                                progressDialog.show();
-                                WindowManager.LayoutParams params = window.getAttributes();
-                                params.gravity = Gravity.CENTER;
-                                progressDialog.setCancelable(true);
-                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                progressDialog.setContentView(R.layout.exit_progress_bar);
-                                TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                                dialog_message_TextView.setText(new String("是否删除安装包： " + deleteFileName + "？"));
-                            }
-                            progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    progressDialog.dismiss();
-                                }
-                            });
-                            progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    try {
-                                        File deleteFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName +
-                                                "_" + jsonObjectList.get(position).getString("apk_id") + ".cache");
-                                        File deleteApkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName +
-                                                "_" + jsonObjectList.get(position).getString("apk_id") + ".apk");
-                                        if (deleteFile.delete()) {
-                                            jsonObjectList.get(position).put("download_flag", 0);
-                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
-                                        }
-                                        if (deleteApkFile.delete()) {
-                                            jsonObjectList.get(position).put("download_flag", 0);
-                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                    File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                            + "_" + apkJSONObject.getString("apk_id") + ".cache");
+                                    if (cacheFile.exists()) {
+                                        apkJSONObject.put("download_flag", 1);
+                                    } else {
+                                        apkJSONObject.put("download_flag", 0);
                                     }
-                                    apkRecyclerViewAdapter.notifyDataSetChanged();
-                                    progressDialog.dismiss();
                                 }
-                            });
-                        } catch (JSONException e) {
-                            Toast.makeText(context, "删除安装包失败！", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                                apkRecyclerViewAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    } else {
+                        Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     }
-                });
-            } catch (JSONException e) {
+                    apkRecyclerViewAdapter.setOnDownloadApkImageViewClickListener(new ApkRecyclerViewAdapter.DownloadApkImageViewOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            try {
+                                downloadApkFile(context, jsonObjectList.get(position)
+                                        , jsonObjectList.get(position).getString("apk_download_url"), position);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    apkRecyclerViewAdapter.setOnInstallImageViewClickListener(new ApkRecyclerViewAdapter.InstallImageViewOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            try {
+                                String apkFileName = jsonObjectList.get(position).getString("apk_name") + "_" + jsonObjectList.get(position).getString("apk_id");
+                                File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".cache");
+                                File apkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkFileName + ".apk");
+                                TmpFileUtil.copyFile(cacheFile, apkFile);
+                                ActivityUtil.silentInstallApk(apkFile, context);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    apkRecyclerViewAdapter.setOnDeleteImageViewClickListener(new ApkRecyclerViewAdapter.DeleteImageViewOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Log.e(TAG, "onItemClick: 正在删除安装包" + jsonObjectList.get(position));
+                            try {
+                                String deleteFileName = jsonObjectList.get(position).getString("apk_name");
+                                ;
+                                ProgressDialog progressDialog = new ProgressDialog(context);
+                                Window window = progressDialog.getWindow();
+                                if (window != null) {
+                                    progressDialog.show();
+                                    WindowManager.LayoutParams params = window.getAttributes();
+                                    params.gravity = Gravity.CENTER;
+                                    progressDialog.setCancelable(true);
+                                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    progressDialog.setContentView(R.layout.exit_progress_bar);
+                                    TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
+                                    dialog_message_TextView.setText(new String("是否删除安装包： " + deleteFileName + "？"));
+                                }
+                                progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                                progressDialog.findViewById(R.id.confirm_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        try {
+                                            File deleteFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName +
+                                                    "_" + jsonObjectList.get(position).getString("apk_id") + ".cache");
+                                            File deleteApkFile = new File(ActivityUtil.TMP_APK_FILE_PATH, deleteFileName +
+                                                    "_" + jsonObjectList.get(position).getString("apk_id") + ".apk");
+                                            if (deleteFile.delete()) {
+                                                jsonObjectList.get(position).put("download_flag", 0);
+                                                Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                            }
+                                            if (deleteApkFile.delete()) {
+                                                jsonObjectList.get(position).put("download_flag", 0);
+                                                Toast.makeText(context, "删除安装包：" + deleteFileName + " 成功！", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(context, "删除安装包：" + deleteFileName + " 失败，文件不存在！", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        apkRecyclerViewAdapter.notifyDataSetChanged();
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                Toast.makeText(context, "删除安装包失败！", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                super.handleMessage(message);
+            }else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
-            super.handleMessage(message);
         }
     };
 
@@ -307,12 +311,9 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                     parameter.put("kind_name", kindJSONObject.getString("kind_name"));
                     parameter.put("kind_page","1");
                     message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_apk_list_by_kind_link", parameter);
+                    message.what = 1;
                 } catch (Exception e) {
-                    message.obj = "{" +
-                            "        'code': '0'," +
-                            "        'status': '获取应用分类成功！'," +
-                            "        'message': []" +
-                            "    }";
+                    message.what = 0;
                     e.printStackTrace();
                 }
                 getApkListHandler.sendMessage(message);
@@ -405,6 +406,5 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
     @Override
     public void onRefresh() {
         initFragmentView();
-
     }
 }
