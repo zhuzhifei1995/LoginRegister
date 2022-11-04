@@ -12,31 +12,30 @@
         layout="@layout/title_search_bar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/net_disk_main_LinearLayout"
-        android:layout_below="@+id/title_search_bar_net_disk"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_search_bar_net_disk"
+        android:orientation="vertical">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/net_disk_title_TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="auto"
             android:layout_marginBottom="10dp"
-            app:tabIndicatorFullWidth="true"
             android:longClickable="false"
             app:tabIndicator="@drawable/tab_layout_bg"
             app:tabIndicatorColor="@color/main_select"
+            app:tabIndicatorFullWidth="true"
+            app:tabMode="auto"
             app:tabSelectedTextColor="@color/main_select" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/net_disk_content_ViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

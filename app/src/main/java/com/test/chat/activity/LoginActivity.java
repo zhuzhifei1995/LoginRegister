@@ -88,7 +88,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     Toast.makeText(context, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常，登录失败", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();

@@ -35,8 +35,8 @@ public class SilentInstallManager {
             boolean isCopyOk = copyInstallApkFile(sessionId, installer, apkFilePath);
             if (isCopyOk) {
                 boolean isInstalled = installPackage(context, sessionId,
-                        installer,apkFilePath);
-                if (isInstalled ){
+                        installer, apkFilePath);
+                if (isInstalled) {
                     ret = true;
                 }
             }
@@ -94,7 +94,7 @@ public class SilentInstallManager {
     }
 
     private static boolean installPackage(Context context, int sessionId,
-                                          PackageInstaller installer,  String filePath) {
+                                          PackageInstaller installer, String filePath) {
         PackageInstaller.Session session = null;
         boolean ret = false;
         try {

@@ -118,8 +118,19 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+            }
+            super.handleMessage(message);
+        }
+    };
+    private final Handler sendMessageHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            if (message.what == 0) {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "消息发送成功！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
         }
@@ -460,18 +471,6 @@ public class ChatFriendActivity extends Activity implements View.OnClickListener
             send_message_EditText.setText("");
         }
     }
-
-    private final Handler sendMessageHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message message) {
-            if (message.what == 0){
-                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(context, "消息发送成功！", Toast.LENGTH_SHORT).show();
-            }
-            super.handleMessage(message);
-        }
-    };
 
     private void photoFromCapture() {
         Intent intent;

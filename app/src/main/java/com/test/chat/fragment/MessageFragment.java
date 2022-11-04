@@ -92,7 +92,7 @@ public class MessageFragment extends Fragment {
                     Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(message);
@@ -100,7 +100,8 @@ public class MessageFragment extends Fragment {
     };
     private Activity activity;
 
-    public MessageFragment() {}
+    public MessageFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

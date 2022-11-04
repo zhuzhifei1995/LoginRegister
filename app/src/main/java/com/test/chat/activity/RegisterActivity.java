@@ -148,7 +148,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     progressDialog.dismiss();
                 }
 
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();

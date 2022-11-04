@@ -35,7 +35,6 @@ import com.test.chat.adapter.ApkRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.ImageUtil;
-import com.test.chat.util.SilentInstallManager;
 import com.test.chat.util.TmpFileUtil;
 
 import org.json.JSONArray;
@@ -65,6 +64,13 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
 
     private static final String TAG = ActivityUtil.TAG;
     private final JSONObject kindJSONObject;
+    private final Handler saveBitmapHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message message) {
+            ImageUtil.saveBitmapToTmpFile((Bitmap) message.obj, ActivityUtil.TMP_APK_ICON_PATH, message.getData().getString("apkFileName"));
+            super.handleMessage(message);
+        }
+    };
     private View appListDetailsFragmentView;
     private View loading_layout;
     private List<JSONObject> jsonObjectList;
@@ -110,14 +116,6 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                 e.printStackTrace();
             }
             apkRecyclerViewAdapter.notifyDataSetChanged();
-            super.handleMessage(message);
-        }
-    };
-
-    private final Handler saveBitmapHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(@NonNull Message message) {
-            ImageUtil.saveBitmapToTmpFile((Bitmap) message.obj, ActivityUtil.TMP_APK_ICON_PATH, message.getData().getString("apkFileName"));
             super.handleMessage(message);
         }
     };
@@ -267,7 +265,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                     e.printStackTrace();
                 }
                 super.handleMessage(message);
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
         }
@@ -309,7 +307,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("kind_link", kindJSONObject.getString("kind_link"));
                     parameter.put("kind_name", kindJSONObject.getString("kind_name"));
-                    parameter.put("kind_page","1");
+                    parameter.put("kind_page", "1");
                     message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_apk_list_by_kind_link", parameter);
                     message.what = 1;
                 } catch (Exception e) {

@@ -158,21 +158,21 @@ public class ActivityUtil {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Class<?> packageInstallObserverClass = Class.forName("android.app.PackageInstallObserver");
-                Constructor<?> constructor =packageInstallObserverClass.getDeclaredConstructor();
+                Constructor<?> constructor = packageInstallObserverClass.getDeclaredConstructor();
                 constructor.setAccessible(true);
-                Object installObserver =constructor.newInstance();
+                Object installObserver = constructor.newInstance();
                 Method method = packageManagerClass.getDeclaredMethod("installPackage",
-                        Uri.class,packageInstallObserverClass,int.class,String.class);
+                        Uri.class, packageInstallObserverClass, int.class, String.class);
                 method.setAccessible(true);
-                method.invoke(packageManager,Uri.fromFile(apkFile),installObserver,2,null);
-            }else {
+                method.invoke(packageManager, Uri.fromFile(apkFile), installObserver, 2, null);
+            } else {
                 Method method = packageManagerClass.getDeclaredMethod("installPackage", Uri.class,
-                        Class.forName("android.content.pm.IPackageInstallObserver"),int.class,String.class);
+                        Class.forName("android.content.pm.IPackageInstallObserver"), int.class, String.class);
                 method.setAccessible(true);
-                method.invoke(packageManager,Uri.fromFile(apkFile),null,2,null);
+                method.invoke(packageManager, Uri.fromFile(apkFile), null, 2, null);
             }
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

@@ -208,7 +208,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "修改密码失败！", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();
@@ -219,7 +219,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private final Handler codeHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            if(message.what == 1) {
+            if (message.what == 1) {
                 try {
                     JSONObject jsonObject = new JSONObject((String) message.obj);
                     if (jsonObject.getString("code").equals("1")) {
@@ -292,7 +292,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
@@ -347,7 +347,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "修改昵称失败！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
@@ -399,7 +399,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             my_SwipeRefreshLayout.setRefreshing(false);

@@ -114,7 +114,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     progressDialog.dismiss();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
@@ -126,7 +126,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void handleMessage(Message message) {
             if (message.what == 1) {
                 Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else if (message.what == 0){
+            } else if (message.what == 0) {
                 try {
                     String friendJSON = (String) message.obj;
                     JSONObject jsonObject = new JSONObject(friendJSON);
@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
@@ -164,7 +164,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(message);

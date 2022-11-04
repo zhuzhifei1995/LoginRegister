@@ -44,26 +44,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/ChatFriendActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/RegisterActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkRecyclerViewAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppListDetailsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppListDetailsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FriendFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FriendFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MessageFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MessageFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MyFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/MyFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/HttpUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/HttpUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/SilentInstallManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/SilentInstallManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/tab_layout_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/tab_layout_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk_file.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk_file.xml" afterDir="false" />
     </list>
@@ -385,13 +380,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663428283551</updated>
-    </task>
-    <task id="LOCAL-00005" summary="修改项目结构">
-      <created>1664990253198</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1664990253198</updated>
     </task>
     <task id="LOCAL-00006" summary="修改部分内容">
       <created>1664995039057</created>
@@ -729,7 +717,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667488095248</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="处理刷新问题">
+      <created>1667573344522</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1667573344523</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

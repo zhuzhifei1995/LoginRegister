@@ -68,7 +68,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private final Handler getMessageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
-            if (message.what ==1) {
+            if (message.what == 1) {
                 try {
                     String json = (String) message.obj;
                     JSONObject jsonObject = new JSONObject(json);
@@ -108,7 +108,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(message);
@@ -121,7 +121,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         public void handleMessage(Message message) {
             if (message.what == 1) {
                 Toast.makeText(context, "当前查找的用户是自己！", Toast.LENGTH_LONG).show();
-            } else if(message.what == 2){
+            } else if (message.what == 2) {
                 try {
                     String friendJSON = (String) message.obj;
                     JSONObject jsonObject = new JSONObject(friendJSON);
@@ -135,7 +135,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_LONG).show();
             }
             progressDialog.dismiss();
@@ -185,7 +185,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     Log.e(TAG, "获取数据失败！");
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "刷新失败，网络异常！", Toast.LENGTH_LONG).show();
             }
             initFriendRecyclerView();
@@ -455,7 +455,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                 message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_messages", parameter);
                                 message.what = 1;
                             } catch (IOException e) {
-                                message.what =0;
+                                message.what = 0;
                                 e.printStackTrace();
                             }
                             getMessageHandler.sendMessage(message);

@@ -238,7 +238,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
