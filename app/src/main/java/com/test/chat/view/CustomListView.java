@@ -237,7 +237,7 @@ public class CustomListView extends ListView implements OnScrollListener {
                 refreshHeadLinearLayout.setPadding(0, -1 * mHeadContentHeight, 0, 0);
                 mProgressBar.setVisibility(GONE);
                 mArrowImageView.clearAnimation();
-                mArrowImageView.setImageResource(R.drawable.refresh_image);
+                mArrowImageView.setImageResource(R.drawable.loading_progress);
                 head_tips = "加载完成";
                 head_tips_TextView.setText(head_tips);
                 mLastUpdatedTextView.setVisibility(VISIBLE);

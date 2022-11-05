@@ -102,7 +102,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             } else if (downloadFlag == 1) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.delete_ImageView.setVisibility(View.VISIBLE);
-                apkRecyclerViewHolder.install_ImageView.setVisibility(View.VISIBLE);
+                apkRecyclerViewHolder.install_ImageView.setVisibility(View.GONE);
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.GONE);
             } else if (downloadFlag == 2) {
                 apkRecyclerViewHolder.download_ImageView.setVisibility(View.GONE);

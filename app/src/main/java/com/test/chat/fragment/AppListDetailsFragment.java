@@ -71,6 +71,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
             super.handleMessage(message);
         }
     };
+    private int pageNum;
     private View appListDetailsFragmentView;
     private View loading_layout;
     private List<JSONObject> jsonObjectList;
@@ -98,8 +99,8 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
             }
             Log.e(TAG, "download success");
             try {
-                showDownloadNotification(context, jsonObject.getString("apk_name"), position, " 下载完成！", 1);
-                Toast.makeText(context, jsonObject.getString("apk_name") + " 文件下载成功！", Toast.LENGTH_SHORT).show();
+                showDownloadNotification(context, "应用 " + jsonObject.getString("apk_name"), position, " 下载完成！", 1);
+                Toast.makeText(context, "应用 " + jsonObject.getString("apk_name") + " 下载成功！", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -133,7 +134,8 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                         }
                         apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
                         apkRecyclerViewAdapter.notifyDataSetChanged();
-                        apk_file_RecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                        apk_file_RecyclerView.setLayoutManager(linearLayoutManager);
                         apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
                         loading_layout.setVisibility(View.GONE);
                         for (int i = 0; i < jsonObjectList.size(); i++) {
@@ -269,6 +271,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
         }
+
     };
 
     public AppListDetailsFragment(JSONObject kindJSONObject) {
@@ -285,6 +288,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         appListDetailsFragmentView = inflater.inflate(R.layout.fragment_app_list_details, container, false);
+        pageNum = 1;
         initFragmentView();
         return appListDetailsFragmentView;
     }
@@ -307,7 +311,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                     Map<String, String> parameter = new HashMap<>();
                     parameter.put("kind_link", kindJSONObject.getString("kind_link"));
                     parameter.put("kind_name", kindJSONObject.getString("kind_name"));
-                    parameter.put("kind_page", "1");
+                    parameter.put("kind_page", pageNum + "");
                     message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_apk_list_by_kind_link", parameter);
                     message.what = 1;
                 } catch (Exception e) {
@@ -327,7 +331,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Toast.makeText(context, "创建文件下载任务，开始下载文件：" + downFileName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "创建应用下载任务，开始下载应用：" + downFileName, Toast.LENGTH_SHORT).show();
         try {
             jsonObjectList.get(position).put("download_flag", 2);
             apkRecyclerViewAdapter.notifyDataSetChanged();
@@ -349,7 +353,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
-                showDownloadNotification(context, finalDownFileName, position, "正在下载中......", 0);
+                showDownloadNotification(context, "应用： " + finalDownFileName, position, "正在下载中......", 0);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

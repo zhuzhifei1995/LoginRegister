@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
+import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.view.TitleFragmentPagerView;
 
 import org.json.JSONArray;
@@ -61,7 +63,6 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                         TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
                         app_store_content_ViewPager.setAdapter(titleFragmentPagerView);
                         app_store_title_TabLayout.setupWithViewPager(app_store_content_ViewPager);
-                        app_store_content_ViewPager.setOffscreenPageLimit(1);
                         for (int j = 0; j < jsonArray.length(); j++) {
                             String kindName = jsonArray.getJSONObject(j).getString("kind_name");
                             Objects.requireNonNull(app_store_title_TabLayout.getTabAt(j)).setText(kindName);
@@ -69,13 +70,16 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                         app_store_SwipeRefreshLayout.setEnabled(false);
                         loading_layout.setVisibility(View.GONE);
                     } else {
+                        app_store_SwipeRefreshLayout.setEnabled(true);
                         Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
+                    app_store_SwipeRefreshLayout.setEnabled(true);
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             } else {
+                app_store_SwipeRefreshLayout.setEnabled(true);
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
@@ -114,7 +118,15 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
         app_store_SwipeRefreshLayout.setOnRefreshListener(this);
         app_store_SwipeRefreshLayout.setRefreshing(false);
         loading_layout.setVisibility(View.VISIBLE);
+        LinearLayout app_store_LinearLayout = appStoreFragment.findViewById(R.id.app_store_LinearLayout);
+        ActivityUtil.setLinearLayoutBackground(app_store_LinearLayout,SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         app_store_title_TabLayout = appStoreFragment.findViewById(R.id.app_store_title_TabLayout);
+        app_store_LinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "1！", Toast.LENGTH_SHORT).show();
+            }
+        });
         app_store_content_ViewPager = appStoreFragment.findViewById(R.id.app_store_content_ViewPager);
         new Thread(new Runnable() {
             @Override

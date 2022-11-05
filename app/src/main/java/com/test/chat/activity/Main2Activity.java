@@ -923,34 +923,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 }
             }
         }).start();
-    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message message) {
-            try {
-                String json = (String) message.obj;
-                JSONObject jsonObject = new JSONObject(json);
-                if (jsonObject.getString("code").equals("1")) {
-                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
-                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
-                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
-                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
-                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
-                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
-                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
-                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
-                    saveUserPhoto(userJSONObject.getString("photo_url"));
-                } else {
-                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            my_SwipeRefreshLayout.setRefreshing(false);
-            initMyView();
-            super.handleMessage(message);
-        }
-    };
+    }
 
     private void startBigPhotoZoom(Uri uri) {
         File file;
@@ -981,7 +954,34 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         } else {
             Toast.makeText(context, "剪切图片失败", Toast.LENGTH_LONG).show();
         }
-    }
+    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            try {
+                String json = (String) message.obj;
+                JSONObject jsonObject = new JSONObject(json);
+                if (jsonObject.getString("code").equals("1")) {
+                    Toast.makeText(context, "刷新成功！", Toast.LENGTH_LONG).show();
+                    JSONObject userJSONObject = jsonObject.getJSONObject("message");
+                    SharedPreferencesUtils.putString(context, "create_time", userJSONObject.getString("create_time"), "user");
+                    SharedPreferencesUtils.putString(context, "password", userJSONObject.getString("password"), "user");
+                    SharedPreferencesUtils.putString(context, "login_number", userJSONObject.getString("login_number"), "user");
+                    SharedPreferencesUtils.putString(context, "nick_name", userJSONObject.getString("nick_name"), "user");
+                    SharedPreferencesUtils.putString(context, "phone", userJSONObject.getString("phone"), "user");
+                    SharedPreferencesUtils.putString(context, "photo", userJSONObject.getString("photo_url"), "user");
+                    saveUserPhoto(userJSONObject.getString("photo_url"));
+                } else {
+                    Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(context, "刷新失败！", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            my_SwipeRefreshLayout.setRefreshing(false);
+            initMyView();
+            super.handleMessage(message);
+        }
+    };
 
     private void setBigImageToImageView() {
         File photoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
