@@ -46,7 +46,7 @@ public class ActivityUtil {
     public static final String TMP_APK_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/apk";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files";
 
-    //    连接电脑正常网络时
+//    连接电脑正常网络时
     public static String NET_URL = "http://192.168.1.3:8080";
 //    public static String NET_URL = "http://192.168.137.1:8080/";
 

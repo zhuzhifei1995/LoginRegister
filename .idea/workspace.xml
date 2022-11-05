@@ -44,8 +44,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/EndlessRecyclerOnScrollListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/RefreshLoadMoreRecycleView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/PageRecyclerViewAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/page_normal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/page_select.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/apk_list_tab_selected.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/apk_page_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/page_show_list_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
@@ -54,14 +58,10 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/Main2Activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkRecyclerViewAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppListDetailsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppListDetailsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppStoreFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/AppStoreFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/CustomListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/CustomListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/TitleFragmentPagerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/TitleFragmentPagerView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_list_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_list_details.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/ActivityUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,9 +98,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="layoutResourceFile_vertical" />
-        <option value="layoutResourceFile" />
         <option value="resourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -142,7 +142,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="DEBUGGABLE_DEVICE" value="youxuepai-p770-ZXXWVKOFFUA6EA9P" />
+    <property name="DEBUGGABLE_DEVICE" value="oppo-pbet00-eb95234d" />
     <property name="DEBUGGABLE_PROCESS" value="com.test.chat" />
     <property name="DEBUGGER_ID" value="Auto" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="eb95234d" />
@@ -154,13 +154,14 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/androidx.recyclerview/recyclerview/1.2.1/f0f93e67af3f7417bdd560d5142f6dec4fe629c3/recyclerview-1.2.1-sources.jar!/androidx/recyclerview/widget/RecyclerView.java_SELECTED" value="RecyclerView" />
+    <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/com.google.android.material/material/1.5.0/8d3b87c7463f55053836b805e014cb238f64757a/material-1.5.0-sources.jar!/com/google/android/material/tabs/TabLayout.java_SELECTED" value="TabLayout" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/adapter/CustomListView.java_SELECTED" value="CustomListView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/CustomListView.java_SELECTED" value="CustomListView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/ProgressBarView.java_SELECTED" value="ProgressBarView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/RefreshLoadMoreRecycleView.java_SELECTED" value="RefreshLoadMoreRecycleView" />
     <property name="android.sdk.path" value="$PROJECT_DIR$/../../../tools/sdk" />
     <property name="cidr.known.project.marker" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/drawable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/layout" />
     <property name="multi-representation-previewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/adapter/CustomListView.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
@@ -181,11 +182,11 @@
       <recent name="com.test.chat" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\layout" />
+      <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable" />
+      <recent name="D:\work\as_work\LoginRegister\app" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable-v24" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable-hdpi" />
-      <recent name="D:\work\as_work\LoginRegister\app\src\main\java\com\test\chat\activity" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\layout" />
@@ -382,13 +383,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663428283551</updated>
-    </task>
-    <task id="LOCAL-00008" summary="格式化">
-      <created>1665052058802</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1665052058802</updated>
     </task>
     <task id="LOCAL-00009" summary="xg">
       <created>1665138967195</created>
@@ -726,7 +720,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667578934956</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="处理刷新问题">
+      <created>1667651307307</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1667651307307</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
