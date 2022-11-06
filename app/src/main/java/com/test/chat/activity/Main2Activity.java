@@ -954,6 +954,18 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         } else {
             Toast.makeText(context, "剪切图片失败", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void setBigImageToImageView() {
+        File photoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+        Uri tempPhotoUri = Uri.fromFile(photoFile);
+        try {
+            Bitmap photoBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(tempPhotoUri));
+            photo_my_ImageView.setImageBitmap(photoBitmap);
+            uploadUpdatePhoto();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -982,18 +994,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void setBigImageToImageView() {
-        File photoFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
-        Uri tempPhotoUri = Uri.fromFile(photoFile);
-        try {
-            Bitmap photoBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(tempPhotoUri));
-            photo_my_ImageView.setImageBitmap(photoBitmap);
-            uploadUpdatePhoto();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showMyMessage() {
         ImageView message_show_ImageView = findViewById(R.id.message_show_ImageView);

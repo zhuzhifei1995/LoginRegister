@@ -18,10 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +62,31 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     private View loading_layout;
     private SwipeRefreshLayout app_store_SwipeRefreshLayout;
     private ProgressDialog progressDialog;
+    private final Handler showPageHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            try {
+                JSONObject jsonObject = new JSONObject((String) msg.obj);
+                int pageNum = Integer.parseInt(jsonObject.getString("kind_page"));
+                progressDialog.setContentView(R.layout.apk_page_bar);
+                RecyclerView apk_page_RecyclerView = progressDialog.findViewById(R.id.apk_page_RecyclerView);
+                List<Integer> pageNumList = new ArrayList<>();
+                for (int i = 1; i < pageNum; i++) {
+                    pageNumList.add(i);
+                }
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                apk_page_RecyclerView.setLayoutManager(linearLayoutManager);
+                PageRecyclerViewAdapter pageRecyclerViewAdapter = new PageRecyclerViewAdapter(pageNumList);
+                apk_page_RecyclerView.setAdapter(pageRecyclerViewAdapter);
+                super.handleMessage(msg);
+            } catch (JSONException e) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "当前分类无应用！", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+        }
+    };
     private Boolean TAB_IS_SELECT;
     private final Handler getAllAppStoreKindHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -99,7 +122,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
                                 kind_ImageView.setImageResource(R.drawable.message_no_show);
                                 kind_ImageView.setVisibility(View.VISIBLE);
-                                if (tab.getPosition() == 0){
+                                if (tab.getPosition() == 0) {
                                     kind_ImageView.setVisibility(View.GONE);
                                 }
                             }
@@ -112,14 +135,14 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onTabReselected(TabLayout.Tab tab) {
                                 ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
-                                if (TAB_IS_SELECT){
+                                if (TAB_IS_SELECT) {
                                     kind_ImageView.setImageResource(R.drawable.message_no_show);
                                     TAB_IS_SELECT = false;
-                                }else {
+                                } else {
                                     kind_ImageView.setImageResource(R.drawable.message_show);
                                     TAB_IS_SELECT = true;
                                     int position = tab.getPosition();
-                                    if (position != 0){
+                                    if (position != 0) {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -133,7 +156,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                                     e.printStackTrace();
                                                 }
                                                 try {
-                                                    msg.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL+"/get_page_num_by_kind_link",parameter);
+                                                    msg.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_page_num_by_kind_link", parameter);
                                                     msg.what = 1;
                                                 } catch (IOException e) {
                                                     msg.what = 0;
@@ -184,32 +207,6 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
-        }
-    };
-
-    private final Handler showPageHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            try {
-                JSONObject jsonObject = new JSONObject((String) msg.obj);
-                int pageNum = Integer.parseInt(jsonObject.getString("kind_page"));
-                progressDialog.setContentView(R.layout.apk_page_bar);
-                RecyclerView apk_page_RecyclerView = progressDialog.findViewById(R.id.apk_page_RecyclerView);
-                List<Integer> pageNumList = new ArrayList<>();
-                for (int i = 1;i<pageNum;i++){
-                    pageNumList.add(i);
-                }
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-                apk_page_RecyclerView.setLayoutManager(linearLayoutManager);
-                PageRecyclerViewAdapter pageRecyclerViewAdapter = new PageRecyclerViewAdapter(pageNumList);
-                apk_page_RecyclerView.setAdapter(pageRecyclerViewAdapter);
-                super.handleMessage(msg);
-            } catch (JSONException e) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "当前分类无应用！", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
         }
     };
 
