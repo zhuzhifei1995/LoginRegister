@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,12 +72,19 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 progressDialog.setContentView(R.layout.apk_page_bar);
                 RecyclerView apk_page_RecyclerView = progressDialog.findViewById(R.id.apk_page_RecyclerView);
                 List<Integer> pageNumList = new ArrayList<>();
-                for (int i = 1; i < pageNum; i++) {
+                for (int i = 1; i <= pageNum; i++) {
                     pageNumList.add(i);
                 }
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 apk_page_RecyclerView.setLayoutManager(linearLayoutManager);
                 PageRecyclerViewAdapter pageRecyclerViewAdapter = new PageRecyclerViewAdapter(pageNumList);
+                pageRecyclerViewAdapter.setOnPageSelectOnItemClickListener(new PageRecyclerViewAdapter.PageSelectOnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Toast.makeText(context, ""+position, Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
                 apk_page_RecyclerView.setAdapter(pageRecyclerViewAdapter);
                 super.handleMessage(msg);
             } catch (JSONException e) {
@@ -119,76 +127,82 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onTabSelected(TabLayout.Tab tab) {
                                 TAB_IS_SELECT = false;
-                                ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
-                                kind_ImageView.setImageResource(R.drawable.message_no_show);
-                                kind_ImageView.setVisibility(View.VISIBLE);
-                                if (tab.getPosition() == 0) {
-                                    kind_ImageView.setVisibility(View.GONE);
+                                if (tab != null) {
+                                    ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
+                                    kind_ImageView.setImageResource(R.drawable.message_no_show);
+                                    kind_ImageView.setVisibility(View.VISIBLE);
+                                    if (tab.getPosition() == 0) {
+                                        kind_ImageView.setVisibility(View.GONE);
+                                    }
                                 }
                             }
 
                             @Override
                             public void onTabUnselected(TabLayout.Tab tab) {
-                                Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView).setVisibility(View.GONE);
+                                if (tab != null) {
+                                    Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView).setVisibility(View.GONE);
+                                }
                             }
 
                             @Override
                             public void onTabReselected(TabLayout.Tab tab) {
-                                ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
-                                if (TAB_IS_SELECT) {
-                                    kind_ImageView.setImageResource(R.drawable.message_no_show);
-                                    TAB_IS_SELECT = false;
-                                } else {
-                                    kind_ImageView.setImageResource(R.drawable.message_show);
-                                    TAB_IS_SELECT = true;
-                                    int position = tab.getPosition();
-                                    if (position != 0) {
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Message msg = new Message();
-                                                Map<String, String> parameter = new HashMap<>();
-                                                try {
-                                                    parameter.put("kind_link", jsonArray.getJSONObject(position).getString("kind_link"));
-                                                    parameter.put("kind_name", jsonArray.getJSONObject(position).getString("kind_name"));
-                                                } catch (JSONException e) {
-                                                    msg.what = 0;
-                                                    e.printStackTrace();
+                                if (tab != null) {
+                                    ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
+                                    if (TAB_IS_SELECT) {
+                                        kind_ImageView.setImageResource(R.drawable.message_no_show);
+                                        TAB_IS_SELECT = false;
+                                    } else {
+                                        kind_ImageView.setImageResource(R.drawable.message_show);
+                                        TAB_IS_SELECT = true;
+                                        int position = tab.getPosition();
+                                        if (position != 0) {
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Message msg = new Message();
+                                                    Map<String, String> parameter = new HashMap<>();
+                                                    try {
+                                                        parameter.put("kind_link", jsonArray.getJSONObject(position).getString("kind_link"));
+                                                        parameter.put("kind_name", jsonArray.getJSONObject(position).getString("kind_name"));
+                                                    } catch (JSONException e) {
+                                                        msg.what = 0;
+                                                        e.printStackTrace();
+                                                    }
+                                                    try {
+                                                        msg.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_page_num_by_kind_link", parameter);
+                                                        msg.what = 1;
+                                                    } catch (IOException e) {
+                                                        msg.what = 0;
+                                                        e.printStackTrace();
+                                                    }
+                                                    showPageHandler.sendMessage(msg);
                                                 }
-                                                try {
-                                                    msg.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_page_num_by_kind_link", parameter);
-                                                    msg.what = 1;
-                                                } catch (IOException e) {
-                                                    msg.what = 0;
-                                                    e.printStackTrace();
-                                                }
-                                                showPageHandler.sendMessage(msg);
+                                            }).start();
+                                            progressDialog = new ProgressDialog(context);
+                                            Window window = progressDialog.getWindow();
+                                            if (window != null) {
+                                                WindowManager.LayoutParams params = window.getAttributes();
+                                                params.gravity = Gravity.CENTER;
+                                                progressDialog.setCancelable(false);
+                                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                progressDialog.show();
+                                                progressDialog.setContentView(R.layout.loading_progress_bar);
                                             }
-                                        }).start();
-                                        progressDialog = new ProgressDialog(context);
-                                        Window window = progressDialog.getWindow();
-                                        if (window != null) {
-                                            WindowManager.LayoutParams params = window.getAttributes();
-                                            params.gravity = Gravity.CENTER;
-                                            progressDialog.setCancelable(false);
-                                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                            progressDialog.show();
-                                            progressDialog.setContentView(R.layout.loading_progress_bar);
+                                            progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                                @Override
+                                                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                                                    if (keyEvent.getKeyCode() == 4) {
+                                                        TAB_IS_SELECT = false;
+                                                        kind_ImageView.setImageResource(R.drawable.message_no_show);
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                    return false;
+                                                }
+                                            });
                                         }
-                                        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                                                if (keyEvent.getKeyCode() == 4) {
-                                                    TAB_IS_SELECT = false;
-                                                    kind_ImageView.setImageResource(R.drawable.message_no_show);
-                                                    dialogInterface.dismiss();
-                                                }
-                                                return false;
-                                            }
-                                        });
                                     }
-                                }
 
+                                }
                             }
                         });
                         app_store_SwipeRefreshLayout.setEnabled(false);
@@ -260,6 +274,13 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 getAllAppStoreKindHandler.sendMessage(message);
             }
         }).start();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
+        initFragmentView();
+        super.onHiddenChanged(hidden);
     }
 
     @Override

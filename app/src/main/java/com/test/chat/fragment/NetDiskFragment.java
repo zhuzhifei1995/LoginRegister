@@ -1,5 +1,6 @@
 package com.test.chat.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -73,7 +74,7 @@ public class NetDiskFragment extends Fragment {
         BlankFragment blankFragment = new BlankFragment();
         fragments.add(netDiskFileFragment);
         fragments.add(blankFragment);
-        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
+        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(getChildFragmentManager(), fragments);
         net_disk_content_ViewPager.setAdapter(titleFragmentPagerView);
         net_disk_title_TabLayout.setupWithViewPager(net_disk_content_ViewPager);
         Objects.requireNonNull(net_disk_title_TabLayout.getTabAt(0)).setText("在线网盘");
@@ -90,6 +91,7 @@ public class NetDiskFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
+        initFragmentView();
         super.onHiddenChanged(hidden);
     }
 }
