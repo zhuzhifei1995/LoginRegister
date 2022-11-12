@@ -81,7 +81,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 pageRecyclerViewAdapter.setOnPageSelectOnItemClickListener(new PageRecyclerViewAdapter.PageSelectOnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        Toast.makeText(context, ""+position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 });
@@ -127,7 +127,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onTabSelected(TabLayout.Tab tab) {
                                 TAB_IS_SELECT = false;
-                                if (tab != null) {
+                                if (tab.getCustomView() != null) {
                                     ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
                                     kind_ImageView.setImageResource(R.drawable.message_no_show);
                                     kind_ImageView.setVisibility(View.VISIBLE);
@@ -139,14 +139,14 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                             @Override
                             public void onTabUnselected(TabLayout.Tab tab) {
-                                if (tab != null) {
+                                if (tab.getCustomView() != null) {
                                     Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView).setVisibility(View.GONE);
                                 }
                             }
 
                             @Override
                             public void onTabReselected(TabLayout.Tab tab) {
-                                if (tab != null) {
+                                if (tab.getCustomView() != null) {
                                     ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
                                     if (TAB_IS_SELECT) {
                                         kind_ImageView.setImageResource(R.drawable.message_no_show);
@@ -202,6 +202,8 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                         }
                                     }
 
+                                }else {
+                                    progressDialog.dismiss();
                                 }
                             }
                         });
@@ -240,6 +242,8 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void initTitleView() {
+        ActivityUtil.setLinearLayoutBackground(appStoreFragment.findViewById(R.id.app_store_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         TextView top_title_TextView = appStoreFragment.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText(new String("应用商城"));
         ImageView title_left_ImageView = appStoreFragment.findViewById(R.id.title_left_ImageView);
@@ -256,8 +260,6 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         app_store_SwipeRefreshLayout.setOnRefreshListener(this);
         app_store_SwipeRefreshLayout.setRefreshing(false);
-        LinearLayout app_store_LinearLayout = appStoreFragment.findViewById(R.id.app_store_LinearLayout);
-        ActivityUtil.setLinearLayoutBackground(app_store_LinearLayout, SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         app_store_title_TabLayout = appStoreFragment.findViewById(R.id.app_store_title_TabLayout);
         app_store_content_ViewPager = appStoreFragment.findViewById(R.id.app_store_content_ViewPager);
         new Thread(new Runnable() {
@@ -279,7 +281,8 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onHiddenChanged(boolean hidden) {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
-        initFragmentView();
+        ActivityUtil.setLinearLayoutBackground(appStoreFragment.findViewById(R.id.app_store_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         super.onHiddenChanged(hidden);
     }
 

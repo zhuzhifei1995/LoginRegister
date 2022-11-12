@@ -91,7 +91,8 @@ public class NetDiskFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
-        initFragmentView();
+        ActivityUtil.setLinearLayoutBackground(netDiskFragmentView.findViewById(R.id.net_disk_main_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         super.onHiddenChanged(hidden);
     }
 }

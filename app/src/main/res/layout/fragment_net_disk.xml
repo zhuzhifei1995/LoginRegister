@@ -30,6 +30,11 @@
             app:tabMode="auto"
             app:tabSelectedTextColor="@color/main_select" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/gray"/>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/net_disk_content_ViewPager"
             android:layout_width="match_parent"

@@ -118,8 +118,6 @@ public class MessageFragment extends Fragment {
     }
 
     private void initFragmentView() {
-        ActivityUtil.setLinearLayoutBackground(messageFragmentView.findViewById(R.id.message_fragment_LinearLayout),
-                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         initTitleView();
         initChatRecyclerView();
     }
@@ -179,6 +177,8 @@ public class MessageFragment extends Fragment {
     }
 
     private void initTitleView() {
+        ActivityUtil.setLinearLayoutBackground(messageFragmentView.findViewById(R.id.message_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         TextView top_title_TextView = messageFragmentView.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText("消息");
         ImageView title_left_ImageView = messageFragmentView.findViewById(R.id.title_left_ImageView);
@@ -203,7 +203,8 @@ public class MessageFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
-        initFragmentView();
+        ActivityUtil.setLinearLayoutBackground(messageFragmentView.findViewById(R.id.message_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         super.onHiddenChanged(hidden);
     }
 }

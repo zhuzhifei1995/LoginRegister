@@ -1343,7 +1343,8 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     @Override
     public void onHiddenChanged(boolean hidden) {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
-        initMyFragmentView();
+        ActivityUtil.setLinearLayoutBackground(myFragmentView.findViewById(R.id.my_fragment_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         super.onHiddenChanged(hidden);
     }
 
