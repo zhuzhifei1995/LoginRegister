@@ -39,7 +39,6 @@ import com.test.chat.util.HttpUtil;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.view.TitleFragmentPagerView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
