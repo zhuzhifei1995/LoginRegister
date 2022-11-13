@@ -966,6 +966,23 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showMyMessage() {
+        ImageView message_show_ImageView = findViewById(R.id.message_show_ImageView);
+        LinearLayout my_show_message_LinearLayout = findViewById(R.id.my_show_message_LinearLayout);
+        View line_message_View = findViewById(R.id.line_message_View);
+        if (IS_SHOW_MY_MESSAGE) {
+            message_show_ImageView.setImageResource(R.drawable.message_no_show);
+            my_show_message_LinearLayout.setVisibility(View.GONE);
+            line_message_View.setVisibility(View.GONE);
+            IS_SHOW_MY_MESSAGE = false;
+        } else {
+            message_show_ImageView.setImageResource(R.drawable.message_show);
+            my_show_message_LinearLayout.setVisibility(View.VISIBLE);
+            line_message_View.setVisibility(View.VISIBLE);
+            IS_SHOW_MY_MESSAGE = true;
+        }
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -994,23 +1011,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void showMyMessage() {
-        ImageView message_show_ImageView = findViewById(R.id.message_show_ImageView);
-        LinearLayout my_show_message_LinearLayout = findViewById(R.id.my_show_message_LinearLayout);
-        View line_message_View = findViewById(R.id.line_message_View);
-        if (IS_SHOW_MY_MESSAGE) {
-            message_show_ImageView.setImageResource(R.drawable.message_no_show);
-            my_show_message_LinearLayout.setVisibility(View.GONE);
-            line_message_View.setVisibility(View.GONE);
-            IS_SHOW_MY_MESSAGE = false;
-        } else {
-            message_show_ImageView.setImageResource(R.drawable.message_show);
-            my_show_message_LinearLayout.setVisibility(View.VISIBLE);
-            line_message_View.setVisibility(View.VISIBLE);
-            IS_SHOW_MY_MESSAGE = true;
-        }
-    }
 
     private void showSearchFriend() {
         View title_search_bar_include = findViewById(R.id.title_search_bar_include);

@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +39,7 @@ import com.test.chat.util.HttpUtil;
 import com.test.chat.util.SharedPreferencesUtils;
 import com.test.chat.view.TitleFragmentPagerView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,7 +110,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                             AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment(kindJSONObject);
                             fragments.add(appListDetailsFragment);
                         }
-                        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(requireActivity().getSupportFragmentManager(), fragments);
+                        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(getChildFragmentManager(), fragments);
                         app_store_content_ViewPager.setAdapter(titleFragmentPagerView);
                         app_store_title_TabLayout.setupWithViewPager(app_store_content_ViewPager);
                         for (int j = 0; j < jsonArray.length(); j++) {
@@ -202,7 +202,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                         }
                                     }
 
-                                }else {
+                                } else {
                                     progressDialog.dismiss();
                                 }
                             }

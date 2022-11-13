@@ -9,31 +9,31 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:padding="10dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
-            android:src="@drawable/back_button"
             android:layout_width="40dp"
+            android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
-            android:layout_height="40dp"
+            android:src="@drawable/back_button"
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:text="@string/app_store"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/app_store"
+            android:textAlignment="center" />
 
         <View
             android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp" />
 
     </LinearLayout>
 

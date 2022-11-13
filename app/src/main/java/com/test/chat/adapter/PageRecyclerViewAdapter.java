@@ -48,8 +48,8 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
     @Override
     public void onBindViewHolder(@NotNull PageRecyclerViewHolder pageRecyclerViewHolder, int position) {
         pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageList.get(position)));
-        Log.e(TAG, "onBindViewHolder: "+ (position == getItemCount()-1) );
-        if (position == getItemCount()-1){
+        Log.e(TAG, "onBindViewHolder: " + (position == getItemCount() - 1));
+        if (position == getItemCount() - 1) {
             pageRecyclerViewHolder.page_main_LinearLayout.setBackgroundResource(R.drawable.button_bottom_bg);
         }
         pageRecyclerViewHolder.page_main_LinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,14 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
                 pageSelectOnItemClickListener.onItemClick(position);
             }
         });
+    }
+
+    public void setOnPageSelectOnItemClickListener(PageRecyclerViewAdapter.PageSelectOnItemClickListener pageSelectOnItemClickListener) {
+        this.pageSelectOnItemClickListener = pageSelectOnItemClickListener;
+    }
+
+    public interface PageSelectOnItemClickListener {
+        void onItemClick(int position);
     }
 
     public static class PageRecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -70,13 +78,5 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
             page_TextView = view.findViewById(R.id.page_TextView);
             page_main_LinearLayout = view.findViewById(R.id.page_main_LinearLayout);
         }
-    }
-
-    public void setOnPageSelectOnItemClickListener(PageRecyclerViewAdapter.PageSelectOnItemClickListener pageSelectOnItemClickListener) {
-        this.pageSelectOnItemClickListener = pageSelectOnItemClickListener;
-    }
-
-    public interface PageSelectOnItemClickListener {
-        void onItemClick(int position);
     }
 }
