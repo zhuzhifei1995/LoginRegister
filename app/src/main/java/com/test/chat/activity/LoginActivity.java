@@ -193,9 +193,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     private void login() {
-        // TODO
-//        login_account_EditText.setText(new String("20220922234321"));
-//        login_password_EditText.setText(new String("123456789"));
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(login_account_EditText.getWindowToken(), 0);
         inputMethodManager.hideSoftInputFromWindow(login_password_EditText.getWindowToken(), 0);

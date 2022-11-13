@@ -223,8 +223,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         top_title_TextView.setText("手机验证");
         ImageView title_left_ImageView = findViewById(R.id.title_left_ImageView);
         title_left_ImageView.setOnClickListener(this);
-        // TODO
-//        myCount = new RegisterActivity.MyCount(10000, 1000);
         myCount = new RegisterActivity.MyCount(6 * 10000, 1000);
         myCount.start();
 
@@ -493,8 +491,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     private void sendMobileNoCode() {
         phone = phone_number_EditText.getText().toString();
-        //TODO
-//        phone = "15079069986";
         if (!check_agree_CheckBox.isChecked()) {
             Toast.makeText(this, "请确认是否已经阅读《腾讯QQ服务条款》", Toast.LENGTH_SHORT).show();
         }
@@ -614,8 +610,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         }
         TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
         prompt_TextView.setText("验证码验证中......");
-        // TODO
-//        verificationCode = new String("123456");
         String inputVerificationCode = verification_code_EditText.getText().toString();
         if (inputVerificationCode.equals(verificationCode)) {
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -644,11 +638,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         EditText re_register_password_EditText = findViewById(R.id.re_register_password_EditText);
         password = register_password_EditText.getText().toString();
         String re_password = re_register_password_EditText.getText().toString();
-
-        // TODO
-//        password = "123456789";
-//        re_password = "123456789";
-
         if (ActivityUtil.isPassword(password)) {
             if (password.equals(re_password)) {
                 initViewPhotoSet();
