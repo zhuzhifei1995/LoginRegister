@@ -31,6 +31,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     private DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener;
     private DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener;
     private UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener;
+    private FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener;
 
     public FileRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化FriendRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -107,7 +108,11 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
                 fileRecyclerViewHolder.root_file_LinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e(TAG, "onClick: 外层被点击");
+                        if (fileDetailLinearLayoutOnItemClickListener != null) {
+                            fileDetailLinearLayoutOnItemClickListener.onItemClick(position);
+                        } else {
+                            Log.e(TAG, "onClick: 不能点击");
+                        }
                     }
                 });
             }
@@ -135,6 +140,10 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         this.updateFileImageViewOnItemClickListener = updateFileImageViewOnItemClickListener;
     }
 
+    public void setOnFileDetailLinearLayoutClickListener(FileRecyclerViewAdapter.FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener) {
+        this.fileDetailLinearLayoutOnItemClickListener = fileDetailLinearLayoutOnItemClickListener;
+    }
+
     public interface DownloadFileImageViewOnItemClickListener {
         void onItemClick(int position);
     }
@@ -144,6 +153,10 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     }
 
     public interface UpdateFileImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface FileDetailLinearLayoutOnItemClickListener {
         void onItemClick(int position);
     }
 

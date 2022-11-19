@@ -302,7 +302,6 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                              Bundle savedInstanceState) {
         appListDetailsFragmentView = inflater.inflate(R.layout.fragment_app_list_details, container, false);
         registerReceiver();
-        pageNum = 1;
         initFragmentView();
         return appListDetailsFragmentView;
     }

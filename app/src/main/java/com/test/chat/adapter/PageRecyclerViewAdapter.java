@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -48,7 +50,17 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
 
     @Override
     public void onBindViewHolder(@NotNull PageRecyclerViewHolder pageRecyclerViewHolder, int position) {
-        pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageJSONObjectList.get(position)));
+        try {
+            pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageJSONObjectList.get(position).getString("page")));
+            String isSelect = pageJSONObjectList.get(position).getString("isSelect");
+            if (isSelect.equals("1")) {
+                pageRecyclerViewHolder.page_ImageView.setImageResource(R.drawable.page_select);
+            } else {
+                pageRecyclerViewHolder.page_ImageView.setImageResource(R.drawable.page_normal);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.e(TAG, "onBindViewHolder: " + (position == getItemCount() - 1));
         if (position == getItemCount() - 1) {
             pageRecyclerViewHolder.page_main_LinearLayout.setBackgroundResource(R.drawable.button_bottom_bg);
@@ -73,11 +85,13 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
 
         private final TextView page_TextView;
         private final LinearLayout page_main_LinearLayout;
+        private final ImageView page_ImageView;
 
         public PageRecyclerViewHolder(View view) {
             super(view);
             page_TextView = view.findViewById(R.id.page_TextView);
             page_main_LinearLayout = view.findViewById(R.id.page_main_LinearLayout);
+            page_ImageView = view.findViewById(R.id.page_ImageView);
         }
     }
 }

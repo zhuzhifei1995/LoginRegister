@@ -87,5 +87,8 @@
     <string name="check_apk_update">检测更新</string>
     <string name="loading">加载中，请稍后......</string>
     <string name="page_select">切换到页码</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
+    <string name="replay">重播</string>
 
 </resources>

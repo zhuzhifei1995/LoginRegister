@@ -1089,6 +1089,28 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                     break;
             }
         }
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 200:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, REQUEST_IMAGE_GET);
+                    } else {
+                        Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+            case 300:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    photoFromCapture();
+                }
+        }
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -1117,28 +1139,6 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    @SuppressLint("QueryPermissionsNeeded")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 200:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(intent, REQUEST_IMAGE_GET);
-                    } else {
-                        Toast.makeText(context, "未找到图片查看器", Toast.LENGTH_LONG).show();
-                    }
-                }
-                break;
-            case 300:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    photoFromCapture();
-                }
-        }
-    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

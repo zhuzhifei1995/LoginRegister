@@ -6,6 +6,7 @@ import static com.test.chat.util.ActivityUtil.showDownloadNotification;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
+import com.test.chat.activity.VideoPlayActivity;
 import com.test.chat.adapter.FileRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -44,6 +46,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,6 +232,26 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                                     });
                                 } catch (JSONException e) {
                                     Toast.makeText(context, "删除文件失败！", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        fileRecyclerViewAdapter.setOnFileDetailLinearLayoutClickListener(new FileRecyclerViewAdapter.FileDetailLinearLayoutOnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Log.e(TAG, "onItemClick: " + fileJSONObjectList.get(position));
+                                try {
+                                    String fileName = fileJSONObjectList.get(position).getString("file_name");
+                                    if (Arrays.asList(ActivityUtil.MOVIE_TYPE).contains(fileName.substring(fileName.lastIndexOf(".") + 1))) {
+                                        Intent intent = new Intent(context, VideoPlayActivity.class);
+                                        String fileDownloadUrl = fileJSONObjectList.get(position).getString("file_download_url");
+                                        intent.putExtra("fileDownloadUrl", fileDownloadUrl);
+                                        intent.putExtra("fileName", fileName);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(context, "文件格式不支持！", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }

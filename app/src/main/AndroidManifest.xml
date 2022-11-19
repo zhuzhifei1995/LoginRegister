@@ -36,7 +36,6 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         tools:targetApi="q">
-
         <activity
             android:name=".activity.WelcomeActivity"
             android:exported="true"
@@ -56,6 +55,12 @@
         <activity
             android:name=".activity.WebNetActivity"
             android:launchMode="standard" />
+        <activity
+            android:name=".activity.VideoPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="standard"

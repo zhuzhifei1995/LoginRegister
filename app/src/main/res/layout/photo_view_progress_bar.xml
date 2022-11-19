@@ -14,7 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:paddingTop="30dp"
+        android:padding="30dp"
         android:text="@string/photo_show" />
 
     <View
