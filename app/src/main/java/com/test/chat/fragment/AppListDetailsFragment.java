@@ -4,7 +4,10 @@ import static com.test.chat.util.ActivityUtil.showDownloadNotification;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -273,9 +277,18 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
         }
 
     };
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            pageNum = intent.getIntExtra("position", 1) + 1;
+            initFragmentView();
+        }
+    };
+    private LocalBroadcastManager localBroadcastManager;
 
     public AppListDetailsFragment(JSONObject kindJSONObject) {
         this.kindJSONObject = kindJSONObject;
+        pageNum = 1;
     }
 
     @Override
@@ -288,6 +301,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         appListDetailsFragmentView = inflater.inflate(R.layout.fragment_app_list_details, container, false);
+        registerReceiver();
         pageNum = 1;
         initFragmentView();
         return appListDetailsFragmentView;
@@ -405,8 +419,35 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
         });
     }
 
+    private void registerReceiver() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(requireActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ActivityUtil.TAG);
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        pageNum = 1;
+        super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        localBroadcastManager.unregisterReceiver(broadcastReceiver);
+        pageNum = 1;
+    }
+
+    @Override
+    public void onResume() {
+        pageNum = 1;
+        super.onResume();
+    }
+
     @Override
     public void onRefresh() {
+        pageNum = 1;
         initFragmentView();
     }
 

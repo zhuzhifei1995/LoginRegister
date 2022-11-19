@@ -17,6 +17,7 @@ import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -25,17 +26,17 @@ import java.util.List;
 public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerViewAdapter.PageRecyclerViewHolder> {
 
     private static final String TAG = ActivityUtil.TAG;
-    private final List<Integer> pageList;
+    private final List<JSONObject> pageJSONObjectList;
     private PageRecyclerViewAdapter.PageSelectOnItemClickListener pageSelectOnItemClickListener;
 
-    public PageRecyclerViewAdapter(List<Integer> pageList) {
-        Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + pageList.toString());
-        this.pageList = pageList;
+    public PageRecyclerViewAdapter(List<JSONObject> pageJSONObjectList) {
+        Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + pageJSONObjectList.toString());
+        this.pageJSONObjectList = pageJSONObjectList;
     }
 
     @Override
     public int getItemCount() {
-        return pageList.size();
+        return pageJSONObjectList.size();
     }
 
     @NonNull
@@ -47,7 +48,7 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
 
     @Override
     public void onBindViewHolder(@NotNull PageRecyclerViewHolder pageRecyclerViewHolder, int position) {
-        pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageList.get(position)));
+        pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageJSONObjectList.get(position)));
         Log.e(TAG, "onBindViewHolder: " + (position == getItemCount() - 1));
         if (position == getItemCount() - 1) {
             pageRecyclerViewHolder.page_main_LinearLayout.setBackgroundResource(R.drawable.button_bottom_bg);

@@ -20,7 +20,9 @@
             android:id="@+id/page_ImageView"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/page_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/btn_page_select"
             tools:ignore="ContentDescription" />
 
         <TextView

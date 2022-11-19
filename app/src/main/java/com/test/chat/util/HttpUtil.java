@@ -33,9 +33,9 @@ import okhttp3.ResponseBody;
 public class HttpUtil {
 
     private static final String TAG = ActivityUtil.TAG;
-    private static final long READ_TIMEOUT = 60000;
-    private static final long WRITE_TIMEOUT = 60000;
-    private static final long CONNECT_TIMEOUT = 60000;
+    private static final long READ_TIMEOUT = 6000;
+    private static final long WRITE_TIMEOUT = 6000;
+    private static final long CONNECT_TIMEOUT = 6000;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String JSON_RESULT = "";
     private final OkHttpClient client;

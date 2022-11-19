@@ -37,9 +37,7 @@ public class TitleFragmentPagerView extends FragmentPagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup viewGroup, int position) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         for (int i = 0; i < getCount(); i++) {
-            final long itemId = getItemId(i);
-            String name = makeFragmentName(viewGroup.getId(), itemId);
-            Fragment fragment = fragmentManager.findFragmentByTag(name);
+            Fragment fragment = fragmentManager.findFragmentByTag(makeFragmentName(viewGroup.getId(), getItemId(i)));
             if (fragment != null) {
                 fragmentTransaction.remove(fragment);
             }

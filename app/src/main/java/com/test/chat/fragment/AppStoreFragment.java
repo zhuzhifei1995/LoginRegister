@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -51,7 +53,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-@SuppressLint("MissingInflatedId")
+@SuppressLint("MissingInflatedId,NotifyDataSetChanged")
 public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ActivityUtil.TAG;
@@ -62,6 +64,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
     private View loading_layout;
     private SwipeRefreshLayout app_store_SwipeRefreshLayout;
     private ProgressDialog progressDialog;
+    private int PAGE_SELECT;
     private final Handler showPageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -70,23 +73,44 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                 int pageNum = Integer.parseInt(jsonObject.getString("kind_page"));
                 progressDialog.setContentView(R.layout.apk_page_bar);
                 RecyclerView apk_page_RecyclerView = progressDialog.findViewById(R.id.apk_page_RecyclerView);
-                List<Integer> pageNumList = new ArrayList<>();
+                List<JSONObject> pageJSONObjectList = new ArrayList<>();
                 for (int i = 1; i <= pageNum; i++) {
-                    pageNumList.add(i);
+                    if (i == PAGE_SELECT) {
+                        pageJSONObjectList.add(new JSONObject("{'page': '" + i + "', 'isSelect': '1'}"));
+                    } else {
+                        pageJSONObjectList.add(new JSONObject("{'page': '" + i + "', 'isSelect': '0'}"));
+                    }
                 }
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 apk_page_RecyclerView.setLayoutManager(linearLayoutManager);
-                PageRecyclerViewAdapter pageRecyclerViewAdapter = new PageRecyclerViewAdapter(pageNumList);
+                PageRecyclerViewAdapter pageRecyclerViewAdapter = new PageRecyclerViewAdapter(pageJSONObjectList);
                 pageRecyclerViewAdapter.setOnPageSelectOnItemClickListener(new PageRecyclerViewAdapter.PageSelectOnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ActivityUtil.TAG);
+                        intent.putExtra("position", position);
+                        try {
+                            PAGE_SELECT = position + 1;
+                            pageRecyclerViewAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        LocalBroadcastManager.getInstance(requireActivity()).sendBroadcast(intent);
                         progressDialog.dismiss();
                     }
                 });
                 apk_page_RecyclerView.setAdapter(pageRecyclerViewAdapter);
+                ImageView back_ImageView = progressDialog.findViewById(R.id.back_ImageView);
+                back_ImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        progressDialog.dismiss();
+                    }
+                });
+                TextView title_TextView = progressDialog.findViewById(R.id.title_TextView);
+                title_TextView.setText(new String("当前共有" + pageJSONObjectList.size() + "页"));
                 super.handleMessage(msg);
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 progressDialog.dismiss();
                 Toast.makeText(context, "当前分类无应用！", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -127,6 +151,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                             public void onTabSelected(TabLayout.Tab tab) {
                                 TAB_IS_SELECT = false;
                                 if (tab.getCustomView() != null) {
+                                    PAGE_SELECT = 1;
                                     ImageView kind_ImageView = Objects.requireNonNull(tab.getCustomView()).findViewById(R.id.kind_ImageView);
                                     kind_ImageView.setImageResource(R.drawable.message_no_show);
                                     kind_ImageView.setVisibility(View.VISIBLE);
@@ -196,6 +221,13 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
                                                         dialogInterface.dismiss();
                                                     }
                                                     return false;
+                                                }
+                                            });
+                                            progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialogInterface) {
+                                                    kind_ImageView.setImageResource(R.drawable.message_no_show);
+                                                    TAB_IS_SELECT = false;
                                                 }
                                             });
                                         }
@@ -287,6 +319,7 @@ public class AppStoreFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
+        PAGE_SELECT = 1;
         initFragmentView();
     }
 }

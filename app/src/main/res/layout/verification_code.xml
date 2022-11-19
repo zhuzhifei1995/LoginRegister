@@ -148,6 +148,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
+                android:background="@drawable/button_send_rounded_corners_bg"
                 android:padding="20dp"
                 android:text="@string/get_again"
                 android:visibility="gone" />
@@ -170,6 +171,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
+            android:background="@drawable/button_send_rounded_corners_bg"
             android:padding="20dp"
             android:text="@string/submit_verification_code" />
     </LinearLayout>
