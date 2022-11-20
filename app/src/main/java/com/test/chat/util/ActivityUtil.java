@@ -45,7 +45,7 @@ public class ActivityUtil {
     public static final String TMP_APK_ICON_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/icon";
     public static final String TMP_APK_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/apk";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files";
-    public static final String[] MOVIE_TYPE = {"mp4", "flv", "mkv", "webm", "avi"};
+    public static final String[] MOVIE_TYPE = {"mp4", "flv", "mkv", "webm", "avi", "wmv"};
     public static final String[] MUSIC_TYPE = {"aac", "mp3", "ac3", "ogg", "wav"};
 
     //    连接电脑正常网络时

@@ -57,7 +57,7 @@ public class VideoPlayActivity extends AppCompatActivity {
             }
         });
         TextView top_title_TextView = findViewById(R.id.top_title_TextView);
-        top_title_TextView.setText(fileName.substring(0,fileName.lastIndexOf(".")));
+        top_title_TextView.setText(fileName.substring(0, fileName.lastIndexOf(".")));
         JCUtils.saveProgress(getApplicationContext(), fileDownloadUrl, 0);
         playVideo_JCVideoPlayerStandard = findViewById(R.id.playVideo_JCVideoPlayerStandard);
         playVideo_JCVideoPlayerStandard.setUp(fileDownloadUrl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");

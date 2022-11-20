@@ -62,6 +62,9 @@
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
+            android:name=".activity.ApkDetailActivity"
+            android:launchMode="standard" />
+        <activity
             android:name=".activity.MainActivity"
             android:launchMode="standard"
             android:windowSoftInputMode="adjustPan" />

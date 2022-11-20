@@ -85,21 +85,33 @@ public class PhotoShowActivity extends Activity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }, 1);
             } else {
-                initVoiceView(voiceName);
-                initMediaPlayer(voiceName);
+                initVoiceView(voiceName, 1);
+                initMediaPlayer(voiceName, 1);
             }
-
         } else if (flag == 4) {
             photo_show_ImageView.setVisibility(View.VISIBLE);
             voice_LinearLayout.setVisibility(View.GONE);
             photo_show_ImageView.setImageBitmap(ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "qr_code.png.cache"));
+        } else if (flag == 5) {
+            photo_show_ImageView.setVisibility(View.GONE);
+            String voiceName = intent.getStringExtra("voiceName");
+            voice_LinearLayout.setVisibility(View.VISIBLE);
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, 1);
+            } else {
+                initVoiceView(voiceName, 2);
+                initMediaPlayer(voiceName, 2);
+            }
         } else {
             finish();
             Toast.makeText(context, "传入的参数错误！", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void initVoiceView(final String voiceName) {
+    private void initVoiceView(String voiceName, int type) {
         mediaPlayer = new MediaPlayer();
         play_ImageView = findViewById(R.id.play_ImageView);
         music_play_time_TextView = findViewById(R.id.music_play_time_TextView);
@@ -128,7 +140,7 @@ public class PhotoShowActivity extends Activity {
                     play_ImageView.setImageResource(R.drawable.voice_stop);
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
-                        initMediaPlayer(voiceName);
+                        initMediaPlayer(voiceName, type);
                     }
                     IS_PLAYING = true;
                 }
@@ -184,11 +196,16 @@ public class PhotoShowActivity extends Activity {
         }
     }
 
-    private void initMediaPlayer(String voiceName) {
+    private void initMediaPlayer(String voiceName, int type) {
         try {
-            File file = new File(ActivityUtil.TMP_VOICE_FILE_PATH, voiceName);
-            mediaPlayer.setDataSource(file.getPath());
-            mediaPlayer.prepareAsync();
+            if (type == 2) {
+                mediaPlayer.setDataSource(voiceName);
+                mediaPlayer.prepareAsync();
+            } else {
+                File file = new File(ActivityUtil.TMP_VOICE_FILE_PATH, voiceName);
+                mediaPlayer.setDataSource(file.getPath());
+                mediaPlayer.prepareAsync();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,7 +224,7 @@ public class PhotoShowActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initMediaPlayer("");
+                initMediaPlayer("", 1);
             } else {
                 Toast.makeText(this, "拒绝权限将无法使用程序", Toast.LENGTH_LONG).show();
                 finish();

@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
+import com.test.chat.activity.ApkDetailActivity;
 import com.test.chat.adapter.ApkRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -139,6 +140,7 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                         apkRecyclerViewAdapter = new ApkRecyclerViewAdapter(jsonObjectList);
                         apkRecyclerViewAdapter.notifyDataSetChanged();
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+//                        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         apk_file_RecyclerView.setLayoutManager(linearLayoutManager);
                         apk_file_RecyclerView.setAdapter(apkRecyclerViewAdapter);
                         loading_layout.setVisibility(View.GONE);
@@ -262,6 +264,19 @@ public class AppListDetailsFragment extends Fragment implements SwipeRefreshLayo
                                 });
                             } catch (JSONException e) {
                                 Toast.makeText(context, "删除安装包失败！", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    apkRecyclerViewAdapter.setOnApkDetailLinearLayoutClickListener(new ApkRecyclerViewAdapter.ApkDetailLinearLayoutOnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            try {
+                                String apkDetailHtml = jsonObjectList.get(position).getString("apk_detail_html");
+                                Intent intent = new Intent(context, ApkDetailActivity.class);
+                                intent.putExtra("apkDetailHtml", apkDetailHtml);
+                                context.startActivity(intent);
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }

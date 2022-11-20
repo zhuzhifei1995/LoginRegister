@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
+import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.activity.VideoPlayActivity;
 import com.test.chat.adapter.FileRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
@@ -247,6 +248,12 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                                         String fileDownloadUrl = fileJSONObjectList.get(position).getString("file_download_url");
                                         intent.putExtra("fileDownloadUrl", fileDownloadUrl);
                                         intent.putExtra("fileName", fileName);
+                                        startActivity(intent);
+                                    } else if (Arrays.asList(ActivityUtil.MUSIC_TYPE).contains(fileName.substring(fileName.lastIndexOf(".") + 1))) {
+                                        Intent intent = new Intent(context, PhotoShowActivity.class);
+                                        String fileDownloadUrl = fileJSONObjectList.get(position).getString("file_download_url");
+                                        intent.putExtra("flag", 5);
+                                        intent.putExtra("voiceName", fileDownloadUrl);
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(context, "文件格式不支持！", Toast.LENGTH_SHORT).show();

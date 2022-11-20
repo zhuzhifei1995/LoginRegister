@@ -34,6 +34,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     private DownloadApkImageViewOnItemClickListener downloadApkImageViewOnItemClickListener;
     private InstallImageViewOnItemClickListener installImageViewOnItemClickListener;
     private DeleteImageViewOnItemClickListener deleteImageViewOnItemClickListener;
+    private ApkDetailLinearLayoutOnItemClickListener apkDetailLinearLayoutOnItemClickListener;
 
     public ApkRecyclerViewAdapter(List<JSONObject> jsonObjectList) {
         Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + jsonObjectList.toString());
@@ -50,7 +51,11 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         apkRecyclerViewHolder.root_apk_LinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "onClick: 外层被点击");
+                if (apkDetailLinearLayoutOnItemClickListener != null) {
+                    apkDetailLinearLayoutOnItemClickListener.onItemClick(position);
+                } else {
+                    Log.e(TAG, "onClick: 不能点击");
+                }
             }
         });
         apkRecyclerViewHolder.download_ImageView.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +142,10 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         this.deleteImageViewOnItemClickListener = deleteImageViewOnItemClickListener;
     }
 
+    public void setOnApkDetailLinearLayoutClickListener(ApkRecyclerViewAdapter.ApkDetailLinearLayoutOnItemClickListener apkDetailLinearLayoutOnItemClickListener) {
+        this.apkDetailLinearLayoutOnItemClickListener = apkDetailLinearLayoutOnItemClickListener;
+    }
+
     public interface DownloadApkImageViewOnItemClickListener {
         void onItemClick(int position);
     }
@@ -146,6 +155,10 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     }
 
     public interface DeleteImageViewOnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface ApkDetailLinearLayoutOnItemClickListener {
         void onItemClick(int position);
     }
 
