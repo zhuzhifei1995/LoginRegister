@@ -61,7 +61,6 @@ public class VideoPlayActivity extends AppCompatActivity {
         JCUtils.saveProgress(getApplicationContext(), fileDownloadUrl, 0);
         playVideo_JCVideoPlayerStandard = findViewById(R.id.playVideo_JCVideoPlayerStandard);
         playVideo_JCVideoPlayerStandard.setUp(fileDownloadUrl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-        playVideo_JCVideoPlayerStandard.startVideo();
         playVideo_JCVideoPlayerStandard.fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,7 +26,7 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher_sync"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="false"
         android:networkSecurityConfig="@xml/network_security_config"
