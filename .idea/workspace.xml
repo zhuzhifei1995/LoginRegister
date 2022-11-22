@@ -44,10 +44,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="增加页码切换">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
@@ -57,20 +53,25 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/VideoPlayActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/VideoPlayActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_launcher_sync.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-v24/ic_launcher_sync.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v23/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_sync.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v24/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/app_store_normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/app_store_selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/dynamic_normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/dynamic_selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/friend_normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/friend_selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/message_normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/message_selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/my_normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/my_selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/main_foot_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/main_foot_select.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[eb95234d]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -165,6 +166,7 @@
     <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/fm.jiecao/jiecaovideoplayer/5.5.2/7c2cdb75203c513b673ad1da710e82c8447d33eb/jiecaovideoplayer-5.5.2-sources.jar!/fm/jiecao/jcvideoplayer_lib/JCVideoPlayer.java_SELECTED" value="JCVideoPlayer" />
     <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/fm.jiecao/jiecaovideoplayer/5.5.2/7c2cdb75203c513b673ad1da710e82c8447d33eb/jiecaovideoplayer-5.5.2-sources.jar!/fm/jiecao/jcvideoplayer_lib/JCVideoPlayerStandard.java_SELECTED" value="JCVideoPlayerStandard" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/view/View.java_SELECTED" value="View" />
+    <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/ImageButton.java_SELECTED" value="ImageButton" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/adapter/CustomListView.java_SELECTED" value="CustomListView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/CustomListView.java_SELECTED" value="CustomListView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/ProgressBarView.java_SELECTED" value="ProgressBarView" />
@@ -192,11 +194,11 @@
       <recent name="com.test.chat" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable-v23" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\layout" />
       <recent name="D:\work\as_work\LoginRegister\app" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable-v24" />
-      <recent name="D:\work\as_work\LoginRegister\app\src\main\res\drawable-hdpi" />
     </key>
     <key name="android.template.863467341">
       <recent name="com.test.chat.activity" />
@@ -310,13 +312,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663428283551</updated>
-    </task>
-    <task id="LOCAL-00019" summary="修改">
-      <created>1665758699396</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1665758699396</updated>
     </task>
     <task id="LOCAL-00020" summary="修改">
       <created>1665820635158</created>
@@ -654,7 +649,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668953420729</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="增加页码切换">
+      <created>1669120396135</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1669120396136</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

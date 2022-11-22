@@ -4,22 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="5dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/message_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:padding="5dp"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/message_bottom_ImageButton"
+        <ImageView
+            android:id="@+id/message_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/message"
+            android:src="@drawable/message"
             android:clickable="false"
             tools:ignore="ContentDescription" />
 
@@ -35,16 +36,17 @@
     <LinearLayout
         android:id="@+id/friend_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:padding="5dp"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/friend_bottom_ImageButton"
+        <ImageView
+            android:id="@+id/friend_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/friend"
+            android:src="@drawable/friend"
             android:clickable="false"
             tools:ignore="ContentDescription" />
 
@@ -60,16 +62,17 @@
     <LinearLayout
         android:id="@+id/net_disk_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/net_disk_bottom_ImageButton"
+        <ImageView
+            android:id="@+id/net_disk_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/dynamic"
+            android:src="@drawable/dynamic"
             android:clickable="false"
             tools:ignore="ContentDescription" />
 
@@ -85,16 +88,17 @@
     <LinearLayout
         android:id="@+id/app_store_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/app_store_bottom_ImageButton"
+        <ImageView
+            android:id="@+id/app_store_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/app_store"
+            android:src="@drawable/app_store"
             android:clickable="false"
             tools:ignore="ContentDescription" />
 
@@ -110,16 +114,17 @@
     <LinearLayout
         android:id="@+id/my_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/my_bottom_ImageButton"
+        <ImageView
+            android:id="@+id/my_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/my"
+            android:src="@drawable/my"
             android:clickable="false"
             tools:ignore="ContentDescription" />
 

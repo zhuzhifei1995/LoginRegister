@@ -21,7 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,11 +63,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static final String TAG = ActivityUtil.TAG;
     private static final int BACK_PRESSED_INTERVAL = 2000;
     private static long CURRENT_BACK_PRESSED_TIME = 0;
-    private ImageButton message_bottom_ImageButton;
-    private ImageButton friend_bottom_ImageButton;
-    private ImageButton dynamic_bottom_ImageButton;
-    private ImageButton my_bottom_ImageButton;
-    private ImageButton app_store_bottom_ImageButton;
+    private ImageView message_bottom_ImageView;
+    private ImageView friend_bottom_ImageView;
+    private ImageView dynamic_bottom_ImageView;
+    private ImageView my_bottom_ImageView;
+    private ImageView app_store_bottom_ImageView;
     private TextView message_bottom_TextView;
     private TextView friend_bottom_TextView;
     private TextView dynamic_bottom_TextView;
@@ -198,11 +198,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dynamic_bottom_LinearLayout.setOnClickListener(this);
         my_bottom_LinearLayout.setOnClickListener(this);
         app_store_bottom_LinearLayout.setOnClickListener(this);
-        message_bottom_ImageButton = findViewById(R.id.message_bottom_ImageButton);
-        friend_bottom_ImageButton = findViewById(R.id.friend_bottom_ImageButton);
-        my_bottom_ImageButton = findViewById(R.id.my_bottom_ImageButton);
-        dynamic_bottom_ImageButton = findViewById(R.id.net_disk_bottom_ImageButton);
-        app_store_bottom_ImageButton = findViewById(R.id.app_store_bottom_ImageButton);
+        message_bottom_ImageView = findViewById(R.id.message_bottom_ImageView);
+        friend_bottom_ImageView = findViewById(R.id.friend_bottom_ImageView);
+        my_bottom_ImageView = findViewById(R.id.my_bottom_ImageView);
+        dynamic_bottom_ImageView = findViewById(R.id.net_disk_bottom_ImageView);
+        app_store_bottom_ImageView = findViewById(R.id.app_store_bottom_ImageView);
         setSelect(0);
         initFriendFragmentData();
     }
@@ -254,7 +254,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(messageFragment);
                 }
-                message_bottom_ImageButton.setBackgroundResource(R.drawable.message_selected);
+                message_bottom_ImageView.setImageResource(R.drawable.message_selected);
                 message_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 1:
@@ -265,7 +265,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(friendFragment);
 
                 }
-                friend_bottom_ImageButton.setBackgroundResource(R.drawable.friend_selected);
+                friend_bottom_ImageView.setImageResource(R.drawable.friend_selected);
                 friend_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 2:
@@ -275,7 +275,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(netDiskFragment);
                 }
-                dynamic_bottom_ImageButton.setBackgroundResource(R.drawable.dynamic_selected);
+                dynamic_bottom_ImageView.setImageResource(R.drawable.dynamic_selected);
                 dynamic_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 3:
@@ -285,7 +285,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(myFragment);
                 }
-                my_bottom_ImageButton.setBackgroundResource(R.drawable.my_selected);
+                my_bottom_ImageView.setImageResource(R.drawable.my_selected);
                 my_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 4:
@@ -295,7 +295,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(appStoreFragment);
                 }
-                app_store_bottom_ImageButton.setBackgroundResource(R.drawable.app_store_selected);
+                app_store_bottom_ImageView.setImageResource(R.drawable.app_store_selected);
                 app_store_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             default:
@@ -326,7 +326,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
         isCurrentDeviceLogin();
-        setBottomSelectImageButton();
+        setBottomSelectImageView();
         switch (view.getId()) {
             case R.id.message_bottom_LinearLayout:
                 setSelect(0);
@@ -368,16 +368,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }).start();
     }
 
-    private void setBottomSelectImageButton() {
-        message_bottom_ImageButton.setBackgroundResource(R.drawable.message_normal);
+    private void setBottomSelectImageView() {
+        message_bottom_ImageView.setImageResource(R.drawable.message_normal);
         message_bottom_TextView.setTextColor(Color.BLACK);
-        friend_bottom_ImageButton.setBackgroundResource(R.drawable.friend_normal);
+        friend_bottom_ImageView.setImageResource(R.drawable.friend_normal);
         friend_bottom_TextView.setTextColor(Color.BLACK);
-        dynamic_bottom_ImageButton.setBackgroundResource(R.drawable.dynamic_normal);
+        dynamic_bottom_ImageView.setImageResource(R.drawable.dynamic_normal);
         dynamic_bottom_TextView.setTextColor(Color.BLACK);
-        my_bottom_ImageButton.setBackgroundResource(R.drawable.my_normal);
+        my_bottom_ImageView.setImageResource(R.drawable.my_normal);
         my_bottom_TextView.setTextColor(Color.BLACK);
-        app_store_bottom_ImageButton.setBackgroundResource(R.drawable.app_store_normal);
+        app_store_bottom_ImageView.setImageResource(R.drawable.app_store_normal);
         app_store_bottom_TextView.setTextColor(Color.BLACK);
     }
 
