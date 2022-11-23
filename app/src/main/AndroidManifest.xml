@@ -66,13 +66,14 @@
             android:launchMode="standard" />
         <activity
             android:name=".activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:launchMode="standard"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ThemeSettingActivity"
             android:launchMode="standard" />
         <activity
-            android:name=".activity.Main2Activity"
+            android:name=".activity.MainActivity2"
             android:launchMode="standard" />
         <activity
             android:name=".activity.ChatFriendActivity"

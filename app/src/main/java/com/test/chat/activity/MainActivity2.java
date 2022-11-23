@@ -69,7 +69,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class Main2Activity extends Activity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity2 extends Activity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ActivityUtil.TAG;
     private static final int BACK_PRESSED_INTERVAL = 2000;
@@ -226,7 +226,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 initFriendRecyclerView();
             }
             friend_SwipeRefreshLayout.setRefreshing(false);
-            title_right_ImageView.setOnClickListener(Main2Activity.this);
+            title_right_ImageView.setOnClickListener(MainActivity2.this);
             friend_RecyclerView.setVisibility(View.VISIBLE);
             super.handleMessage(message);
         }
@@ -370,7 +370,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
 
         message_ImageView.setImageResource(R.drawable.message_normal);
         friend_ImageView.setImageResource(R.drawable.friend_normal);
-        dynamic_ImageView.setImageResource(R.drawable.dynamic_selected);
+        dynamic_ImageView.setImageResource(R.drawable.net_disk_selected);
         my_ImageView.setImageResource(R.drawable.my_normal);
         message_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
         friend_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
@@ -401,7 +401,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         initView();
         message_ImageView.setImageResource(R.drawable.message_normal);
         friend_ImageView.setImageResource(R.drawable.friend_normal);
-        dynamic_ImageView.setImageResource(R.drawable.dynamic_normal);
+        dynamic_ImageView.setImageResource(R.drawable.net_disk_normal);
         my_ImageView.setImageResource(R.drawable.my_selected);
         message_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
         friend_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
@@ -479,7 +479,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         initView();
         message_ImageView.setImageResource(R.drawable.message_selected);
         friend_ImageView.setImageResource(R.drawable.friend_normal);
-        dynamic_ImageView.setImageResource(R.drawable.dynamic_normal);
+        dynamic_ImageView.setImageResource(R.drawable.net_disk_normal);
         my_ImageView.setImageResource(R.drawable.my_normal);
         message_TextView.setTextColor(getResources().getColor(R.color.main_select, null));
         friend_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
@@ -561,7 +561,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         initView();
         message_ImageView.setImageResource(R.drawable.message_normal);
         friend_ImageView.setImageResource(R.drawable.friend_selected);
-        dynamic_ImageView.setImageResource(R.drawable.dynamic_normal);
+        dynamic_ImageView.setImageResource(R.drawable.net_disk_normal);
         my_ImageView.setImageResource(R.drawable.my_normal);
         message_TextView.setTextColor(getResources().getColor(R.color.main_normal, null));
         friend_TextView.setTextColor(getResources().getColor(R.color.main_select, null));
@@ -792,7 +792,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(Main2Activity.this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -811,7 +811,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
                 || ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(Main2Activity.this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
         } else {
@@ -1017,7 +1017,7 @@ public class Main2Activity extends Activity implements View.OnClickListener, Swi
 
     private void searchFriend() {
         ((InputMethodManager) search_EditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).
-                hideSoftInputFromWindow(Objects.requireNonNull(Main2Activity.this.getCurrentFocus()).getWindowToken(),
+                hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
         final String phone = search_EditText.getText().toString();
         if (ActivityUtil.isMobileNO(phone)) {

@@ -275,7 +275,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(netDiskFragment);
                 }
-                dynamic_bottom_ImageView.setImageResource(R.drawable.dynamic_selected);
+                dynamic_bottom_ImageView.setImageResource(R.drawable.net_disk_selected);
                 dynamic_bottom_TextView.setTextColor(Color.BLUE);
                 break;
             case 3:
@@ -373,7 +373,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         message_bottom_TextView.setTextColor(Color.BLACK);
         friend_bottom_ImageView.setImageResource(R.drawable.friend_normal);
         friend_bottom_TextView.setTextColor(Color.BLACK);
-        dynamic_bottom_ImageView.setImageResource(R.drawable.dynamic_normal);
+        dynamic_bottom_ImageView.setImageResource(R.drawable.net_disk_normal);
         dynamic_bottom_TextView.setTextColor(Color.BLACK);
         my_bottom_ImageView.setImageResource(R.drawable.my_normal);
         my_bottom_TextView.setTextColor(Color.BLACK);
