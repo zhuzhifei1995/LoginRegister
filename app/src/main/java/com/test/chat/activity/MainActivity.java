@@ -65,12 +65,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static long CURRENT_BACK_PRESSED_TIME = 0;
     private ImageView message_bottom_ImageView;
     private ImageView friend_bottom_ImageView;
-    private ImageView dynamic_bottom_ImageView;
+    private ImageView net_disk_bottom_ImageView;
     private ImageView my_bottom_ImageView;
     private ImageView app_store_bottom_ImageView;
     private TextView message_bottom_TextView;
     private TextView friend_bottom_TextView;
-    private TextView dynamic_bottom_TextView;
+    private TextView net_disk_bottom_TextView;
     private TextView my_bottom_TextView;
     private TextView app_store_bottom_TextView;
     private MessageFragment messageFragment;
@@ -190,7 +190,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         LinearLayout app_store_bottom_LinearLayout = findViewById(R.id.app_store_bottom_LinearLayout);
         message_bottom_TextView = findViewById(R.id.message_bottom_TextView);
         friend_bottom_TextView = findViewById(R.id.friend_bottom_TextView);
-        dynamic_bottom_TextView = findViewById(R.id.net_disk_bottom_TextView);
+        net_disk_bottom_TextView = findViewById(R.id.net_disk_bottom_TextView);
         my_bottom_TextView = findViewById(R.id.my_bottom_TextView);
         app_store_bottom_TextView = findViewById(R.id.app_store_bottom_TextView);
         message_bottom_LinearLayout.setOnClickListener(this);
@@ -201,7 +201,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         message_bottom_ImageView = findViewById(R.id.message_bottom_ImageView);
         friend_bottom_ImageView = findViewById(R.id.friend_bottom_ImageView);
         my_bottom_ImageView = findViewById(R.id.my_bottom_ImageView);
-        dynamic_bottom_ImageView = findViewById(R.id.net_disk_bottom_ImageView);
+        net_disk_bottom_ImageView = findViewById(R.id.net_disk_bottom_ImageView);
         app_store_bottom_ImageView = findViewById(R.id.app_store_bottom_ImageView);
         setSelect(0);
         initFriendFragmentData();
@@ -255,7 +255,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(messageFragment);
                 }
                 message_bottom_ImageView.setImageResource(R.drawable.message_selected);
-                message_bottom_TextView.setTextColor(Color.BLUE);
+                message_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             case 1:
                 if (friendFragment == null) {
@@ -266,7 +266,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                 }
                 friend_bottom_ImageView.setImageResource(R.drawable.friend_selected);
-                friend_bottom_TextView.setTextColor(Color.BLUE);
+                friend_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             case 2:
                 if (netDiskFragment == null) {
@@ -275,8 +275,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     transaction.show(netDiskFragment);
                 }
-                dynamic_bottom_ImageView.setImageResource(R.drawable.net_disk_selected);
-                dynamic_bottom_TextView.setTextColor(Color.BLUE);
+                net_disk_bottom_ImageView.setImageResource(R.drawable.net_disk_selected);
+                net_disk_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             case 3:
                 if (myFragment == null) {
@@ -286,7 +286,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(myFragment);
                 }
                 my_bottom_ImageView.setImageResource(R.drawable.my_selected);
-                my_bottom_TextView.setTextColor(Color.BLUE);
+                my_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             case 4:
                 if (appStoreFragment == null) {
@@ -296,7 +296,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(appStoreFragment);
                 }
                 app_store_bottom_ImageView.setImageResource(R.drawable.app_store_selected);
-                app_store_bottom_TextView.setTextColor(Color.BLUE);
+                app_store_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             default:
                 break;
@@ -305,6 +305,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void hideFragment(FragmentTransaction fragmentTransaction) {
+        isCurrentDeviceLogin();
         if (messageFragment != null) {
             fragmentTransaction.hide(messageFragment);
         }
@@ -325,7 +326,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
-        isCurrentDeviceLogin();
         setBottomSelectImageView();
         switch (view.getId()) {
             case R.id.message_bottom_LinearLayout:
@@ -370,15 +370,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void setBottomSelectImageView() {
         message_bottom_ImageView.setImageResource(R.drawable.message_normal);
-        message_bottom_TextView.setTextColor(Color.BLACK);
+        message_bottom_TextView.setTextColor(getColor(R.color.bottom_no_select));
         friend_bottom_ImageView.setImageResource(R.drawable.friend_normal);
-        friend_bottom_TextView.setTextColor(Color.BLACK);
-        dynamic_bottom_ImageView.setImageResource(R.drawable.net_disk_normal);
-        dynamic_bottom_TextView.setTextColor(Color.BLACK);
+        friend_bottom_TextView.setTextColor(getColor(R.color.bottom_no_select));
+        net_disk_bottom_ImageView.setImageResource(R.drawable.net_disk_normal);
+        net_disk_bottom_TextView.setTextColor(getColor(R.color.bottom_no_select));
         my_bottom_ImageView.setImageResource(R.drawable.my_normal);
-        my_bottom_TextView.setTextColor(Color.BLACK);
+        my_bottom_TextView.setTextColor(getColor(R.color.bottom_no_select));
         app_store_bottom_ImageView.setImageResource(R.drawable.app_store_normal);
-        app_store_bottom_TextView.setTextColor(Color.BLACK);
+        app_store_bottom_TextView.setTextColor(getColor(R.color.bottom_no_select));
     }
 
     @Override

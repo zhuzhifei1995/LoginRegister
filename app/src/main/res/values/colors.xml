@@ -6,8 +6,9 @@
     <color name="main_select">#0096DF</color>
     <color name="main_normal">#7D8F98</color>
     <color name="black">#000000</color>
-    <color name="text_bottom">#009CE8</color>
+    <color name="bottom_select">#0593D8</color>
     <color name="gray">#CCCCCC</color>
     <color name="no_color">#FFFFFF</color>
+    <color name="bottom_no_select">#BCBCBC</color>
 
 </resources>

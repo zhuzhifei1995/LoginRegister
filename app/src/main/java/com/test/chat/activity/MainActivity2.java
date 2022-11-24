@@ -1172,6 +1172,22 @@ public class MainActivity2 extends Activity implements View.OnClickListener, Swi
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void deletePhotoCacheFile() {
+        File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
+        if (photoCacheFile.delete()) {
+            Log.e(TAG, "临时图片删除成功：" + photoCacheFile.getAbsolutePath());
+        } else {
+            Log.e(TAG, "无生成的图片" + photoCacheFile.getAbsolutePath());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        TmpFileUtil.writeJSONToFile("{}", Environment.getExternalStorageDirectory().getPath()
+                + "/tmp/friend", "friend.json");
+        super.onDestroy();
     }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
@@ -1200,22 +1216,6 @@ public class MainActivity2 extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    private void deletePhotoCacheFile() {
-        File photoCacheFile = new File(TMP_PHOTO_FILE_PATH, IMAGE_FILE_NAME);
-        if (photoCacheFile.delete()) {
-            Log.e(TAG, "临时图片删除成功：" + photoCacheFile.getAbsolutePath());
-        } else {
-            Log.e(TAG, "无生成的图片" + photoCacheFile.getAbsolutePath());
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        TmpFileUtil.writeJSONToFile("{}", Environment.getExternalStorageDirectory().getPath()
-                + "/tmp/friend", "friend.json");
-        super.onDestroy();
-    }
 
     @Override
     public void onRefresh() {

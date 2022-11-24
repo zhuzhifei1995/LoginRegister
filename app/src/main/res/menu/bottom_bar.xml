@@ -3,21 +3,21 @@
     <item
         android:id="@+id/message"
         android:icon="@drawable/message"
-        android:title="@string/message"/>
+        android:title="@string/message" />
     <item
         android:id="@+id/friend"
         android:icon="@drawable/friend"
-        android:title="@string/friend"/>
+        android:title="@string/friend" />
     <item
         android:id="@+id/net_disk"
         android:icon="@drawable/net_disk_normal"
-        android:title="@string/net_disk"/>
+        android:title="@string/net_disk" />
     <item
         android:id="@+id/app_store"
         android:icon="@drawable/app_store"
-        android:title="@string/app_store"/>
+        android:title="@string/app_store" />
     <item
         android:id="@+id/my"
         android:icon="@drawable/my"
-        android:title="@string/my"/>
+        android:title="@string/my" />
 </menu>

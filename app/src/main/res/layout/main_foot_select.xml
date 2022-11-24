@@ -4,24 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
-    android:padding="5dp"
     android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/message_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/button_center_bg"
         android:gravity="center"
-        android:padding="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/message_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/message"
             android:clickable="false"
+            android:src="@drawable/message"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -29,25 +29,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/message"
-            android:textColor="#000000"
+            android:textColor="@color/bottom_no_select"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/friend_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/button_center_bg"
         android:gravity="center"
-        android:padding="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/friend_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/friend"
             android:clickable="false"
+            android:src="@drawable/friend"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -55,25 +56,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/friend"
-            android:textColor="#000000"
+            android:textColor="@color/bottom_no_select"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/net_disk_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:padding="5dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/button_center_bg"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/net_disk_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dynamic"
             android:clickable="false"
+            android:src="@drawable/dynamic"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -81,25 +83,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/net_disk"
-            android:textColor="#000000"
+            android:textColor="@color/bottom_no_select"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/app_store_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:padding="5dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/button_center_bg"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/app_store_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/app_store"
             android:clickable="false"
+            android:src="@drawable/app_store"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -107,25 +110,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_store"
-            android:textColor="#000000"
+            android:textColor="@color/bottom_no_select"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/my_bottom_LinearLayout"
         android:layout_width="0dp"
-        android:padding="5dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/button_center_bg"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/my_bottom_ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/my"
             android:clickable="false"
+            android:src="@drawable/my"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -133,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my"
-            android:textColor="#000000"
+            android:textColor="@color/bottom_no_select"
             android:textStyle="bold" />
     </LinearLayout>
 

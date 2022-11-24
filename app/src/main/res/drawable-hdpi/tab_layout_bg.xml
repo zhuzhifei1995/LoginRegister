@@ -2,12 +2,15 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:height="5dp"
         android:gravity="center"
         tools:ignore="UnusedAttribute"
         tools:targetApi="m">
         <shape>
-            <corners android:radius="5dp" />
+            <size android:height="2dp" />
+            <padding
+                android:bottom="0dp"
+                android:top="0dp" />
+            <corners android:radius="1dp" />
             <solid android:color="@color/main_select" />
         </shape>
     </item>

@@ -90,5 +90,6 @@
     <string name="play">播放</string>
     <string name="pause">暂停</string>
     <string name="replay">重播</string>
+    <string name="apk_store">应用商城</string>
 
 </resources>
