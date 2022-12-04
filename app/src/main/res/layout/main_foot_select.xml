@@ -11,10 +11,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/message_bottom_ImageView"
@@ -38,9 +40,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
         android:gravity="center"
         android:orientation="vertical"
+        tools:ignore="UnusedAttribute"
         android:padding="5dp">
 
         <ImageView
@@ -65,8 +69,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
         android:gravity="center"
+        tools:ignore="UnusedAttribute"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -92,8 +98,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
         android:gravity="center"
+        tools:ignore="UnusedAttribute"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -119,6 +127,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        tools:ignore="UnusedAttribute"
+        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
         android:gravity="center"
         android:orientation="vertical"

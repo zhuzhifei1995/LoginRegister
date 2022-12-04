@@ -216,7 +216,6 @@ public class AppListDetailsFragment1 extends Fragment implements SwipeRefreshLay
                             Log.e(TAG, "onItemClick: 正在删除安装包" + jsonObjectList.get(position));
                             try {
                                 String deleteFileName = jsonObjectList.get(position).getString("apk_name");
-                                ;
                                 ProgressDialog progressDialog = new ProgressDialog(context);
                                 Window window = progressDialog.getWindow();
                                 if (window != null) {

@@ -205,7 +205,7 @@ public class NetDiskFileFragment extends Fragment implements SwipeRefreshLayout.
                                         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                         progressDialog.setContentView(R.layout.exit_progress_bar);
                                         TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                                        dialog_message_TextView.setText(new String("是否删除文件 " + deleteFileName + "？"));
+                                        dialog_message_TextView.setText("是否删除文件 " + deleteFileName + "？");
                                     }
                                     progressDialog.findViewById(R.id.cancel_exit_register_TextView).setOnClickListener(new View.OnClickListener() {
                                         @Override

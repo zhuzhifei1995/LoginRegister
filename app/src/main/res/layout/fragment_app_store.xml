@@ -8,7 +8,8 @@
 
     <include
         android:id="@+id/app_store_View"
-        layout="@layout/loading_layout" />
+        layout="@layout/loading_layout"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/app_store_LinearLayout"

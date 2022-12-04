@@ -51,7 +51,7 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<PageRecyclerVi
     @Override
     public void onBindViewHolder(@NotNull PageRecyclerViewHolder pageRecyclerViewHolder, int position) {
         try {
-            pageRecyclerViewHolder.page_TextView.setText(String.valueOf(pageJSONObjectList.get(position).getString("page")));
+            pageRecyclerViewHolder.page_TextView.setText(pageJSONObjectList.get(position).getString("page"));
             String isSelect = pageJSONObjectList.get(position).getString("isSelect");
             if (isSelect.equals("1")) {
                 pageRecyclerViewHolder.page_ImageView.setImageResource(R.drawable.page_select);

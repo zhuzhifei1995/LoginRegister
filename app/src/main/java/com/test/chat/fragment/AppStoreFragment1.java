@@ -108,7 +108,7 @@ public class AppStoreFragment1 extends Fragment implements SwipeRefreshLayout.On
                     }
                 });
                 TextView title_TextView = progressDialog.findViewById(R.id.title_TextView);
-                title_TextView.setText(new String("当前共有" + pageJSONObjectList.size() + "页"));
+                title_TextView.setText("当前共有" + pageJSONObjectList.size() + "页");
                 super.handleMessage(msg);
             } catch (Exception e) {
                 progressDialog.dismiss();
@@ -276,7 +276,7 @@ public class AppStoreFragment1 extends Fragment implements SwipeRefreshLayout.On
         ActivityUtil.setLinearLayoutBackground(appStoreFragment.findViewById(R.id.app_store_LinearLayout),
                 SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         TextView top_title_TextView = appStoreFragment.findViewById(R.id.top_title_TextView);
-        top_title_TextView.setText(new String("应用商城"));
+        top_title_TextView.setText("应用商城");
         ImageView title_left_ImageView = appStoreFragment.findViewById(R.id.title_left_ImageView);
         title_left_ImageView.setVisibility(View.GONE);
         ImageView title_right_ImageView = appStoreFragment.findViewById(R.id.title_right_ImageView);

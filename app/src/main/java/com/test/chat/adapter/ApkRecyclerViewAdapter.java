@@ -116,8 +116,8 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
                 apkRecyclerViewHolder.downing_ImageView.setVisibility(View.VISIBLE);
             }
             apkRecyclerViewHolder.apk_name_TextView.setText(apkName);
-            apkRecyclerViewHolder.apk_size_TextView.setText(new String("应用大小：" + jsonObject.getString("apk_size")));
-            apkRecyclerViewHolder.apk_update_time_TextView.setText(new String("最后更新时间：" + jsonObject.getString("apk_update_time")));
+            apkRecyclerViewHolder.apk_size_TextView.setText("应用大小：" + jsonObject.getString("apk_size"));
+            apkRecyclerViewHolder.apk_update_time_TextView.setText("最后更新时间：" + jsonObject.getString("apk_update_time"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -46,24 +48,28 @@ public class AppStoreFragment extends Fragment {
     private final Handler getAppKindJSONObjectHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
-            try {
-                JSONObject jsonObject = new JSONObject((String) message.obj);
-                if (message.what == 1) {
-                    if (jsonObject.getString("code").equals("1")) {
-                        jsonObjectList = new ArrayList<>();
-                        JSONArray jsonArray = jsonObject.getJSONArray("message");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject appKindJSONObject = jsonArray.getJSONObject(i);
-                            jsonObjectList.add(appKindJSONObject);
+            if (message.what == 1) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (message.what == 1) {
+                        if (jsonObject.getString("code").equals("1")) {
+                            jsonObjectList = new ArrayList<>();
+                            JSONArray jsonArray = jsonObject.getJSONArray("message");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject appKindJSONObject = jsonArray.getJSONObject(i);
+                                jsonObjectList.add(appKindJSONObject);
+                            }
+                            initView();
                         }
-                        initView();
+                    } else {
+                        jsonObjectList = null;
                     }
-                } else {
+                } catch (JSONException e) {
                     jsonObjectList = null;
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                jsonObjectList = null;
-                e.printStackTrace();
+            } else {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(message);
         }
@@ -84,21 +90,22 @@ public class AppStoreFragment extends Fragment {
         appStoreFragment = layoutInflater.inflate(R.layout.fragment_app_store, viewGroup, false);
         app_store_View = appStoreFragment.findViewById(R.id.app_store_View);
         app_store_View.setVisibility(View.VISIBLE);
-        getAppKindJSONObject();
-        return appStoreFragment;
-    }
-
-    private void initView() {
-        ActivityUtil.setLinearLayoutBackground(appStoreFragment.findViewById(R.id.app_store_LinearLayout),
-                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
+        LinearLayout app_store_LinearLayout = appStoreFragment.findViewById(R.id.app_store_LinearLayout);
+        ActivityUtil.setLinearLayoutBackground(app_store_LinearLayout, SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         TextView top_title_TextView = appStoreFragment.findViewById(R.id.top_title_TextView);
         top_title_TextView.setText(R.string.apk_store);
         ImageView title_left_ImageView = appStoreFragment.findViewById(R.id.title_left_ImageView);
         title_left_ImageView.setVisibility(View.GONE);
         ImageView title_right_ImageView = appStoreFragment.findViewById(R.id.title_right_ImageView);
         title_right_ImageView.setImageResource(R.drawable.down_button);
+        getAppKindJSONObject();
+        return appStoreFragment;
+    }
+
+    private void initView() {
         TabLayout app_list_title_TabLayout = appStoreFragment.findViewById(R.id.app_list_title_TabLayout);
         ViewPager2 app_list_ViewPager2 = appStoreFragment.findViewById(R.id.app_list_ViewPager2);
+        app_list_ViewPager2.setUserInputEnabled(false);
         AppListDetailsTitleAdapter appListDetailsTitleAdapter = new AppListDetailsTitleAdapter(requireActivity(), jsonObjectList);
         app_list_ViewPager2.setAdapter(appListDetailsTitleAdapter);
         new TabLayoutMediator(app_list_title_TabLayout, app_list_ViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {

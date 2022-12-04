@@ -428,7 +428,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             progressDialog.setContentView(R.layout.loading_progress_bar);
             TextView prompt_TextView = progressDialog.findViewById(R.id.prompt_TextView);
-            prompt_TextView.setText(new String("更新文件下载中...."));
+            prompt_TextView.setText("更新文件下载中....");
         }
         ActivityUtil.showDownloadNotification(context, "", -1, "应用更新文件下载中......", 0);
         Log.e(TAG, "开始下载时间：startTime=" + startTime);
@@ -869,7 +869,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 @Override
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
-                                    update_local_TextView.setText(new String("+86中国大陆"));
+                                    update_local_TextView.setText("+86中国大陆");
                                 }
                             });
 
@@ -878,7 +878,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 @Override
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
-                                    update_local_TextView.setText(new String("+853中国澳门"));
+                                    update_local_TextView.setText("+853中国澳门");
                                 }
                             });
 
@@ -887,7 +887,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 @Override
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
-                                    update_local_TextView.setText(new String("+852中国香港"));
+                                    update_local_TextView.setText("+852中国香港");
                                 }
                             });
 
@@ -896,7 +896,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                                 @Override
                                 public void onClick(View view) {
                                     localPhoneProgressDialog.dismiss();
-                                    update_local_TextView.setText(new String("+886中国台湾"));
+                                    update_local_TextView.setText("+886中国台湾");
                                 }
                             });
 

@@ -1188,7 +1188,28 @@ public class MainActivity2 extends Activity implements View.OnClickListener, Swi
         TmpFileUtil.writeJSONToFile("{}", Environment.getExternalStorageDirectory().getPath()
                 + "/tmp/friend", "friend.json");
         super.onDestroy();
-    }    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
+    }
+
+    @Override
+    public void onRefresh() {
+        if (friendRecyclerViewAdapter != null) {
+            friendRecyclerViewAdapter.setOnItemClickListener(null);
+        }
+        if (search_Button != null) {
+            search_Button.setOnClickListener(null);
+        } else {
+            friend_SwipeRefreshLayout.setRefreshing(true);
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getNetFriendRecyclerView();
+                friendSwipeRefreshHandler.sendMessage(new Message());
+            }
+        }).start();
+    }
+
+    private final Handler mySwipeRefreshHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             try {
@@ -1216,27 +1237,6 @@ public class MainActivity2 extends Activity implements View.OnClickListener, Swi
             super.handleMessage(message);
         }
     };
-
-    @Override
-    public void onRefresh() {
-        if (friendRecyclerViewAdapter != null) {
-            friendRecyclerViewAdapter.setOnItemClickListener(null);
-        }
-        if (search_Button != null) {
-            search_Button.setOnClickListener(null);
-        } else {
-            friend_SwipeRefreshLayout.setRefreshing(true);
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getNetFriendRecyclerView();
-                friendSwipeRefreshHandler.sendMessage(new Message());
-            }
-        }).start();
-    }
-
-
 
 
     private final Handler searchFriendHandler = new Handler(Looper.getMainLooper()) {

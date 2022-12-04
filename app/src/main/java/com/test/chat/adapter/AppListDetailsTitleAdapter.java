@@ -1,16 +1,21 @@
 package com.test.chat.adapter;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.test.chat.fragment.AppListDetailsFragment;
+import com.test.chat.fragment.BlankFragment;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class AppListDetailsTitleAdapter extends FragmentStateAdapter {
 
     private final List<JSONObject> jsonObjectList;
@@ -23,7 +28,11 @@ public class AppListDetailsTitleAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return AppListDetailsFragment.newInstance(jsonObjectList.get(position));
+        if (position == 0) {
+            return BlankFragment.newInstance(jsonObjectList.get(position));
+        } else {
+            return AppListDetailsFragment.newInstance(jsonObjectList.get(position));
+        }
     }
 
     @Override

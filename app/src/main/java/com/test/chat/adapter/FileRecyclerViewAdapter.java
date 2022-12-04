@@ -53,7 +53,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
                 String fileSize = jsonObject.getString("file_size");
                 int downloadFlag = jsonObject.getInt("download_flag");
                 fileRecyclerViewHolder.file_name_TextView.setText(fileName);
-                fileRecyclerViewHolder.file_size_TextView.setText(new String("文件大小：" + fileSize));
+                fileRecyclerViewHolder.file_size_TextView.setText("文件大小：" + fileSize);
                 if (downloadFlag == 0) {
                     fileRecyclerViewHolder.download_ImageView.setVisibility(View.VISIBLE);
                     fileRecyclerViewHolder.delete_ImageView.setVisibility(View.GONE);

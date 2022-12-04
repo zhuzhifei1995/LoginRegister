@@ -285,7 +285,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     progressDialog.setContentView(R.layout.exit_progress_bar);
                 }
                 TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                dialog_message_TextView.setText(new String("点击后，需要重新验证手机号"));
+                dialog_message_TextView.setText("点击后，需要重新验证手机号");
                 TextView cancel_exit_register_TextView = progressDialog.findViewById(R.id.cancel_exit_register_TextView);
                 cancel_exit_register_TextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -352,7 +352,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     progressDialog.setContentView(R.layout.exit_progress_bar);
                 }
                 TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                dialog_message_TextView.setText(new String("点击后，需要重新验证手机号"));
+                dialog_message_TextView.setText("点击后，需要重新验证手机号");
                 TextView cancel_exit_register_TextView = progressDialog.findViewById(R.id.cancel_exit_register_TextView);
                 cancel_exit_register_TextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -397,7 +397,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     progressDialog.setContentView(R.layout.exit_progress_bar);
                 }
                 TextView dialog_message_TextView = progressDialog.findViewById(R.id.dialog_message_TextView);
-                dialog_message_TextView.setText(new String("点击后，需要重新设置登录密码"));
+                dialog_message_TextView.setText("点击后，需要重新设置登录密码");
                 TextView cancel_exit_register_TextView = progressDialog.findViewById(R.id.cancel_exit_register_TextView);
                 cancel_exit_register_TextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -449,7 +449,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 localPhoneProgressDialog.dismiss();
-                local_TextView.setText(new String("+86中国大陆"));
+                local_TextView.setText("+86中国大陆");
             }
         });
 
@@ -458,7 +458,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 localPhoneProgressDialog.dismiss();
-                local_TextView.setText(new String("+853中国澳门"));
+                local_TextView.setText("+853中国澳门");
             }
         });
 
@@ -467,7 +467,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 localPhoneProgressDialog.dismiss();
-                local_TextView.setText(new String("+852中国香港"));
+                local_TextView.setText("+852中国香港");
             }
         });
 
@@ -476,7 +476,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 localPhoneProgressDialog.dismiss();
-                local_TextView.setText(new String("+886中国台湾"));
+                local_TextView.setText("+886中国台湾");
             }
         });
 
@@ -985,9 +985,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         @Override
         public void onTick(long millisUntilFinished) {
             long second = millisUntilFinished / 1000;
-            regain_verification_code_TextView.setText(new String(second + " 秒后可以重新获得验证码"));
+            regain_verification_code_TextView.setText(second + " 秒后可以重新获得验证码");
             if (second == 10) {
-                regain_verification_code_TextView.setText(new String(9 + " 秒后可以重新获得验证码"));
+                regain_verification_code_TextView.setText(9 + " 秒后可以重新获得验证码");
             }
         }
 
