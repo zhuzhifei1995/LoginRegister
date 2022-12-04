@@ -413,7 +413,7 @@ public class AppListDetailsFragment extends Fragment {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 String label = DateUtils.formatDateTime(context, System.currentTimeMillis(),
-            DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME);
+                        DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME);
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
                 if (refreshView.getHeaderLayout().isShown()) {
                     new Thread() {

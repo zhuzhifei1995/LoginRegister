@@ -11,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
+        android:foreground="?selectableItemBackground"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="5dp"
@@ -40,12 +40,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
+        android:foreground="?selectableItemBackground"
         android:gravity="center"
         android:orientation="vertical"
-        tools:ignore="UnusedAttribute"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/friend_bottom_ImageView"
@@ -69,12 +69,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
+        android:foreground="?selectableItemBackground"
         android:gravity="center"
-        tools:ignore="UnusedAttribute"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/net_disk_bottom_ImageView"
@@ -98,12 +98,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
+        android:foreground="?selectableItemBackground"
         android:gravity="center"
-        tools:ignore="UnusedAttribute"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/app_store_bottom_ImageView"
@@ -127,12 +127,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:ignore="UnusedAttribute"
-        android:foreground="?selectableItemBackground"
         android:background="@drawable/button_center_bg"
+        android:foreground="?selectableItemBackground"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/my_bottom_ImageView"
