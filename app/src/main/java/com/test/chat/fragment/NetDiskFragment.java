@@ -1,5 +1,7 @@
 package com.test.chat.fragment;
 
+import static com.test.chat.util.ActivityUtil.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,21 +16,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.test.chat.R;
 import com.test.chat.activity.LoginActivity;
+import com.test.chat.adapter.NetDiskTitleAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.ImageUtil;
 import com.test.chat.util.SharedPreferencesUtils;
-import com.test.chat.view.TitleFragmentPagerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class NetDiskFragment extends Fragment {
@@ -67,24 +70,36 @@ public class NetDiskFragment extends Fragment {
             activity.finish();
         }
         TabLayout net_disk_title_TabLayout = netDiskFragmentView.findViewById(R.id.net_disk_title_TabLayout);
-        ViewPager net_disk_content_ViewPager = netDiskFragmentView.findViewById(R.id.net_disk_content_ViewPager);
-        List<Fragment> fragments = new ArrayList<>();
-        NetDiskFileFragment netDiskFileFragment = new NetDiskFileFragment();
-        BlankFragment blankFragment = new BlankFragment();
-        fragments.add(netDiskFileFragment);
-        fragments.add(blankFragment);
-        TitleFragmentPagerView titleFragmentPagerView = new TitleFragmentPagerView(getChildFragmentManager(), fragments);
-        net_disk_content_ViewPager.setAdapter(titleFragmentPagerView);
-        net_disk_title_TabLayout.setupWithViewPager(net_disk_content_ViewPager);
-        Objects.requireNonNull(net_disk_title_TabLayout.getTabAt(0)).setText("在线网盘");
-        Objects.requireNonNull(net_disk_title_TabLayout.getTabAt(1)).setText("本地文件");
+        ViewPager2 net_disk_content_ViewPager2 = netDiskFragmentView.findViewById(R.id.net_disk_content_ViewPager2);
+        List<String> netDiskTitle = new ArrayList<>();
+        netDiskTitle.add("网盘文件");
+        netDiskTitle.add("本地已下载文件");
+        netDiskTitle.add("上传文件");
+        net_disk_content_ViewPager2.setUserInputEnabled(false);
+        NetDiskTitleAdapter netDiskTitleAdapter = new NetDiskTitleAdapter(requireActivity(), netDiskTitle);
+        net_disk_content_ViewPager2.setAdapter(netDiskTitleAdapter);
+        new TabLayoutMediator(net_disk_title_TabLayout, net_disk_content_ViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(netDiskTitle.get(position));
+            }
+        }).attach();
+        for (int i = 0; i < net_disk_title_TabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = net_disk_title_TabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.view.setLongClickable(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tab.view.setTooltipText(null);
+                }
+            }
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         context = getActivity();
         activity = getActivity();
-        super.onCreate(savedInstanceState);
     }
 
     @Override

@@ -75,6 +75,9 @@
             android:name=".activity.MainActivity2"
             android:launchMode="standard" />
         <activity
+            android:name=".activity.ApkFileDownActivity"
+            android:launchMode="standard" />
+        <activity
             android:name=".activity.ChatFriendActivity"
             android:launchMode="standard" />
         <activity

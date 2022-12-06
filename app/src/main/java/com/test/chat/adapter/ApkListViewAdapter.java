@@ -1,6 +1,5 @@
 package com.test.chat.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -44,9 +43,7 @@ public class ApkListViewAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(context);
         this.resourceId = resourceId;
         this.appJSONObjectList = appJSONObjectList;
-        int maxCache = (int) Runtime.getRuntime().maxMemory();
-        int cacheSize = maxCache / 8;
-        imageViewLruCache = new LruCache<String, BitmapDrawable>(cacheSize) {
+        imageViewLruCache = new LruCache<String, BitmapDrawable>(((int) Runtime.getRuntime().maxMemory() / 8)) {
             @Override
             protected int sizeOf(String key, BitmapDrawable bitmapDrawable) {
                 return bitmapDrawable.getBitmap().getByteCount();
@@ -86,9 +83,8 @@ public class ApkListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    @SuppressLint("CutPasteId")
     public View getView(int position, View view, ViewGroup viewGroup) {
-        ApkListViewViewHolder apkListViewViewHolder;
+        ApkListViewViewHolder apkListViewViewHolder = null;
         if (view == null) {
             apkListViewViewHolder = new ApkListViewViewHolder();
             view = layoutInflater.inflate(resourceId, viewGroup, false);
@@ -116,6 +112,7 @@ public class ApkListViewAdapter extends BaseAdapter {
                 apkListViewViewHolder.apk_icon_ImageView.setImageDrawable(imageViewLruCache.get(apkIcon));
             } else {
                 ImageDownLoadTask imageDownLoadTask = new ImageDownLoadTask((ListView) viewGroup, imageViewLruCache, apkIcon);
+                apkListViewViewHolder.apk_icon_ImageView.setImageResource(R.drawable.ic_launcher);
                 imageDownLoadTask.execute();
             }
             int downloadFlag = jsonObject.getInt("download_flag");
@@ -136,10 +133,10 @@ public class ApkListViewAdapter extends BaseAdapter {
                 apkListViewViewHolder.downing_ProgressBar.setVisibility(View.VISIBLE);
             }
             apkListViewViewHolder.apk_name_TextView.setText(apkName);
-            String apkSize = jsonObject.getString("apk_size");
-            apkListViewViewHolder.apk_size_TextView.setText(new String("应用大小：" + apkSize));
-            String apkUpdateTime = jsonObject.getString("apk_update_time");
-            apkListViewViewHolder.apk_update_time_TextView.setText(new String("最后更新时间：" + apkUpdateTime));
+            String apkSize = "应用大小：" + jsonObject.getString("apk_size");
+            apkListViewViewHolder.apk_size_TextView.setText(apkSize);
+            String apkUpdateTime = "最后更新时间：" + jsonObject.getString("apk_update_time");
+            apkListViewViewHolder.apk_update_time_TextView.setText(apkUpdateTime);
             apkListViewViewHolder.root_apk_LinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

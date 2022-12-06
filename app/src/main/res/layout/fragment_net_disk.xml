@@ -25,19 +25,17 @@
             android:longClickable="false"
             app:tabIndicator="@drawable/tab_layout_bg"
             app:tabIndicatorColor="@color/main_select"
-            app:tabIndicatorFullWidth="true"
-            app:tabMode="auto"
+            app:tabIndicatorFullWidth="false"
+            app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/main_select" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/gray" />
+            android:background="@color/main_select" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/net_disk_content_ViewPager"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/net_disk_content_ViewPager2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

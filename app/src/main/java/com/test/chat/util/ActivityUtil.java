@@ -35,6 +35,7 @@ public class ActivityUtil {
     public static final String TAG = "com.test.chat.zzf";
     public static final String QQ_SERVER_URL = "https://www.qq.com/contract.shtml";
 
+    public static final String ROOT_FILE_PATH = Environment.getExternalStorageDirectory().getPath();
     public static final String TMP_FRIEND_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/friend";
     public static final String TMP_USER_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/user";
     public static final String TMP_MESSAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/message";
@@ -45,6 +46,7 @@ public class ActivityUtil {
     public static final String TMP_APK_ICON_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/icon";
     public static final String TMP_APK_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files/apk/apk";
     public static final String TMP_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.test.chat/files";
+
     public static final String[] MOVIE_TYPE = {"mp4", "flv", "mkv", "webm", "avi", "wmv"};
     public static final String[] MUSIC_TYPE = {"aac", "mp3", "ac3", "ogg", "wav"};
 
@@ -154,7 +156,7 @@ public class ActivityUtil {
     }
 
 
-    public static boolean silentInstallApk(File apkFile, Context context) {
+    public static void silentInstallApk(File apkFile, Context context) {
         PackageManager packageManager = context.getPackageManager();
         Class<? extends PackageManager> packageManagerClass = packageManager.getClass();
         try {
@@ -173,11 +175,9 @@ public class ActivityUtil {
                 method.setAccessible(true);
                 method.invoke(packageManager, Uri.fromFile(apkFile), null, 2, null);
             }
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
 }

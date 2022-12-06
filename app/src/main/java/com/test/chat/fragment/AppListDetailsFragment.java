@@ -2,6 +2,7 @@ package com.test.chat.fragment;
 
 import static com.test.chat.util.ActivityUtil.showDownloadNotification;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +43,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +121,9 @@ public class AppListDetailsFragment extends Fragment {
                         if (jsonArray.length() == 0) {
                             Toast.makeText(context, "没有更多应用了！", Toast.LENGTH_SHORT).show();
                         } else {
+                            if (jsonObject.getInt("kind_page_size") == jsonObject.getInt("kind_page")) {
+                                Toast.makeText(context, "没有更多应用了！", Toast.LENGTH_SHORT).show();
+                            }
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject apkJSONObject = jsonArray.getJSONObject(i);
                                 File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
@@ -359,11 +364,11 @@ public class AppListDetailsFragment extends Fragment {
     }
 
     public static AppListDetailsFragment newInstance(JSONObject jsonObject) {
-        AppListDetailsFragment fragment = new AppListDetailsFragment();
+        AppListDetailsFragment appListDetailsFragment = new AppListDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(PARAM, jsonObject.toString());
-        fragment.setArguments(bundle);
-        return fragment;
+        appListDetailsFragment.setArguments(bundle);
+        return appListDetailsFragment;
     }
 
     @Override
@@ -412,9 +417,9 @@ public class AppListDetailsFragment extends Fragment {
         app_list_PullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                String label = DateUtils.formatDateTime(context, System.currentTimeMillis(),
-                        DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME);
-                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+                @SuppressLint("SimpleDateFormat")
+                String timeLabel = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss").format(new Date());
+                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(timeLabel);
                 if (refreshView.getHeaderLayout().isShown()) {
                     new Thread() {
                         public void run() {
@@ -439,7 +444,7 @@ public class AppListDetailsFragment extends Fragment {
                 if (refreshView.getFooterLayout().isShown()) {
                     new Thread() {
                         public void run() {
-                            PAGE_NUM++;
+                            PAGE_NUM = PAGE_NUM + 1;
                             Message message = new Message();
                             try {
                                 JSONObject kindJSONObject = new JSONObject(param);
@@ -457,7 +462,6 @@ public class AppListDetailsFragment extends Fragment {
                         }
                     }.start();
                 }
-
             }
         });
     }
@@ -542,6 +546,12 @@ public class AppListDetailsFragment extends Fragment {
                 Log.e(TAG, "总共下载时间：totalTime=" + (System.currentTimeMillis() - startTime));
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        app_list_PullToRefreshListView.setFocusable(false);
     }
 
 }

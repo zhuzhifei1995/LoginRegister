@@ -23,27 +23,27 @@ public class ImageDownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
 
     private final ListView listView;
     private final LruCache<String, BitmapDrawable> imageViewLruCache;
-    private final String apkIcon;
+    private final String imageUrl;
 
-    public ImageDownLoadTask(ListView listView, LruCache<String, BitmapDrawable> imageViewLruCache, String apkIcon) {
+    public ImageDownLoadTask(ListView listView, LruCache<String, BitmapDrawable> imageViewLruCache, String imageUrl) {
         this.listView = listView;
         this.imageViewLruCache = imageViewLruCache;
-        this.apkIcon = apkIcon;
+        this.imageUrl = imageUrl;
     }
 
     @Override
     protected BitmapDrawable doInBackground(String... params) {
         Bitmap bitmap = downloadImage();
         BitmapDrawable bitmapDrawable = new BitmapDrawable(listView.getResources(), bitmap);
-        if (imageViewLruCache.get(apkIcon) == null) {
-            imageViewLruCache.put(apkIcon, bitmapDrawable);
+        if (imageViewLruCache.get(imageUrl) == null) {
+            imageViewLruCache.put(imageUrl, bitmapDrawable);
         }
         return bitmapDrawable;
     }
 
     @Override
     protected void onPostExecute(BitmapDrawable bitmapDrawable) {
-        ImageView apk_icon_ImageView = (ImageView) listView.findViewWithTag(apkIcon);
+        ImageView apk_icon_ImageView = (ImageView) listView.findViewWithTag(imageUrl);
         if (apk_icon_ImageView != null && bitmapDrawable != null) {
             apk_icon_ImageView.setImageDrawable(bitmapDrawable);
         }
@@ -53,7 +53,7 @@ public class ImageDownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
         HttpURLConnection httpURLConnection = null;
         Bitmap bitmap = null;
         try {
-            URL url = new URL(apkIcon);
+            URL url = new URL(imageUrl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(5 * 1000);
             httpURLConnection.setReadTimeout(10 * 1000);

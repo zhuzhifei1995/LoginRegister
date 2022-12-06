@@ -25,12 +25,12 @@ public class BlankFragment extends Fragment {
     public BlankFragment() {
     }
 
-    public static BlankFragment newInstance(JSONObject jsonObject) {
-        BlankFragment fragment = new BlankFragment();
+    public static BlankFragment newInstance(String blank) {
+        BlankFragment blankFragment = new BlankFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(PARAM, jsonObject.toString());
-        fragment.setArguments(bundle);
-        return fragment;
+        bundle.putString(PARAM, blank);
+        blankFragment.setArguments(bundle);
+        return blankFragment;
     }
 
     @Override

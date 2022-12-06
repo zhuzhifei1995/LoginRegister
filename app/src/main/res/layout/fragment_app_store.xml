@@ -29,6 +29,11 @@
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/main_select" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_select" />
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/app_list_ViewPager2"
             android:layout_width="match_parent"

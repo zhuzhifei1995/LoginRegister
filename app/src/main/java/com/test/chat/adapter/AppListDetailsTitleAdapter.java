@@ -29,7 +29,7 @@ public class AppListDetailsTitleAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return BlankFragment.newInstance(jsonObjectList.get(position));
+            return BlankFragment.newInstance(jsonObjectList.get(position).toString());
         } else {
             return AppListDetailsFragment.newInstance(jsonObjectList.get(position));
         }

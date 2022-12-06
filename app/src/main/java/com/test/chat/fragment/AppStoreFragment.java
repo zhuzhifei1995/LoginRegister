@@ -3,6 +3,7 @@ package com.test.chat.fragment;
 import static com.test.chat.util.ActivityUtil.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.test.chat.R;
+import com.test.chat.activity.ApkFileDownActivity;
 import com.test.chat.adapter.AppListDetailsTitleAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -98,6 +100,12 @@ public class AppStoreFragment extends Fragment {
         title_left_ImageView.setVisibility(View.GONE);
         ImageView title_right_ImageView = appStoreFragment.findViewById(R.id.title_right_ImageView);
         title_right_ImageView.setImageResource(R.drawable.down_button);
+        title_right_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, ApkFileDownActivity.class));
+            }
+        });
         getAppKindJSONObject();
         return appStoreFragment;
     }
