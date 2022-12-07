@@ -15,4 +15,5 @@ adb shell getprop ro.noah.apkinstall
 adb shell getprop noah.pmc.factoryinstallapk
 
 
+git config --global http.sslVerify "false"
 

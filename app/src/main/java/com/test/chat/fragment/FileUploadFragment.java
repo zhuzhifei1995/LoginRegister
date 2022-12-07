@@ -54,7 +54,9 @@ public class FileUploadFragment extends Fragment {
         public void handleMessage(Message message) {
             super.handleMessage(message);
             file_upload_PullToRefreshListView.onRefreshComplete();
-            Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+            if (message.what == 0) {
+                Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+            }
         }
     };
     private List<String> fileItemList;
@@ -65,9 +67,11 @@ public class FileUploadFragment extends Fragment {
         public void handleMessage(@NonNull Message message) {
             fileJSONObjectList.clear();
             fileItemList.clear();
-            fileItemList.add("本地磁盘 >");
+            fileItemList.add("本地磁盘");
             fileItemRecyclerViewAdapter.notifyDataSetChanged();
             File[] fileList = (File[]) message.obj;
+            int flag = message.what;
+            Log.e(TAG, "handleMessage: " + flag);
             if (fileList != null) {
                 Log.e(TAG, "initView: " + Arrays.toString(fileList));
                 try {
@@ -110,7 +114,7 @@ public class FileUploadFragment extends Fragment {
                 public void run() {
                     try {
                         Thread.sleep(1500);
-                        waitHandler.sendEmptyMessage(1);
+                        waitHandler.sendEmptyMessage(flag);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -159,10 +163,9 @@ public class FileUploadFragment extends Fragment {
         file_upload_PullToRefreshListView = fileUploadFragmentView.findViewById(R.id.file_upload_PullToRefreshListView);
         RecyclerView file_RecyclerView = fileUploadFragmentView.findViewById(R.id.file_RecyclerView);
         fileItemList = new ArrayList<>();
-        fileItemList.add("本地磁盘 >");
-        fileItemRecyclerViewAdapter = new FileItemRecyclerViewAdapter(fileItemList);
+        fileItemList.add("本地磁盘");
+        fileItemRecyclerViewAdapter = new FileItemRecyclerViewAdapter(context,fileItemList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         file_RecyclerView.setLayoutManager(linearLayoutManager);
         file_RecyclerView.setAdapter(fileItemRecyclerViewAdapter);
         file_empty_TextView = fileUploadFragmentView.findViewById(R.id.file_empty_TextView);
@@ -217,6 +220,7 @@ public class FileUploadFragment extends Fragment {
                             File[] fileList = new File(ActivityUtil.ROOT_FILE_PATH).listFiles();
                             Message message = new Message();
                             message.obj = fileList;
+                            message.what = 0;
                             refreshHandler.sendMessage(message);
                         }
                     }.start();
@@ -233,6 +237,7 @@ public class FileUploadFragment extends Fragment {
                     int fileType = jsonObject.getInt("file_type");
                     String filePath = jsonObject.getString("file_path");
                     String fileName = jsonObject.getString("file_name");
+                    Log.e(TAG, "onItemClick: " + fileType + "------" + filePath + "------" + fileName);
                     if (fileType == 0) {
                         fileJSONObjectList.clear();
                         File[] fileList = new File(filePath).listFiles();
@@ -268,7 +273,7 @@ public class FileUploadFragment extends Fragment {
                         } else {
                             file_empty_TextView.setVisibility(View.VISIBLE);
                         }
-                        fileItemList.add(fileName + " >");
+                        fileItemList.add(fileName);
                         fileUploadListViewAdapter.notifyDataSetChanged();
                         fileItemRecyclerViewAdapter.notifyDataSetChanged();
                     } else {
@@ -283,6 +288,77 @@ public class FileUploadFragment extends Fragment {
             @Override
             public void onItemLongClick(int position) {
                 Toast.makeText(context, "长按！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fileItemRecyclerViewAdapter.setOnFileItemTextViewClickListener(new FileItemRecyclerViewAdapter.FileItemTextViewOnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (fileItemList.size() != 1) {
+                    if (position == 0) {
+                        new Thread() {
+                            public void run() {
+                                File[] fileList = new File(ActivityUtil.ROOT_FILE_PATH).listFiles();
+                                Message message = new Message();
+                                message.obj = fileList;
+                                message.what = 1;
+                                refreshHandler.sendMessage(message);
+                            }
+                        }.start();
+                    } else if (position < fileItemList.size() - 1) {
+                        fileJSONObjectList.clear();
+                        StringBuilder filePathStringBuilder = new StringBuilder();
+                        List<String> tmpFileItemList = new ArrayList<>();
+                        tmpFileItemList.add("本地磁盘");
+                        for (int i = 1; i <= position; i++) {
+                            String name = fileItemList.get(i);
+                            tmpFileItemList.add(name);
+                            filePathStringBuilder.append("/").append(name);
+                        }
+                        fileItemList.clear();
+                        fileItemList.addAll(tmpFileItemList);
+                        File[] fileList = new File(ActivityUtil.ROOT_FILE_PATH + filePathStringBuilder).listFiles();
+                        if (fileList != null) {
+                            Log.e(TAG, "initView: " + Arrays.toString(fileList));
+                            Log.e(TAG, "initView: " + fileList.length);
+                            try {
+                                List<JSONObject> filesJSONObjectList = new ArrayList<>();
+                                List<JSONObject> dirJSONObjectList = new ArrayList<>();
+                                for (File file : fileList) {
+                                    JSONObject fileJSONObject = new JSONObject();
+                                    if (!file.getName().startsWith(".")) {
+                                        if (file.isDirectory()) {
+                                            fileJSONObject.put("file_type", "0");
+                                            fileJSONObject.put("file_path", file.getAbsoluteFile());
+                                            fileJSONObject.put("file_name", file.getName());
+                                            filesJSONObjectList.add(fileJSONObject);
+                                        }
+                                        if (file.isFile()) {
+                                            fileJSONObject.put("file_type", "1");
+                                            fileJSONObject.put("file_path", file.getAbsoluteFile());
+                                            fileJSONObject.put("file_name", file.getName());
+                                            dirJSONObjectList.add(fileJSONObject);
+                                        }
+                                    }
+                                }
+                                fileJSONObjectList.addAll(filesJSONObjectList);
+                                fileJSONObjectList.addAll(dirJSONObjectList);
+                                if (fileJSONObjectList.size() == 0) {
+                                    file_empty_TextView.setVisibility(View.VISIBLE);
+                                } else {
+                                    file_empty_TextView.setVisibility(View.GONE);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                file_empty_TextView.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            file_empty_TextView.setVisibility(View.VISIBLE);
+                        }
+                        fileUploadListViewAdapter.notifyDataSetChanged();
+                        fileItemRecyclerViewAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
     }

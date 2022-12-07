@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:longClickable="true"
-        app:itemBackground="@color/no_color"
+        app:itemBackground="@color/white"
         app:itemRippleColor="#0593D8"
         app:itemTextColor="@color/bottom_bar"
         app:labelVisibilityMode="labeled"

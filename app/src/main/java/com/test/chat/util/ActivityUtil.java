@@ -102,7 +102,7 @@ public class ActivityUtil {
                 my_fragment_linearLayout.setBackgroundResource(R.drawable.theme_four);
                 break;
             default:
-                my_fragment_linearLayout.setBackgroundResource(R.color.no_color);
+                my_fragment_linearLayout.setBackgroundResource(R.color.white);
                 break;
         }
     }

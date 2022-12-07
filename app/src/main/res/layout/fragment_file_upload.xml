@@ -3,28 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".fragment.FileUploadFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/file_RecyclerView"
+        android:layout_width="70dp"
+        android:layout_height="match_parent" />
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/back_button"
-            tools:ignore="ContentDescription" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/file_RecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-    </LinearLayout>
+    <View
+        android:background="@color/gray"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             ptr:ptrAnimationStyle="flip"
-            ptr:ptrMode="pullFromStart" />
+            ptr:ptrMode="disabled" />
 
         <TextView
             android:id="@+id/file_empty_TextView"

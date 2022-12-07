@@ -1,10 +1,13 @@
 package com.test.chat.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,14 +22,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressLint("RecyclerView")
 public class FileItemRecyclerViewAdapter extends RecyclerView.Adapter<FileItemRecyclerViewAdapter.FileItemRecyclerViewHolder> {
 
     private static final String TAG = ActivityUtil.TAG;
     private final List<String> fileItemJSONObjectList;
+    private final Context context;
+    private FileItemTextViewOnItemClickListener fileItemTextViewOnItemClickListener;
 
-    public FileItemRecyclerViewAdapter(List<String> fileItemJSONObjectList) {
+    public FileItemRecyclerViewAdapter(Context context,List<String> fileItemJSONObjectList) {
         Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + fileItemJSONObjectList.toString());
         this.fileItemJSONObjectList = fileItemJSONObjectList;
+        this.context = context;
     }
 
     @Override
@@ -44,15 +51,38 @@ public class FileItemRecyclerViewAdapter extends RecyclerView.Adapter<FileItemRe
     @Override
     public void onBindViewHolder(@NotNull FileItemRecyclerViewHolder pageRecyclerViewHolder, int position) {
         pageRecyclerViewHolder.textView.setText(fileItemJSONObjectList.get(position));
+        if (position == getItemCount()-1){
+            pageRecyclerViewHolder.file_LinearLayout.setBackgroundColor(context.getColor(R.color.gray));
+        }else {
+            pageRecyclerViewHolder.file_LinearLayout.setBackgroundColor(context.getColor(R.color.no_color));
+        }
+        pageRecyclerViewHolder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fileItemTextViewOnItemClickListener != null) {
+                    fileItemTextViewOnItemClickListener.onItemClick(position);
+                }
+            }
+        });
+    }
+
+    public void setOnFileItemTextViewClickListener(FileItemTextViewOnItemClickListener fileItemTextViewOnItemClickListener) {
+        this.fileItemTextViewOnItemClickListener = fileItemTextViewOnItemClickListener;
+    }
+
+    public interface FileItemTextViewOnItemClickListener {
+        void onItemClick(int position);
     }
 
     public static class FileItemRecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView;
+        private final LinearLayout file_LinearLayout;
 
         public FileItemRecyclerViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.textView);
+            file_LinearLayout = view.findViewById(R.id.file_LinearLayout);
         }
     }
 }
