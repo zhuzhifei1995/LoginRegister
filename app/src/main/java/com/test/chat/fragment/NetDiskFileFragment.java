@@ -33,7 +33,6 @@ import com.test.chat.R;
 import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.activity.VideoPlayActivity;
 import com.test.chat.adapter.FileListViewAdapter;
-import com.test.chat.adapter.FileRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.SharedPreferencesUtils;
@@ -70,16 +69,24 @@ public class NetDiskFileFragment extends Fragment {
 
     private static final String TAG = ActivityUtil.TAG;
     private static final String PARAM = "param";
-    private String param;
     private final int IS_REFRESH = 1;
     private final int LOAD_MORE = 2;
     private final int LOAD_ERROR = 0;
+    private String param;
     private Context context;
     private View netDiskFileFragmentView;
     private View loading_layout;
     private List<JSONObject> netDiskJSONObjectList;
     private int PAGE_NUM;
     private PullToRefreshListView net_disk_PullToRefreshListView;
+    private final Handler waitHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            super.handleMessage(message);
+            net_disk_PullToRefreshListView.onRefreshComplete();
+            Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+        }
+    };
     private FileListViewAdapter fileListViewAdapter;
     private final Handler failDownloadNetDiskFileHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -155,7 +162,7 @@ public class NetDiskFileFragment extends Fragment {
                         fileListViewAdapter = new FileListViewAdapter(context, R.layout.file_list_view, netDiskJSONObjectList);
                         net_disk_PullToRefreshListView.setAdapter(fileListViewAdapter);
                         loading_layout.setVisibility(View.GONE);
-                        fileListViewAdapter.setOnDownloadFileImageViewClickListener(new FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener() {
+                        fileListViewAdapter.setOnDownloadFileImageViewClickListener(new FileListViewAdapter.DownloadFileImageViewOnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
                                 Log.e(TAG, "onItemClick: 开始下载" + netDiskJSONObjectList.get(position));
@@ -175,7 +182,7 @@ public class NetDiskFileFragment extends Fragment {
                                 }
                             }
                         });
-                        fileListViewAdapter.setOnUpdateFileImageViewClickListener(new FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener() {
+                        fileListViewAdapter.setOnUpdateFileImageViewClickListener(new FileListViewAdapter.UpdateFileImageViewOnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
                                 Log.e(TAG, "onItemClick: 开始更新" + netDiskJSONObjectList.get(position));
@@ -195,7 +202,7 @@ public class NetDiskFileFragment extends Fragment {
                                 }
                             }
                         });
-                        fileListViewAdapter.setOnDeleteFileImageViewClickListener(new FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener() {
+                        fileListViewAdapter.setOnDeleteFileImageViewClickListener(new FileListViewAdapter.DeleteFileImageViewOnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
                                 Log.e(TAG, "onItemClick: 正在删除" + netDiskJSONObjectList.get(position));
@@ -243,7 +250,7 @@ public class NetDiskFileFragment extends Fragment {
                                 }
                             }
                         });
-                        fileListViewAdapter.setOnFileDetailLinearLayoutClickListener(new FileRecyclerViewAdapter.FileDetailLinearLayoutOnItemClickListener() {
+                        fileListViewAdapter.setOnFileDetailLinearLayoutClickListener(new FileListViewAdapter.FileDetailLinearLayoutOnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
                                 Log.e(TAG, "onItemClick: " + netDiskJSONObjectList.get(position));
@@ -317,11 +324,6 @@ public class NetDiskFileFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
                     e.printStackTrace();
                 }
                 fileListViewAdapter.notifyDataSetChanged();
@@ -334,9 +336,6 @@ public class NetDiskFileFragment extends Fragment {
                         if (jsonArray.length() == 0) {
                             Toast.makeText(context, "没有更多文件了！", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (jsonArray.length() < 10) {
-                                Toast.makeText(context, "没有更多文件了！", Toast.LENGTH_SHORT).show();
-                            }
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject fileJSONObject = jsonArray.getJSONObject(i);
                                 String cacheFileName = fileJSONObject.getString("file_name") + ".cache";
@@ -367,24 +366,24 @@ public class NetDiskFileFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
                     e.printStackTrace();
                 }
                 fileListViewAdapter.notifyDataSetChanged();
             }
             if (message.what == LOAD_ERROR) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
             }
-            net_disk_PullToRefreshListView.onRefreshComplete();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1500);
+                        waitHandler.sendEmptyMessage(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     };
 

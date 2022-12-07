@@ -35,7 +35,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.test.chat.R;
-import com.test.chat.fragment.AppStoreFragment;
+import com.test.chat.fragment.ApkStoreFragment;
 import com.test.chat.fragment.FriendFragment;
 import com.test.chat.fragment.MessageFragment;
 import com.test.chat.fragment.MyFragment;
@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private FriendFragment friendFragment;
     private NetDiskFragment netDiskFragment;
     private MyFragment myFragment;
-    private AppStoreFragment appStoreFragment;
+    private ApkStoreFragment apkStoreFragment;
     private List<JSONObject> userJSONObjectList;
     private ProgressDialog progressDialog;
     private Context context;
@@ -289,11 +289,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 my_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
                 break;
             case 4:
-                if (appStoreFragment == null) {
-                    appStoreFragment = new AppStoreFragment();
-                    transaction.add(R.id.content_FrameLayout, appStoreFragment);
+                if (apkStoreFragment == null) {
+                    apkStoreFragment = new ApkStoreFragment();
+                    transaction.add(R.id.content_FrameLayout, apkStoreFragment);
                 } else {
-                    transaction.show(appStoreFragment);
+                    transaction.show(apkStoreFragment);
                 }
                 app_store_bottom_ImageView.setImageResource(R.drawable.app_store_selected);
                 app_store_bottom_TextView.setTextColor(getColor(R.color.bottom_select));
@@ -318,8 +318,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (myFragment != null) {
             fragmentTransaction.hide(myFragment);
         }
-        if (appStoreFragment != null) {
-            fragmentTransaction.hide(appStoreFragment);
+        if (apkStoreFragment != null) {
+            fragmentTransaction.hide(apkStoreFragment);
         }
     }
 

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +96,15 @@ public class ThemeSettingActivity extends Activity implements View.OnClickListen
                 theme_four_Button.setText("应用背景");
                 break;
         }
+        ImageView title_left_ImageView = findViewById(R.id.title_left_ImageView);
+        title_left_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        TextView top_title_TextView = findViewById(R.id.top_title_TextView);
+        top_title_TextView.setText("主题设置");
     }
 
     private void setThemeId(int themeId) {

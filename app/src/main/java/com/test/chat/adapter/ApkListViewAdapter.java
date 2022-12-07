@@ -97,10 +97,9 @@ public class ApkListViewAdapter extends BaseAdapter {
             apkListViewViewHolder.download_ImageView = (ImageView) view.findViewById(R.id.download_ImageView);
             apkListViewViewHolder.install_ImageView = (ImageView) view.findViewById(R.id.install_ImageView);
             apkListViewViewHolder.downing_ProgressBar = (ProgressBar) view.findViewById(R.id.downing_ProgressBar);
-            view.setTag(R.id.app_list_PullToRefreshListView, apkListViewViewHolder);
-            view.setTag(position);
+            view.setTag(apkListViewViewHolder);
         } else {
-            apkListViewViewHolder = (ApkListViewViewHolder) view.getTag(R.id.app_list_PullToRefreshListView);
+            apkListViewViewHolder = (ApkListViewViewHolder) view.getTag();
         }
         try {
             JSONObject jsonObject = appJSONObjectList.get(position);

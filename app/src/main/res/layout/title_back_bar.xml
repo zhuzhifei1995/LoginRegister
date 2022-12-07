@@ -34,6 +34,16 @@
         android:textSize="20sp" />
 
     <ImageView
+        android:id="@+id/title_right_ImageView2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
         android:id="@+id/title_right_ImageView"
         android:layout_width="40dp"
         android:layout_height="40dp"

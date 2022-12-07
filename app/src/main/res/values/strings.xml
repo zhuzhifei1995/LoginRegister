@@ -93,5 +93,6 @@
     <string name="apk_store">应用商城</string>
     <string name="time">时间</string>
     <string name="refreshing">正在刷新.......</string>
+    <string name="file_empty">文件夹为空</string>
 
 </resources>

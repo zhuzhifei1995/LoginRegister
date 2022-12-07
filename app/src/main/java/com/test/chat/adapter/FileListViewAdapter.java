@@ -29,10 +29,10 @@ public class FileListViewAdapter extends BaseAdapter {
     private final List<JSONObject> fileJSONObjectList;
     private final int resourceId;
     private final LayoutInflater layoutInflater;
-    private FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener;
-    private FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener;
-    private FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener;
-    private FileRecyclerViewAdapter.FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener;
+    private FileListViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener;
+    private FileListViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener;
+    private FileListViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener;
+    private FileListViewAdapter.FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener;
 
     public FileListViewAdapter(Context context, int resourceId, List<JSONObject> fileJSONObjectList) {
         layoutInflater = LayoutInflater.from(context);
@@ -145,19 +145,19 @@ public class FileListViewAdapter extends BaseAdapter {
         return view;
     }
 
-    public void setOnDownloadFileImageViewClickListener(FileRecyclerViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
+    public void setOnDownloadFileImageViewClickListener(FileListViewAdapter.DownloadFileImageViewOnItemClickListener downloadFileImageViewOnItemClickListener) {
         this.downloadFileImageViewOnItemClickListener = downloadFileImageViewOnItemClickListener;
     }
 
-    public void setOnDeleteFileImageViewClickListener(FileRecyclerViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener) {
+    public void setOnDeleteFileImageViewClickListener(FileListViewAdapter.DeleteFileImageViewOnItemClickListener deleteFileImageViewOnItemClickListener) {
         this.deleteFileImageViewOnItemClickListener = deleteFileImageViewOnItemClickListener;
     }
 
-    public void setOnUpdateFileImageViewClickListener(FileRecyclerViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener) {
+    public void setOnUpdateFileImageViewClickListener(FileListViewAdapter.UpdateFileImageViewOnItemClickListener updateFileImageViewOnItemClickListener) {
         this.updateFileImageViewOnItemClickListener = updateFileImageViewOnItemClickListener;
     }
 
-    public void setOnFileDetailLinearLayoutClickListener(FileRecyclerViewAdapter.FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener) {
+    public void setOnFileDetailLinearLayoutClickListener(FileListViewAdapter.FileDetailLinearLayoutOnItemClickListener fileDetailLinearLayoutOnItemClickListener) {
         this.fileDetailLinearLayoutOnItemClickListener = fileDetailLinearLayoutOnItemClickListener;
     }
 

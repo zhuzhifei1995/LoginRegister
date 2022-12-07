@@ -1,8 +1,6 @@
 package com.test.chat.adapter;
 
 import android.os.Build;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -13,8 +11,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.test.chat.fragment.BlankFragment;
 import com.test.chat.fragment.FileUploadFragment;
 import com.test.chat.fragment.NetDiskFileFragment;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -33,7 +29,7 @@ public class NetDiskTitleAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         if (position == 0) {
             return NetDiskFileFragment.newInstance(netDiskTitle.get(position));
-        }else if (position == 2){
+        } else if (position == 2) {
             return FileUploadFragment.newInstance(netDiskTitle.get(position));
         } else {
             return BlankFragment.newInstance(netDiskTitle.get(position));

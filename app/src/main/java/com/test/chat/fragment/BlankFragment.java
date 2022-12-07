@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment;
 import com.test.chat.R;
 import com.test.chat.util.ActivityUtil;
 
-import org.json.JSONObject;
-
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class BlankFragment extends Fragment {
 

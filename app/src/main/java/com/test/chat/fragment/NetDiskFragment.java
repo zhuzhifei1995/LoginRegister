@@ -1,7 +1,5 @@
 package com.test.chat.fragment;
 
-import static com.test.chat.util.ActivityUtil.TAG;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -51,11 +49,7 @@ public class NetDiskFragment extends Fragment {
         return netDiskFragmentView;
     }
 
-    private void initFragmentView() {
-        ActivityUtil.setLinearLayoutBackground(netDiskFragmentView.findViewById(R.id.net_disk_main_LinearLayout),
-                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
-        TextView top_title_TextView = netDiskFragmentView.findViewById(R.id.top_title_TextView);
-        top_title_TextView.setText("我的网盘");
+    private void initTitleView() {
         ImageView title_left_ImageView = netDiskFragmentView.findViewById(R.id.title_left_ImageView);
         Bitmap bitmap = ImageUtil.getBitmapFromFile(ActivityUtil.TMP_USER_FILE_PATH, "photo.png.cache");
         if (bitmap != null) {
@@ -69,6 +63,14 @@ public class NetDiskFragment extends Fragment {
             startActivity(new Intent(context, LoginActivity.class));
             activity.finish();
         }
+    }
+
+    private void initFragmentView() {
+        ActivityUtil.setLinearLayoutBackground(netDiskFragmentView.findViewById(R.id.net_disk_main_LinearLayout),
+                SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
+        TextView top_title_TextView = netDiskFragmentView.findViewById(R.id.top_title_TextView);
+        top_title_TextView.setText("我的网盘");
+        initTitleView();
         TabLayout net_disk_title_TabLayout = netDiskFragmentView.findViewById(R.id.net_disk_title_TabLayout);
         ViewPager2 net_disk_content_ViewPager2 = netDiskFragmentView.findViewById(R.id.net_disk_content_ViewPager2);
         List<String> netDiskTitle = new ArrayList<>();
@@ -107,6 +109,7 @@ public class NetDiskFragment extends Fragment {
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
         ActivityUtil.setLinearLayoutBackground(netDiskFragmentView.findViewById(R.id.net_disk_main_LinearLayout),
                 SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
+        initTitleView();
         super.onHiddenChanged(hidden);
     }
 }

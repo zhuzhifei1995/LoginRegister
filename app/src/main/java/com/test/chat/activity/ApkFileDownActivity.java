@@ -30,9 +30,9 @@ public class ApkFileDownActivity extends Activity {
         Context context = this;
         File[] fileList = new File(ActivityUtil.TMP_APK_FILE_PATH).listFiles();
         if (fileList != null) {
-            if (fileList.length == 0){
+            if (fileList.length == 0) {
                 Toast.makeText(context, "没有APK文件", Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 for (File file : fileList) {
                     if (!file.isDirectory()) {
                         try {

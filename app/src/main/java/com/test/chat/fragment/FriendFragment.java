@@ -482,6 +482,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
         ActivityUtil.setLinearLayoutBackground(friendFragmentView.findViewById(R.id.friend_fragment_LinearLayout),
                 SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
+        initTitleView();
         super.onHiddenChanged(hidden);
     }
 }

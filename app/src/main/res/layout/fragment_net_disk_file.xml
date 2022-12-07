@@ -11,13 +11,12 @@
         layout="@layout/loading_layout"
         android:visibility="gone" />
 
-    <com.test.chat.view.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <com.test.chat.view.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/net_disk_PullToRefreshListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ptr:ptrAnimationStyle="flip"
-        ptr:ptrShowIndicator = "false"
-        ptr:ptrMode="both" />
+        ptr:ptrMode="both"
+        ptr:ptrShowIndicator="false" />
 
 </LinearLayout>
