@@ -1,7 +1,5 @@
 package com.test.chat.fragment;
 
-import static com.test.chat.util.ActivityUtil.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -27,10 +25,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.test.chat.R;
 import com.test.chat.activity.ApkFileDownActivity;
-import com.test.chat.adapter.ApkListDetailsTitleAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
 import com.test.chat.util.SharedPreferencesUtils;
+import com.test.chat.view.TitleAdapterView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -127,9 +125,17 @@ public class ApkStoreFragment extends Fragment {
     private void initView() {
         TabLayout app_list_title_TabLayout = appStoreFragment.findViewById(R.id.app_list_title_TabLayout);
         ViewPager2 app_list_ViewPager2 = appStoreFragment.findViewById(R.id.app_list_ViewPager2);
-        app_list_ViewPager2.setUserInputEnabled(false);
-        ApkListDetailsTitleAdapter appListDetailsTitleAdapter = new ApkListDetailsTitleAdapter(requireActivity(), jsonObjectList);
-        app_list_ViewPager2.setAdapter(appListDetailsTitleAdapter);
+        //TODO 需要解决滑动冲突
+//        app_list_ViewPager2.setUserInputEnabled(false);
+        List<Fragment> fragmentList = new ArrayList<>();
+        ApkHomePageFragment apkHomePageFragment = ApkHomePageFragment.newInstance(jsonObjectList.get(0));
+        fragmentList.add(apkHomePageFragment);
+        for (int i= 1;i<jsonObjectList.size();i++){
+            ApkListDetailsFragment apkListDetailsFragment = ApkListDetailsFragment.newInstance(jsonObjectList.get(i));
+            fragmentList.add(apkListDetailsFragment);
+        }
+        TitleAdapterView titleAdapterView = new TitleAdapterView(requireActivity(), fragmentList);
+        app_list_ViewPager2.setAdapter(titleAdapterView);
         new TabLayoutMediator(app_list_title_TabLayout, app_list_ViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -171,7 +177,7 @@ public class ApkStoreFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        Log.e(TAG, "onHiddenChanged: " + getClass().getSimpleName());
+        Log.e(ActivityUtil.TAG, "onHiddenChanged: " + getClass().getSimpleName());
         ActivityUtil.setLinearLayoutBackground(appStoreFragment.findViewById(R.id.app_store_LinearLayout),
                 SharedPreferencesUtils.getInt(context, "themeId", 0, "user"));
         super.onHiddenChanged(hidden);

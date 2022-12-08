@@ -1,4 +1,4 @@
-package com.test.chat.adapter;
+package com.test.chat.view;
 
 import android.os.Build;
 
@@ -11,11 +11,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class ApkListDetailsTitleAdapter extends FragmentStateAdapter {
+public class TitleAdapterView extends FragmentStateAdapter {
 
     private final List<Fragment> fragmentList;
 
-    public ApkListDetailsTitleAdapter(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
+    public TitleAdapterView(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
         super(fragmentActivity);
         this.fragmentList = fragmentList;
     }

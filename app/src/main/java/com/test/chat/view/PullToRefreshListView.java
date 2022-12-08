@@ -181,6 +181,35 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         return listView;
     }
 
+    private int startX;
+    private int startY;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startX = (int) motionEvent.getX();
+                startY = (int) motionEvent.getY();
+                getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int endX = (int) motionEvent.getX();
+                int endY = (int) motionEvent.getY();
+                int disX = Math.abs(endX - startX);
+                int disY = Math.abs(endY - startY);
+                if(disX > disY){
+                    getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(startX -endX));
+                }else {
+                    getParent().requestDisallowInterceptTouchEvent(canScrollVertically(startY -endY));
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+        }
+        return super.dispatchTouchEvent(motionEvent);
+    }
+
     @Override
     protected void handleStyledAttributes(TypedArray typedArray) {
         super.handleStyledAttributes(typedArray);
@@ -305,4 +334,5 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
 
     }
+
 }
