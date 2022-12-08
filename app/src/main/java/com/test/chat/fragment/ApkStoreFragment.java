@@ -45,6 +45,7 @@ public class ApkStoreFragment extends Fragment {
     private View appStoreFragment;
     private Context context;
     private View app_store_View;
+    private ViewPager2 app_list_ViewPager2;
     private final Handler getAppKindJSONObjectHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
@@ -124,18 +125,22 @@ public class ApkStoreFragment extends Fragment {
 
     private void initView() {
         TabLayout app_list_title_TabLayout = appStoreFragment.findViewById(R.id.app_list_title_TabLayout);
-        ViewPager2 app_list_ViewPager2 = appStoreFragment.findViewById(R.id.app_list_ViewPager2);
-        //TODO 需要解决滑动冲突
-//        app_list_ViewPager2.setUserInputEnabled(false);
+        app_list_ViewPager2 = appStoreFragment.findViewById(R.id.app_list_ViewPager2);
         List<Fragment> fragmentList = new ArrayList<>();
         ApkHomePageFragment apkHomePageFragment = ApkHomePageFragment.newInstance(jsonObjectList.get(0));
         fragmentList.add(apkHomePageFragment);
-        for (int i= 1;i<jsonObjectList.size();i++){
+        for (int i = 1; i < jsonObjectList.size(); i++) {
             ApkListDetailsFragment apkListDetailsFragment = ApkListDetailsFragment.newInstance(jsonObjectList.get(i));
             fragmentList.add(apkListDetailsFragment);
         }
-        TitleAdapterView titleAdapterView = new TitleAdapterView(requireActivity(), fragmentList);
-        app_list_ViewPager2.setAdapter(titleAdapterView);
+        TitleAdapterView apkStoreTitleAdapterView = new TitleAdapterView(requireActivity(), fragmentList);
+        app_list_ViewPager2.setAdapter(apkStoreTitleAdapterView);
+        app_list_ViewPager2.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                app_list_ViewPager2.setUserInputEnabled(false);
+            }
+        });
         new TabLayoutMediator(app_list_title_TabLayout, app_list_ViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

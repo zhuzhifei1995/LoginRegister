@@ -44,8 +44,15 @@ public class ApkHomePageFragment extends Fragment {
     private Context context;
     private List<JSONObject> bannerJSONObjectList;
     private PullToRefreshListView banner_PullToRefreshListView;
+    private final Handler waitHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message message) {
+            super.handleMessage(message);
+            Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+            banner_PullToRefreshListView.onRefreshComplete();
+        }
+    };
     private View loading_layout;
-
     private final Handler getApkHomePageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
@@ -67,7 +74,17 @@ public class ApkHomePageFragment extends Fragment {
             } else {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
-            banner_PullToRefreshListView.onRefreshComplete();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        waitHandler.sendEmptyMessage(1);
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
             super.handleMessage(message);
         }
     };

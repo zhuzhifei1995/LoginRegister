@@ -25,6 +25,7 @@ import com.test.chat.R;
 import com.test.chat.adapter.FileItemRecyclerViewAdapter;
 import com.test.chat.adapter.FileUploadListViewAdapter;
 import com.test.chat.util.ActivityUtil;
+import com.test.chat.util.FileSizeUtil;
 import com.test.chat.view.PullToRefreshListView;
 import com.test.chat.view.view.PullToRefreshBase;
 
@@ -90,6 +91,7 @@ public class FileUploadFragment extends Fragment {
                                 fileJSONObject.put("file_type", "1");
                                 fileJSONObject.put("file_path", file.getAbsoluteFile());
                                 fileJSONObject.put("file_name", file.getName());
+                                fileJSONObject.put("file_size", FileSizeUtil.getAutoFileOrFilesSize(file.getPath()));
                                 dirJSONObjectList.add(fileJSONObject);
                             }
                         }
@@ -113,8 +115,8 @@ public class FileUploadFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(1500);
                         waitHandler.sendEmptyMessage(flag);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -164,7 +166,7 @@ public class FileUploadFragment extends Fragment {
         RecyclerView file_RecyclerView = fileUploadFragmentView.findViewById(R.id.file_RecyclerView);
         fileItemList = new ArrayList<>();
         fileItemList.add("本地磁盘");
-        fileItemRecyclerViewAdapter = new FileItemRecyclerViewAdapter(context,fileItemList);
+        fileItemRecyclerViewAdapter = new FileItemRecyclerViewAdapter(context, fileItemList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         file_RecyclerView.setLayoutManager(linearLayoutManager);
         file_RecyclerView.setAdapter(fileItemRecyclerViewAdapter);
@@ -190,6 +192,7 @@ public class FileUploadFragment extends Fragment {
                             fileJSONObject.put("file_type", "1");
                             fileJSONObject.put("file_path", file.getAbsoluteFile());
                             fileJSONObject.put("file_name", file.getName());
+                            fileJSONObject.put("file_size", FileSizeUtil.getAutoFileOrFilesSize(file.getPath()));
                             dirJSONObjectList.add(fileJSONObject);
                         }
                     }
@@ -259,6 +262,7 @@ public class FileUploadFragment extends Fragment {
                                         fileJSONObject.put("file_type", "1");
                                         fileJSONObject.put("file_path", file.getAbsoluteFile());
                                         fileJSONObject.put("file_name", file.getName());
+                                        fileJSONObject.put("file_size", FileSizeUtil.getAutoFileOrFilesSize(file.getPath()));
                                         dirJSONObjectList.add(fileJSONObject);
                                     }
                                 }
@@ -337,6 +341,7 @@ public class FileUploadFragment extends Fragment {
                                             fileJSONObject.put("file_type", "1");
                                             fileJSONObject.put("file_path", file.getAbsoluteFile());
                                             fileJSONObject.put("file_name", file.getName());
+                                            fileJSONObject.put("file_size", FileSizeUtil.getAutoFileOrFilesSize(file.getPath()));
                                             dirJSONObjectList.add(fileJSONObject);
                                         }
                                     }

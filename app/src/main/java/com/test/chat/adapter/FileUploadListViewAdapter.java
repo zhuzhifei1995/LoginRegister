@@ -61,6 +61,7 @@ public class FileUploadListViewAdapter extends BaseAdapter {
             fileUploadListViewHolder.file_name_TextView = view.findViewById(R.id.file_name_TextView);
             fileUploadListViewHolder.next_dir_ImageView = view.findViewById(R.id.next_dir_ImageView);
             fileUploadListViewHolder.file_LinearLayout = view.findViewById(R.id.file_LinearLayout);
+            fileUploadListViewHolder.file_size_TextView = view.findViewById(R.id.file_size_TextView);
             view.setTag(fileUploadListViewHolder);
         } else {
             fileUploadListViewHolder = (FileUploadListViewAdapter.FileUploadListViewHolder) view.getTag();
@@ -72,9 +73,13 @@ public class FileUploadListViewAdapter extends BaseAdapter {
             if (fileType == 0) {
                 fileUploadListViewHolder.file_type_ImageView.setImageResource(R.drawable.dir_image);
                 fileUploadListViewHolder.next_dir_ImageView.setVisibility(View.VISIBLE);
+                fileUploadListViewHolder.file_size_TextView.setVisibility(View.GONE);
             } else {
                 fileUploadListViewHolder.file_type_ImageView.setImageResource(R.drawable.file_image);
                 fileUploadListViewHolder.next_dir_ImageView.setVisibility(View.GONE);
+                String fileSize = jsonObject.getString("file_size");
+                fileUploadListViewHolder.file_size_TextView.setText(fileSize);
+                fileUploadListViewHolder.file_size_TextView.setVisibility(View.VISIBLE);
             }
             fileUploadListViewHolder.file_name_TextView.setText(fileName);
         } catch (JSONException e) {
@@ -120,6 +125,7 @@ public class FileUploadListViewAdapter extends BaseAdapter {
         private ImageView file_type_ImageView;
         private TextView file_name_TextView;
         private ImageView next_dir_ImageView;
+        private TextView file_size_TextView;
         private LinearLayout file_LinearLayout;
     }
 }

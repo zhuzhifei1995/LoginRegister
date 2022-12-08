@@ -46,7 +46,10 @@ public class ApkListViewAdapter extends BaseAdapter {
         imageViewLruCache = new LruCache<String, BitmapDrawable>(((int) Runtime.getRuntime().maxMemory() / 8)) {
             @Override
             protected int sizeOf(String key, BitmapDrawable bitmapDrawable) {
-                return bitmapDrawable.getBitmap().getByteCount();
+                if (bitmapDrawable.getBitmap() != null) {
+                    return bitmapDrawable.getBitmap().getByteCount();
+                }
+                return -1;
             }
         };
     }

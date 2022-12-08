@@ -1,6 +1,7 @@
 package com.test.chat.view;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -9,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -181,35 +181,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         return listView;
     }
 
-    private int startX;
-    private int startY;
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startX = (int) motionEvent.getX();
-                startY = (int) motionEvent.getY();
-                getParent().requestDisallowInterceptTouchEvent(true);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int endX = (int) motionEvent.getX();
-                int endY = (int) motionEvent.getY();
-                int disX = Math.abs(endX - startX);
-                int disY = Math.abs(endY - startY);
-                if(disX > disY){
-                    getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(startX -endX));
-                }else {
-                    getParent().requestDisallowInterceptTouchEvent(canScrollVertically(startY -endY));
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                getParent().requestDisallowInterceptTouchEvent(false);
-                break;
-        }
-        return super.dispatchTouchEvent(motionEvent);
-    }
-
     @Override
     protected void handleStyledAttributes(TypedArray typedArray) {
         super.handleStyledAttributes(typedArray);
@@ -266,7 +237,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         @Override
         public void setFriction(float friction) {
             super.setFriction(friction);
-            this.setFriction(ViewConfiguration.getScrollFriction() * 10);
         }
 
         @Override
@@ -281,7 +251,8 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
     }
 
-    protected class InternalListView extends ListView implements EmptyViewMethodAccessor {
+    @SuppressLint("ClickableViewAccessibility")
+    public class InternalListView extends ListView implements EmptyViewMethodAccessor {
 
         private boolean mAddedLvFooter = false;
 
@@ -304,9 +275,9 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
 
         @Override
-        public boolean dispatchTouchEvent(MotionEvent ev) {
+        public boolean dispatchTouchEvent(MotionEvent motionEvent) {
             try {
-                return super.dispatchTouchEvent(ev);
+                return super.dispatchTouchEvent(motionEvent);
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
                 return false;
@@ -314,13 +285,23 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
 
         @Override
-        public void setAdapter(ListAdapter adapter) {
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return super.onTouchEvent(motionEvent);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            return super.onInterceptTouchEvent(motionEvent);
+        }
+
+        @Override
+        public void setAdapter(ListAdapter listAdapter) {
             if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
                 addFooterView(mLvFooterLoadingFrame, null, false);
                 mAddedLvFooter = true;
             }
 
-            super.setAdapter(adapter);
+            super.setAdapter(listAdapter);
         }
 
         @Override

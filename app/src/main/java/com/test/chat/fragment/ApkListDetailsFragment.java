@@ -79,14 +79,23 @@ public class ApkListDetailsFragment extends Fragment {
         @Override
         public void handleMessage(Message message) {
             super.handleMessage(message);
+            if (message.what == IS_REFRESH) {
+                Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+            }
+            if (message.what == LOAD_MORE) {
+                Toast.makeText(context, "加载更多成功！", Toast.LENGTH_SHORT).show();
+            }
+            if (message.what == LOAD_ERROR) {
+                Toast.makeText(context, "加载失败！", Toast.LENGTH_SHORT).show();
+            }
             app_list_PullToRefreshListView.onRefreshComplete();
-            Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
         }
     };
     private ApkListViewAdapter apkListViewAdapter;
     private final Handler refreshHandler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(android.os.Message message) {
-            if (message.what == IS_REFRESH) {
+            int flag = message.what;
+            if (flag == IS_REFRESH) {
                 appJSONObjectList.clear();
                 try {
                     JSONObject jsonObject = new JSONObject((String) message.obj);
@@ -116,12 +125,13 @@ public class ApkListDetailsFragment extends Fragment {
                 }
                 apkListViewAdapter.notifyDataSetChanged();
             }
-            if (message.what == LOAD_MORE) {
+            if (flag == LOAD_MORE) {
                 try {
                     JSONObject jsonObject = new JSONObject((String) message.obj);
                     if (jsonObject.getString("code").equals("1")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("message");
                         if (jsonArray.length() == 0) {
+                            flag = -1;
                             Toast.makeText(context, "没有更多应用了！", Toast.LENGTH_SHORT).show();
                         } else {
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -149,15 +159,16 @@ public class ApkListDetailsFragment extends Fragment {
                 }
                 apkListViewAdapter.notifyDataSetChanged();
             }
-            if (message.what == LOAD_ERROR) {
+            if (flag == LOAD_ERROR) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
+            int finalFlag = flag;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        waitHandler.sendEmptyMessage(finalFlag);
                         Thread.sleep(1500);
-                        waitHandler.sendEmptyMessage(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

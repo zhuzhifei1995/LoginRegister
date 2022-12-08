@@ -30,7 +30,7 @@ public class FileItemRecyclerViewAdapter extends RecyclerView.Adapter<FileItemRe
     private final Context context;
     private FileItemTextViewOnItemClickListener fileItemTextViewOnItemClickListener;
 
-    public FileItemRecyclerViewAdapter(Context context,List<String> fileItemJSONObjectList) {
+    public FileItemRecyclerViewAdapter(Context context, List<String> fileItemJSONObjectList) {
         Log.e(TAG, "初始化ApkRecyclerViewAdapter成功：" + fileItemJSONObjectList.toString());
         this.fileItemJSONObjectList = fileItemJSONObjectList;
         this.context = context;
@@ -50,13 +50,13 @@ public class FileItemRecyclerViewAdapter extends RecyclerView.Adapter<FileItemRe
 
     @Override
     public void onBindViewHolder(@NotNull FileItemRecyclerViewHolder pageRecyclerViewHolder, int position) {
-        pageRecyclerViewHolder.textView.setText(fileItemJSONObjectList.get(position));
-        if (position == getItemCount()-1){
+        pageRecyclerViewHolder.file_name_TextView.setText(fileItemJSONObjectList.get(position));
+        if (position == getItemCount() - 1) {
             pageRecyclerViewHolder.file_LinearLayout.setBackgroundColor(context.getColor(R.color.gray));
-        }else {
+        } else {
             pageRecyclerViewHolder.file_LinearLayout.setBackgroundColor(context.getColor(R.color.no_color));
         }
-        pageRecyclerViewHolder.textView.setOnClickListener(new View.OnClickListener() {
+        pageRecyclerViewHolder.file_name_TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (fileItemTextViewOnItemClickListener != null) {
@@ -76,12 +76,12 @@ public class FileItemRecyclerViewAdapter extends RecyclerView.Adapter<FileItemRe
 
     public static class FileItemRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textView;
+        private final TextView file_name_TextView;
         private final LinearLayout file_LinearLayout;
 
         public FileItemRecyclerViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.textView);
+            file_name_TextView = view.findViewById(R.id.file_name_TextView);
             file_LinearLayout = view.findViewById(R.id.file_LinearLayout);
         }
     }
