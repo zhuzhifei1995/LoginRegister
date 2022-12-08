@@ -56,7 +56,13 @@
             android:name=".activity.WebNetActivity"
             android:launchMode="standard" />
         <activity
-            android:name=".activity.VideoPlayActivity"
+            android:name=".activity.NetVideoPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activity.LocalVideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="fullSensor"
@@ -89,7 +95,6 @@
         <activity
             android:name=".activity.CaptureActivity"
             android:launchMode="standard" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

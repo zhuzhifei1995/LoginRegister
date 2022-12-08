@@ -33,7 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
 import com.test.chat.activity.PhotoShowActivity;
-import com.test.chat.activity.VideoPlayActivity;
+import com.test.chat.activity.NetVideoPlayActivity;
 import com.test.chat.adapter.FileRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -244,7 +244,7 @@ public class NetDiskFileFragment1 extends Fragment implements SwipeRefreshLayout
                                 try {
                                     String fileName = fileJSONObjectList.get(position).getString("file_name");
                                     if (Arrays.asList(ActivityUtil.MOVIE_TYPE).contains(fileName.substring(fileName.lastIndexOf(".") + 1))) {
-                                        Intent intent = new Intent(context, VideoPlayActivity.class);
+                                        Intent intent = new Intent(context, NetVideoPlayActivity.class);
                                         String fileDownloadUrl = fileJSONObjectList.get(position).getString("file_download_url");
                                         intent.putExtra("fileDownloadUrl", fileDownloadUrl);
                                         intent.putExtra("fileName", fileName);

@@ -48,15 +48,18 @@ public class ApkHomePageFragment extends Fragment {
         @Override
         public void handleMessage(Message message) {
             super.handleMessage(message);
-            Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
-            banner_PullToRefreshListView.onRefreshComplete();
+            if (message.what == 0) {
+                Toast.makeText(context, "刷新成功！", Toast.LENGTH_SHORT).show();
+                banner_PullToRefreshListView.onRefreshComplete();
+            }
         }
     };
     private View loading_layout;
     private final Handler getApkHomePageHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
-            if (message.what == 1) {
+            int type = message.what;
+            if (type == 1 || type == 0) {
                 try {
                     JSONObject jsonObject = new JSONObject((String) message.obj);
                     if (jsonObject.getString("code").equals("1")) {
@@ -71,15 +74,16 @@ public class ApkHomePageFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else {
+            }
+            if (type == 2){
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        waitHandler.sendEmptyMessage(1);
                         Thread.sleep(1500);
+                        waitHandler.sendEmptyMessage(type);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -117,7 +121,7 @@ public class ApkHomePageFragment extends Fragment {
         return apkHomePageFragmentView;
     }
 
-    private void getBanner() {
+    private void getBanner(int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -128,9 +132,9 @@ public class ApkHomePageFragment extends Fragment {
                     parameter.put("kind_link", jsonObject.getString("kind_link"));
                     parameter.put("kind_name", jsonObject.getString("kind_name"));
                     message.obj = new HttpUtil(context).postRequest(ActivityUtil.NET_URL + "/get_apk_list_by_kind_link", parameter);
-                    message.what = 1;
+                    message.what = type;
                 } catch (Exception e) {
-                    message.what = 0;
+                    message.what = 2;
                     e.printStackTrace();
                 }
                 getApkHomePageHandler.sendMessage(message);
@@ -143,7 +147,7 @@ public class ApkHomePageFragment extends Fragment {
         loading_layout = apkHomePageFragmentView.findViewById(R.id.loading_layout);
         loading_layout.setVisibility(View.VISIBLE);
         bannerJSONObjectList = new ArrayList<>();
-        getBanner();
+        getBanner(1);
         banner_PullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -152,7 +156,7 @@ public class ApkHomePageFragment extends Fragment {
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(timeLabel);
                 if (refreshView.getHeaderLayout().isShown()) {
                     bannerJSONObjectList.clear();
-                    getBanner();
+                    getBanner(0);
                 }
             }
         });

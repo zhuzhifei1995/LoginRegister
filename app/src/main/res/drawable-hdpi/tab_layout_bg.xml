@@ -3,14 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
     <item
         android:gravity="center"
+        android:height="5dp"
         tools:ignore="UnusedAttribute"
         tools:targetApi="m">
         <shape>
-            <size android:height="2dp" />
-            <padding
-                android:bottom="0dp"
-                android:top="0dp" />
-            <corners android:radius="1dp" />
+            <corners android:radius="3dp" />
             <solid android:color="@color/main_select" />
         </shape>
     </item>

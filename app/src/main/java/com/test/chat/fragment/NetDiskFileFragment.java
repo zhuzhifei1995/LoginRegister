@@ -31,7 +31,7 @@ import androidx.fragment.app.Fragment;
 
 import com.test.chat.R;
 import com.test.chat.activity.PhotoShowActivity;
-import com.test.chat.activity.VideoPlayActivity;
+import com.test.chat.activity.NetVideoPlayActivity;
 import com.test.chat.adapter.FileListViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
@@ -265,7 +265,7 @@ public class NetDiskFileFragment extends Fragment {
                                 try {
                                     String fileName = netDiskJSONObjectList.get(position).getString("file_name");
                                     if (Arrays.asList(ActivityUtil.MOVIE_TYPE).contains(fileName.substring(fileName.lastIndexOf(".") + 1))) {
-                                        Intent intent = new Intent(context, VideoPlayActivity.class);
+                                        Intent intent = new Intent(context, NetVideoPlayActivity.class);
                                         String fileDownloadUrl = netDiskJSONObjectList.get(position).getString("file_download_url");
                                         intent.putExtra("fileDownloadUrl", fileDownloadUrl);
                                         intent.putExtra("fileName", fileName);

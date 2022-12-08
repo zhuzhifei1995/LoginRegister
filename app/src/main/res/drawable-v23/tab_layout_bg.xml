@@ -4,7 +4,7 @@
         android:height="5dp"
         android:gravity="center">
         <shape>
-            <corners android:radius="5dp" />
+            <corners android:radius="3dp" />
             <solid android:color="@color/main_select" />
         </shape>
     </item>

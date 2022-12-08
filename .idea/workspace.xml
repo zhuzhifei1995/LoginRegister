@@ -44,7 +44,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="增加公共的标题类">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/util/FileSizeUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LocalVideoPlayActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/ConditionVideoView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_local_video_play.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_net_video_play.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
@@ -52,19 +55,18 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkListViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/ApkListViewAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileItemRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileItemRecyclerViewAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileUploadListViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/FileUploadListViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/VideoPlayActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/NetVideoPlayActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/BannerListViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/BannerListViewAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkHomePageFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkHomePageFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkListDetailsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkListDetailsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkStoreFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkStoreFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FileUploadFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FileUploadFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/PullToRefreshListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/PullToRefreshListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/file_upload_list_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/file_upload_list_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_file_upload.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_file_upload.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment1.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/tab_layout_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/tab_layout_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-v23/tab_layout_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v23/tab_layout_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_video_play.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,6 +166,7 @@
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/ProgressBar.java_SELECTED" value="ProgressBar" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/TextView.java_SELECTED" value="TextView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/adapter/CustomListView.java_SELECTED" value="CustomListView" />
+    <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/ConditionVideoView.java_SELECTED" value="ConditionVideoView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/CustomListView.java_SELECTED" value="CustomListView" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/FragmentViewPager.java_SELECTED" value="FragmentViewPager" />
     <property name="android-custom-viewD:/work/as_work/LoginRegister/app/src/main/java/com/test/chat/view/HorizontalListView.java_SELECTED" value="HorizontalListView" />
@@ -192,6 +195,20 @@
     <option name="showLigatures" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="android.template.863467341">
+      <recent name="com.test.chat.activity" />
+    </key>
+    <key name="android.template.-993822303">
+      <recent name="com.test.chat.activity" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.test.chat.adapter" />
+      <recent name="com.test.chat.view" />
+      <recent name="com.test.chat.util" />
+    </key>
+    <key name="android.template.1858470825">
+      <recent name="com.test.chat.activity" />
+    </key>
     <key name="android.template.-1512400670">
       <recent name="com.test.chat.activity" />
     </key>
@@ -204,9 +221,6 @@
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\values" />
       <recent name="D:\work\as_work\LoginRegister\app\src\main\java\com\test\chat\view" />
-    </key>
-    <key name="android.template.863467341">
-      <recent name="com.test.chat.activity" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\work\as_work\LoginRegister\app\src\main\res\layout" />
@@ -228,14 +242,6 @@
     </key>
     <key name="android.template.-1358747357">
       <recent name="com.test.chat.fragment" />
-      <recent name="com.test.chat.activity" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.test.chat.adapter" />
-      <recent name="com.test.chat.view" />
-      <recent name="com.test.chat.util" />
-    </key>
-    <key name="android.template.1858470825">
       <recent name="com.test.chat.activity" />
     </key>
   </component>
@@ -321,13 +327,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663428283551</updated>
-    </task>
-    <task id="LOCAL-00030" summary="添加二维码加好友的按钮和界面">
-      <created>1666361756921</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1666361756921</updated>
     </task>
     <task id="LOCAL-00031" summary="增加主题设置功能和界面">
       <created>1666370820245</created>
@@ -665,7 +664,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670503944589</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="增加公共的标题类">
+      <created>1670515288361</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1670515288361</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

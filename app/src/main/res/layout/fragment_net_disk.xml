@@ -20,14 +20,18 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/net_disk_title_TabLayout"
-            android:layout_width="match_parent"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabGravity="center"
+            app:tabPaddingStart="10dp"
+            app:tabPaddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:longClickable="false"
             app:tabIndicator="@drawable/tab_layout_bg"
             app:tabIndicatorColor="@color/main_select"
             app:tabIndicatorFullWidth="false"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/main_select" />
+            app:tabSelectedTextColor="@color/main_select"  />
 
         <View
             android:layout_width="match_parent"

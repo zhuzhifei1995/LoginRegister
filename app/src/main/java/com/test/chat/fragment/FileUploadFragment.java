@@ -2,6 +2,7 @@ package com.test.chat.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
+import com.test.chat.activity.LocalVideoPlayActivity;
+import com.test.chat.activity.NetVideoPlayActivity;
 import com.test.chat.adapter.FileItemRecyclerViewAdapter;
 import com.test.chat.adapter.FileUploadListViewAdapter;
 import com.test.chat.util.ActivityUtil;
@@ -115,8 +118,8 @@ public class FileUploadFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        waitHandler.sendEmptyMessage(flag);
                         Thread.sleep(1500);
+                        waitHandler.sendEmptyMessage(flag);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -281,7 +284,9 @@ public class FileUploadFragment extends Fragment {
                         fileUploadListViewAdapter.notifyDataSetChanged();
                         fileItemRecyclerViewAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(context, "文件不支持打开！", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, LocalVideoPlayActivity.class);
+                        intent.putExtra("file_path", filePath);
+                        startActivity(intent);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
