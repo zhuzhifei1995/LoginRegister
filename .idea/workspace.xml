@@ -43,28 +43,20 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="增加公共的标题类">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LocalVideoPlayActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/ConditionVideoView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_local_video_play.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_net_video_play.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+    <list default="true" id="95d4ba4f-8ea2-43c0-82a4-997c85cf6ed8" name="Default Changelist" comment="增加本地视频播放器">
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/VideoPlayActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/NetVideoPlayActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/BannerListViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/adapter/BannerListViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LocalVideoPlayActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/activity/LocalVideoPlayActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkHomePageFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkHomePageFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkStoreFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/ApkStoreFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FileUploadFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/FileUploadFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment1.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/fragment/NetDiskFileFragment1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/PullToRefreshListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/test/chat/view/PullToRefreshListView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/tab_layout_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/tab_layout_bg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-v23/tab_layout_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v23/tab_layout_bg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_video_play.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_local_video_play.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_local_video_play.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_app_store.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_net_disk.xml" afterDir="false" />
     </list>
@@ -161,6 +153,7 @@
     <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/fm.jiecao/jiecaovideoplayer/5.5.2/7c2cdb75203c513b673ad1da710e82c8447d33eb/jiecaovideoplayer-5.5.2-sources.jar!/fm/jiecao/jcvideoplayer_lib/JCVideoPlayer.java_SELECTED" value="JCVideoPlayer" />
     <property name="android-custom-viewC:/Users/Z/.gradle/caches/modules-2/files-2.1/fm.jiecao/jiecaovideoplayer/5.5.2/7c2cdb75203c513b673ad1da710e82c8447d33eb/jiecaovideoplayer-5.5.2-sources.jar!/fm/jiecao/jcvideoplayer_lib/JCVideoPlayerStandard.java_SELECTED" value="JCVideoPlayerStandard" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/view/View.java_SELECTED" value="View" />
+    <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/AbsListView.java_SELECTED" value="AbsListView" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/ImageButton.java_SELECTED" value="ImageButton" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/ListView.java_SELECTED" value="ListView" />
     <property name="android-custom-viewD:/tools/sdk/sources/android-32/android/widget/ProgressBar.java_SELECTED" value="ProgressBar" />
@@ -327,13 +320,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663428283551</updated>
-    </task>
-    <task id="LOCAL-00031" summary="增加主题设置功能和界面">
-      <created>1666370820245</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1666370820245</updated>
     </task>
     <task id="LOCAL-00032" summary="刷新二维码">
       <created>1666410957297</created>
@@ -671,7 +657,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670515288361</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="增加本地视频播放器">
+      <created>1670518799797</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1670518799798</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -709,7 +702,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="修改R.报错" />
     <MESSAGE value="添加二维码加好友的按钮和界面" />
     <MESSAGE value="增加主题设置功能和界面" />
     <MESSAGE value="刷新二维码" />
@@ -734,7 +726,8 @@
     <MESSAGE value="修改" />
     <MESSAGE value="增加本地文件的显示" />
     <MESSAGE value="增加公共的标题类" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加公共的标题类" />
+    <MESSAGE value="增加本地视频播放器" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加本地视频播放器" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

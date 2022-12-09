@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.chat.R;
 import com.test.chat.activity.LocalVideoPlayActivity;
-import com.test.chat.activity.NetVideoPlayActivity;
 import com.test.chat.adapter.FileItemRecyclerViewAdapter;
 import com.test.chat.adapter.FileUploadListViewAdapter;
 import com.test.chat.util.ActivityUtil;

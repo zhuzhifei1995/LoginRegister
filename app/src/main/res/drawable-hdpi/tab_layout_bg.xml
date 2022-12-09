@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
+        android:height="3dp"
         android:gravity="center"
-        android:height="5dp"
         tools:ignore="UnusedAttribute"
         tools:targetApi="m">
         <shape>
-            <corners android:radius="3dp" />
+            <corners android:radius="1dp" />
             <solid android:color="@color/main_select" />
         </shape>
     </item>

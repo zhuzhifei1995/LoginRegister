@@ -21,17 +21,17 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/app_list_title_TabLayout"
-            app:tabIndicatorAnimationMode="elastic"
-            app:tabGravity="center"
-            app:tabPaddingStart="10dp"
-            app:tabPaddingEnd="10dp"
-            android:paddingBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            app:tabGravity="center"
             app:tabIndicator="@drawable/tab_layout_bg"
+            app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/main_select"
             app:tabIndicatorFullWidth="false"
             app:tabMode="scrollable"
+            app:tabPaddingEnd="10dp"
+            app:tabPaddingStart="10dp"
             app:tabSelectedTextColor="@color/main_select" />
 
         <View

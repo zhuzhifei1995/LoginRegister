@@ -75,7 +75,7 @@ public class ApkHomePageFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            if (type == 2){
+            if (type == 2) {
                 Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
             }
             new Thread(new Runnable() {

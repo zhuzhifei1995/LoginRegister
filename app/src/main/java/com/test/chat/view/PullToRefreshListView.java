@@ -228,6 +228,35 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         return super.onInterceptTouchEvent(ev);
     }
 
+    private int downX= 0;
+    private int downY= 0;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        int x = (int) motionEvent.getX();
+        int y = (int) motionEvent.getY();
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                int deltaX = x - downX;
+                int deltaY = y - downY;
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+            }
+        }
+        downX= x;
+        downY= y;
+        return super.dispatchTouchEvent(motionEvent);
+    }
+
     final class InternalListViewSDK9 extends InternalListView {
 
         public InternalListViewSDK9(Context context, AttributeSet attrs) {
@@ -284,6 +313,33 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
             }
         }
 
+//        @Override
+//        public boolean dispatchTouchEvent(MotionEvent ev) {
+//            int downX= 0;
+//            int downY= 0;
+//            int x = (int) ev.getX();
+//            int y = (int) ev.getY();
+//            switch (ev.getAction()) {
+//                case MotionEvent.ACTION_DOWN: {
+//                    getParent().requestDisallowInterceptTouchEvent(true);
+//                    break;
+//                }
+//                case MotionEvent.ACTION_MOVE: {
+//                    int deltaX = x - downX;
+//                    int deltaY = y - downY;
+//                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+//                        getParent().requestDisallowInterceptTouchEvent(false);
+//                    }
+//                    break;
+//                }
+//                case MotionEvent.ACTION_UP: {
+//                    getParent().requestDisallowInterceptTouchEvent(false);
+//                    break;
+//                }
+//            }
+//            return super.dispatchTouchEvent(ev);
+//        }
+
         @Override
         public boolean onTouchEvent(MotionEvent motionEvent) {
             return super.onTouchEvent(motionEvent);
@@ -315,5 +371,4 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
 
     }
-
 }

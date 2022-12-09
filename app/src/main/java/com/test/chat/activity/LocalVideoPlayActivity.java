@@ -1,12 +1,12 @@
 package com.test.chat.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.MediaController;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.test.chat.R;
 import com.test.chat.view.ConditionVideoView;

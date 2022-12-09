@@ -32,8 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.test.chat.R;
-import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.activity.NetVideoPlayActivity;
+import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.adapter.FileRecyclerViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;

@@ -30,8 +30,8 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.test.chat.R;
-import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.activity.NetVideoPlayActivity;
+import com.test.chat.activity.PhotoShowActivity;
 import com.test.chat.adapter.FileListViewAdapter;
 import com.test.chat.util.ActivityUtil;
 import com.test.chat.util.HttpUtil;
