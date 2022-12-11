@@ -92,90 +92,6 @@ public class ApkListDetailsFragment extends Fragment {
         }
     };
     private ApkListViewAdapter apkListViewAdapter;
-    private final Handler refreshHandler = new Handler(Looper.getMainLooper()) {
-        public void handleMessage(android.os.Message message) {
-            int flag = message.what;
-            if (flag == IS_REFRESH) {
-                appJSONObjectList.clear();
-                try {
-                    JSONObject jsonObject = new JSONObject((String) message.obj);
-                    if (jsonObject.getString("code").equals("1")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("message");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject apkJSONObject = jsonArray.getJSONObject(i);
-                            File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                    + "_" + apkJSONObject.getString("apk_id") + ".download");
-                            if (downloadFile.exists()) {
-                                apkJSONObject.put("download_flag", 2);
-                            } else {
-                                File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                        + "_" + apkJSONObject.getString("apk_id") + ".cache");
-                                if (cacheFile.exists()) {
-                                    apkJSONObject.put("download_flag", 1);
-                                } else {
-                                    apkJSONObject.put("download_flag", 0);
-                                }
-                            }
-                            appJSONObjectList.add(apkJSONObject);
-                        }
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-                apkListViewAdapter.notifyDataSetChanged();
-            }
-            if (flag == LOAD_MORE) {
-                try {
-                    JSONObject jsonObject = new JSONObject((String) message.obj);
-                    if (jsonObject.getString("code").equals("1")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("message");
-                        if (jsonArray.length() == 0) {
-                            flag = -1;
-                            Toast.makeText(context, "没有更多应用了！", Toast.LENGTH_SHORT).show();
-                        } else {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject apkJSONObject = jsonArray.getJSONObject(i);
-                                File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                        + "_" + apkJSONObject.getString("apk_id") + ".download");
-                                if (downloadFile.exists()) {
-                                    apkJSONObject.put("download_flag", 2);
-                                } else {
-                                    File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
-                                            + "_" + apkJSONObject.getString("apk_id") + ".cache");
-                                    if (cacheFile.exists()) {
-                                        apkJSONObject.put("download_flag", 1);
-                                    } else {
-                                        apkJSONObject.put("download_flag", 0);
-                                    }
-                                }
-                                appJSONObjectList.add(apkJSONObject);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-                apkListViewAdapter.notifyDataSetChanged();
-            }
-            if (flag == LOAD_ERROR) {
-                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
-            }
-            int finalFlag = flag;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        waitHandler.sendEmptyMessage(finalFlag);
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-    };
     private final Handler downloadApkHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message message) {
@@ -370,6 +286,91 @@ public class ApkListDetailsFragment extends Fragment {
         }
     };
     private int PAGE_NUM;
+    private final Handler refreshHandler = new Handler(Looper.getMainLooper()) {
+        public void handleMessage(android.os.Message message) {
+            int flag = message.what;
+            if (flag == IS_REFRESH) {
+                appJSONObjectList.clear();
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject apkJSONObject = jsonArray.getJSONObject(i);
+                            File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                    + "_" + apkJSONObject.getString("apk_id") + ".download");
+                            if (downloadFile.exists()) {
+                                apkJSONObject.put("download_flag", 2);
+                            } else {
+                                File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                        + "_" + apkJSONObject.getString("apk_id") + ".cache");
+                                if (cacheFile.exists()) {
+                                    apkJSONObject.put("download_flag", 1);
+                                } else {
+                                    apkJSONObject.put("download_flag", 0);
+                                }
+                            }
+                            appJSONObjectList.add(apkJSONObject);
+                        }
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                apkListViewAdapter.notifyDataSetChanged();
+            }
+            if (flag == LOAD_MORE) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) message.obj);
+                    if (jsonObject.getString("code").equals("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        if (jsonArray.length() == 0) {
+                            flag = -1;
+                            PAGE_NUM = PAGE_NUM - 1;
+                            Toast.makeText(context, "没有更多应用了！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject apkJSONObject = jsonArray.getJSONObject(i);
+                                File downloadFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                        + "_" + apkJSONObject.getString("apk_id") + ".download");
+                                if (downloadFile.exists()) {
+                                    apkJSONObject.put("download_flag", 2);
+                                } else {
+                                    File cacheFile = new File(ActivityUtil.TMP_APK_FILE_PATH, apkJSONObject.getString("apk_name")
+                                            + "_" + apkJSONObject.getString("apk_id") + ".cache");
+                                    if (cacheFile.exists()) {
+                                        apkJSONObject.put("download_flag", 1);
+                                    } else {
+                                        apkJSONObject.put("download_flag", 0);
+                                    }
+                                }
+                                appJSONObjectList.add(apkJSONObject);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                apkListViewAdapter.notifyDataSetChanged();
+            }
+            if (flag == LOAD_ERROR) {
+                Toast.makeText(context, "网络异常！", Toast.LENGTH_SHORT).show();
+            }
+            int finalFlag = flag;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        waitHandler.sendEmptyMessage(finalFlag);
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+    };
 
     public ApkListDetailsFragment() {
     }

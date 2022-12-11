@@ -76,13 +76,16 @@ public class NetDiskFragment extends Fragment {
         List<String> netDiskTitle = new ArrayList<>();
         netDiskTitle.add("网盘文件");
         netDiskTitle.add("本地已下载文件");
+        netDiskTitle.add("在线视频");
         netDiskTitle.add("上传文件");
         List<Fragment> fragmentList = new ArrayList<>();
         NetDiskFileFragment netDiskFileFragment = NetDiskFileFragment.newInstance(netDiskTitle.get(0));
         fragmentList.add(netDiskFileFragment);
         BlankFragment blankFragment = BlankFragment.newInstance(netDiskTitle.get(1));
         fragmentList.add(blankFragment);
-        FileUploadFragment fileUploadFragment = FileUploadFragment.newInstance(netDiskTitle.get(2));
+        NetVideoFragment netVideoFragment = NetVideoFragment.newInstance(netDiskTitle.get(2));
+        fragmentList.add(netVideoFragment);
+        FileUploadFragment fileUploadFragment = FileUploadFragment.newInstance(netDiskTitle.get(3));
         fragmentList.add(fileUploadFragment);
         TitleAdapterView netDiskTitleAdapterView = new TitleAdapterView(requireActivity(), fragmentList);
         net_disk_content_ViewPager2.setAdapter(netDiskTitleAdapterView);

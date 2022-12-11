@@ -36,6 +36,8 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     private float yDistance;
     private float xLast;
     private float yLast;
+    private int downX = 0;
+    private int downY = 0;
 
     public PullToRefreshListView(Context context) {
         super(context);
@@ -228,8 +230,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         return super.onInterceptTouchEvent(ev);
     }
 
-    private int downX= 0;
-    private int downY= 0;
     @Override
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
         int x = (int) motionEvent.getX();
@@ -252,8 +252,8 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
                 break;
             }
         }
-        downX= x;
-        downY= y;
+        downX = x;
+        downY = y;
         return super.dispatchTouchEvent(motionEvent);
     }
 

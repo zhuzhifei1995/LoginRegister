@@ -49,6 +49,14 @@ public class HttpUtil {
         this.context = context;
     }
 
+    public HttpUtil(Context context, int multiple) {
+        Log.e(TAG, "新建倍数的HttpUtil工具类成功：");
+        client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT * multiple, TimeUnit.MILLISECONDS)
+                .readTimeout(READ_TIMEOUT * multiple, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT * multiple, TimeUnit.MILLISECONDS)
+                .build();
+        this.context = context;
+    }
+
     public String getRequest(String url) throws IOException {
         Log.e(TAG, "请求的地址链接：" + url);
         Log.e(TAG, url);

@@ -44,7 +44,6 @@ public class NetVideoPlayActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
             PlayVideo(fileDownloadUrl, fileName);
-
         }
     }
 

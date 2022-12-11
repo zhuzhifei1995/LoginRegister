@@ -344,6 +344,7 @@ public class NetDiskFileFragment extends Fragment {
                         JSONArray jsonArray = jsonObject.getJSONArray("message");
                         if (jsonArray.length() == 0) {
                             flag = -1;
+                            PAGE_NUM = PAGE_NUM - 1;
                             Toast.makeText(context, "没有更多文件了！", Toast.LENGTH_SHORT).show();
                         } else {
                             for (int i = 0; i < jsonArray.length(); i++) {

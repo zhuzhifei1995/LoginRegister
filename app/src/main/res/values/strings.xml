@@ -94,5 +94,11 @@
     <string name="time">时间</string>
     <string name="refreshing">正在刷新.......</string>
     <string name="file_empty">文件夹为空</string>
+    <string name="search">搜索</string>
+    <string name="please_input_keyword">请输入视频关键字</string>
+    <string name="video_name">视频名称：</string>
+    <string name="video_time">更新时间：</string>
+    <string name="video_length">视频时长：</string>
+    <string name="video_author">视频时长：</string>
 
 </resources>
