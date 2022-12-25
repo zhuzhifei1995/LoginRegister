@@ -1,5 +1,7 @@
 package com.test.chat.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Objects;
@@ -222,6 +226,25 @@ public class TmpFileUtil {
                 Log.e(TAG, "要删除的临时下载文件是文件夹：" + file.getAbsolutePath());
             deleteDownloadFileCache(file);
         }
+    }
+
+    private Bitmap downloadImage(String imageUrl) {
+        HttpURLConnection httpURLConnection = null;
+        Bitmap bitmap = null;
+        try {
+            URL url = new URL(imageUrl);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setConnectTimeout(5 * 1000);
+            httpURLConnection.setReadTimeout(10 * 1000);
+            bitmap = BitmapFactory.decodeStream(httpURLConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (httpURLConnection != null) {
+                httpURLConnection.disconnect();
+            }
+        }
+        return bitmap;
     }
 
 }

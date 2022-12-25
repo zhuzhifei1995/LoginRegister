@@ -44,7 +44,7 @@ public class NetVideoAdapter extends BaseAdapter {
                 if (bitmapDrawable.getBitmap() != null) {
                     return bitmapDrawable.getBitmap().getByteCount();
                 }
-                return -1;
+                return 1;
             }
         };
     }

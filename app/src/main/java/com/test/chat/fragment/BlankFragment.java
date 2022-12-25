@@ -23,10 +23,10 @@ public class BlankFragment extends Fragment {
     public BlankFragment() {
     }
 
-    public static BlankFragment newInstance(String blank) {
+    public static BlankFragment newInstance(String param) {
         BlankFragment blankFragment = new BlankFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(PARAM, blank);
+        bundle.putString(PARAM, param);
         blankFragment.setArguments(bundle);
         return blankFragment;
     }

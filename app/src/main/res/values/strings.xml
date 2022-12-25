@@ -100,5 +100,7 @@
     <string name="video_time">更新时间：</string>
     <string name="video_length">视频时长：</string>
     <string name="video_author">视频时长：</string>
+    <string name="comic_name">漫画名称：</string>
+    <string name="comic_update_chapter">最新章节：</string>
 
 </resources>

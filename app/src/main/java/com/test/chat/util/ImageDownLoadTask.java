@@ -1,6 +1,7 @@
 package com.test.chat.util;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,19 +17,27 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
 @SuppressLint("StaticFieldLeak")
 @SuppressWarnings("deprecation")
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class ImageDownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
 
     private final ListView listView;
     private final LruCache<String, BitmapDrawable> imageViewLruCache;
     private final String imageUrl;
+    private Context context;
 
     public ImageDownLoadTask(ListView listView, LruCache<String, BitmapDrawable> imageViewLruCache, String imageUrl) {
         this.listView = listView;
         this.imageViewLruCache = imageViewLruCache;
         this.imageUrl = imageUrl;
+    }
+
+    public ImageDownLoadTask(Context context, ListView listView, LruCache<String, BitmapDrawable> imageViewLruCache, String imageUrl) {
+        this.listView = listView;
+        this.imageViewLruCache = imageViewLruCache;
+        this.imageUrl = imageUrl;
+        this.context = context;
     }
 
     @Override

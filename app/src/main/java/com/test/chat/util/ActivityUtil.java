@@ -31,7 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-@SuppressLint("PrivateApi")
 public class ActivityUtil {
     //    连接手机的热点时
 //    public static String NET_URL = "http://192.168.229.139:8080";
@@ -52,6 +51,12 @@ public class ActivityUtil {
 
     public static final String[] MOVIE_TYPE = {"mp4", "flv", "mkv", "webm", "avi", "wmv"};
     public static final String[] MUSIC_TYPE = {"aac", "mp3", "ac3", "ogg", "wav"};
+    public static final String[] TXT_TYPE = {"txt", "ini", "log", "xml", "json"};
+    public static final String[] IMAGE_TYPE = {"jpg", "png", "bmp", "jpeg", "gif"};
+
+    public static final String ORDER_TYPE_POST = "post";
+    public static final String ORDER_TYPE_UPDATE = "update";
+    public static final String ORDER_TYPE_CLICK = "click";
 
     //    连接电脑正常网络时
     public static String NET_URL = "http://192.168.1.3:8080";
@@ -168,6 +173,7 @@ public class ActivityUtil {
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
+    @SuppressLint("PrivateApi")
     public static void silentInstallApk(File apkFile, Context context) {
         PackageManager packageManager = context.getPackageManager();
         Class<? extends PackageManager> packageManagerClass = packageManager.getClass();

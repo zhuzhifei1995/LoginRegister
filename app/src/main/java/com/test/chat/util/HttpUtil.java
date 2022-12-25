@@ -1,23 +1,35 @@
 package com.test.chat.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.test.chat.R;
+import com.test.chat.util.https.SSLSocketClient;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
@@ -39,12 +51,23 @@ public class HttpUtil {
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String JSON_RESULT = "";
     private final OkHttpClient client;
-    private final Context context;
+    private Context context;
+
+    public HttpUtil() {
+        Log.e(TAG, "新建HttpUtil工具类成功：");
+        client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+                .build();
+    }
 
     public HttpUtil(Context context) {
         Log.e(TAG, "新建HttpUtil工具类成功：");
         client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
         this.context = context;
     }
@@ -53,8 +76,39 @@ public class HttpUtil {
         Log.e(TAG, "新建倍数的HttpUtil工具类成功：");
         client = new OkHttpClient().newBuilder().connectTimeout(CONNECT_TIMEOUT * multiple, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_TIMEOUT * multiple, TimeUnit.MILLISECONDS).writeTimeout(WRITE_TIMEOUT * multiple, TimeUnit.MILLISECONDS)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
         this.context = context;
+    }
+
+    @SuppressLint("TrustAllX509TrustManager,CustomX509TrustManager,BadHostnameVerifier")
+    public static void handleSSLHandshake() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        } catch (Exception ignored) {
+        }
     }
 
     public String getRequest(String url) throws IOException {
@@ -90,17 +144,12 @@ public class HttpUtil {
         } else {
             request = new Request.Builder().url(url).post(formBody).build();
         }
-//        try {
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) {
             throw new IOException("Unexpected code " + response);
         }
         JSON_RESULT = Objects.requireNonNull(response.body()).string();
         Log.e(TAG, JSON_RESULT);
-//        } catch (Exception e) {
-//            Log.e(TAG, "HttpUtils postRequest()出错");
-//            e.printStackTrace();
-//        }
         return JSON_RESULT;
     }
 
@@ -141,6 +190,24 @@ public class HttpUtil {
         return bitmap;
     }
 
+    public Bitmap getImageBitmap(String imageUrl, int resourceId) {
+        Log.e(TAG, "请求的图片链接：" + imageUrl);
+        Request request = new Request.Builder().url(imageUrl).build();
+        Bitmap bitmap;
+        try {
+            ResponseBody responseBody = client.newCall(request).execute().body();
+            InputStream inputStream = null;
+            if (responseBody != null) {
+                inputStream = responseBody.byteStream();
+            }
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
     public void getSoundFile(String fileUrl, String voiceName) {
         Log.e(TAG, "请求下载的文件链接：" + fileUrl);
         Log.e(TAG, "请求下载的文件名称：" + voiceName);
@@ -157,7 +224,7 @@ public class HttpUtil {
         }
     }
 
-    public String upLoadImageFile(final File file, final String url, final Map<String, String> parameter) {
+    public String upLoadImageFile(@NonNull final File file, final String url, final Map<String, String> parameter) {
         Log.e(TAG, "请求上传的文件链接：" + url);
         Log.e(TAG, "请求上传的文件位置：" + file.getAbsolutePath());
         Log.e(TAG, "请求上传的文件参数：" + parameter);
